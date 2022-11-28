@@ -107,7 +107,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-events/db.sqlite3
+db.sqlite3
 
 # Spyder project settings
 .spyderproject
@@ -333,3 +333,4 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/macos,linux,django,python,windows,pycharm+all
 
+/eventsSite/migrations/
