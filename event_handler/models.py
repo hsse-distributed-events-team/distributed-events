@@ -1,18 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User as DjangoUser
-
-
-class PersonalData(models.Model):
-    name = models.CharField('Имя', max_length=20)
-    surname = models.CharField('Фамилия', max_length=20)
-    # Пока что в стадии заглушки. Возможно расширить без ущерба для производства
-
-
-# Create your models here.
-class User(models.Model):
-    user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE, related_name="django_user")
-    personal_data = models.OneToOneField(DjangoUser, on_delete=models.CASCADE)
-    is_verified = models.BooleanField('Проверенный пользователь', default=False)
+from user_handler.models import User
 
 
 class EventData(models.Model):
@@ -23,6 +10,16 @@ class EventData(models.Model):
 class Event(models.Model):
     name = models.CharField("Название мероприятия", default="Новое мероприятие", max_length=50)
     data = models.OneToOneField(EventData, on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, through="Application")
+
+
+class Application(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    last_update_time = models.DateTimeField()
+    status = models.IntegerField("Код статуса заявки")  # Пока что пусть код статуса будет числом, что мы преобразуем
+    result = models.TextField("Результат события", max_length=500)  # Пусть пока что результат будет длинной строкой
+
 
 
 class StageData(models.Model):
