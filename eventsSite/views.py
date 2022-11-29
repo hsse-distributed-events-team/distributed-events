@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from eventsSite.forms import
-from eventsSite.models import EventsList
+from eventsSite.forms import Event
+from eventsSite.models import EventData
 
 
 # Create your views here.
@@ -17,18 +17,16 @@ def create_event(request):
     :return: html страница
     """
 
-    form = SplitForm(request.POST)
+    form = Event(request.POST)
     context = {'form': form}
 
-    user = request.user
+    if form.is_valid():
+        date = form.cleaned_data['date']
 
-    if user.is_authenticated:
-        record = EventsList(
-            name="default"
-        stages = "default"
-        date = "default"
-        info = "default"
-        )
-        record.save()
+        user = request.user
+
+        if user.is_authenticated:
+            record = EventData()
+            record.save()
 
     return render(request, 'create_event.html', context)
