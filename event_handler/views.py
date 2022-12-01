@@ -41,7 +41,7 @@ def all_events(request):
     return render(request, 'all_events/all_events.html', context)
 
 class EventDetailView(DetailView):
-    model = ""
+    pass
 
 def cur_event(request):
     context = {}
