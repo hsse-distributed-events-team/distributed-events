@@ -23,6 +23,6 @@ urlpatterns = [
     # path('login/', auth_views.LoginView.as_view(), name='login'),
     # path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('create_event/', views.create_event, name='create_event'),
-    re_path(r'^events/event/(\d+)', views.cur_event, name="cur_event")
+    re_path(r'^events/event/(\d+)', views.cur_event, name="cur_event"),
     path('', views.all_events, name="all_events"),
 ]
