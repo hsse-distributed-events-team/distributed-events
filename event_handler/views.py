@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from event_handler.forms import Event
 from event_handler.models import Event, Stage
 
-from db_controller import *
+from .db_controller import *
 
 
 def error404(request):
