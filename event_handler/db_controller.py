@@ -35,11 +35,12 @@ def get_user_events_id(user: User) -> Union[Set, int]:
 
 
 def get_user_stages(user: User) -> QuerySet:
-    return User.stages__set.all()
+    return user.stage_set.all()
 
 
 def get_user_by_django_user(dj_user: DjangoUser) -> User:
-    return User.objects.get(user=dj_user)
+    us = User.objects.get(user=dj_user)
+    return us
 
 
 def create_default_stage() -> Stage:

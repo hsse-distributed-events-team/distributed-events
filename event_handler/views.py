@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from event_handler.forms import Event
 from event_handler.models import Event, Stage
 
-from .db_controller import *
+from event_handler.db_controller import *
 
 
 def error404(request):
@@ -67,8 +67,10 @@ def all_events(request, page_number=1):
     :return: html страница
     """
 
-    context = []  # pass
-
+    print('------')
+    context = get_all_events(page_number, request.user)
+    print(context)
+    print('------')
 
     if not context:
         return error404(request)
