@@ -6,6 +6,19 @@ from event_handler.models import Event, Stage
 
 from db_controller import *
 
+
+def error404(request):
+    """
+    Страница 404 - page not found
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+    """
+
+    return render(request, "404.html")
+
+
 @login_required
 def create_event(request):
     """
@@ -44,8 +57,20 @@ def cur_event(request):
     context['sub_events'] = [get_stages_by_event(context["event_id"])]
     return render(request, 'all_events/templates/cur_event.html', context)
 
-def all_events(request):
-    context = []
-    if request.user.is_authenticated:
-        pass
+
+def all_events(request, page_number=1):
+    """
+    Страница всех мероприятий
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+    """
+
+    context = []  # pass
+
+
+    if not context:
+        return error404(request)
+
     return render(request, 'all_events.html', context)
