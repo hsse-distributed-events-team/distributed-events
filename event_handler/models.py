@@ -1,14 +1,13 @@
 from django.db import models
 from user_handler.models import User
-from enum import Enum
-
 
 class Event(models.Model):
     name = models.CharField("Название мероприятия", default="Новое мероприятие", max_length=50)
     description = models.TextField(null=True, blank=True, max_length=500)
 
+
 class Stage(models.Model):
-    class StageStatus(models.IntegerChoices):
+    class Status(models.IntegerChoices):
         WAITING = 0
         ACTIVE = 1
         ENDED = 2
@@ -18,7 +17,7 @@ class Stage(models.Model):
     description = models.TextField(null=True, blank=True, max_length=500)
     preview = models.TextField(null=True, blank=True, max_length=100)
     users = models.ManyToManyField(User, through="Application")
-    status = models.SmallIntegerField(null=True, default=StageStatus.WAITING, choices=StageStatus.choices)
+    status = models.SmallIntegerField(null=True, default=Status.WAITING, choices=Status.choices)
     time_start = models.DateTimeField(null=True, blank=True)
     time_end = models.DateTimeField(null=True, blank=True)
 
