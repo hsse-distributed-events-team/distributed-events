@@ -17,7 +17,7 @@ def create_default_stage() -> Stage:
 
 
 def create_event(event: Event) -> None:
-    Event.objects.create(Event)
+    Event.objects.create(event)
 
 
 def get_event_by_id(id: int) -> Event:
