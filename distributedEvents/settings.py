@@ -57,6 +57,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             'event_handler/templates',
+            'distributedEvents/templates'
         ],
         'APP_DIRS': True,
         'OPTIONS': {

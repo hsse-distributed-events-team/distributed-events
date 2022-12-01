@@ -67,12 +67,12 @@ def all_events(request, page_number=1):
     :return: html страница
     """
 
-    print('------')
-    context = get_all_events(page_number, request.user)
-    print(context)
-    print('------')
+    event_list = get_all_events(int(page_number), request.user)
 
-    if not context:
-        return error404(request)
+    # if not event_list:
+    #     return error404(request)
 
-    return render(request, 'all_events.html', context)
+    context = {'event_list': event_list}
+
+    return render(request, 'event_handler/event_handler.html', context)
+    # return render(request, 'event_handler/all_events.html', context)
