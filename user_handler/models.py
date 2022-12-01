@@ -14,7 +14,7 @@ class PersonalData(models.Model):
 # Create your models here.
 class User(models.Model):
     user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE, related_name="django_user")
-    personal_data = models.OneToOneField(DjangoUser, on_delete=models.CASCADE)
+    personal_data = models.OneToOneField(PersonalData, on_delete=models.CASCADE)
     is_verified = models.BooleanField('Проверенный пользователь', default=False)
 
     class Meta:
