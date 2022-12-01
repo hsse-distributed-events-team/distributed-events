@@ -36,11 +36,6 @@ def create_event(request):
     return render(request, 'create_event.html', context)
 
 
-def all_events(request):
-    context = []
-    return render(request, 'all_events/all_events.html', context)
-
-
 def cur_event(request):
     context = {"event_id": request.GET.get("event_id")}
     event = get_event_by_id(context["event_id"])
