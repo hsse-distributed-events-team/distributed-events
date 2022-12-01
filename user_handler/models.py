@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
 
+
 class PersonalData(models.Model):
     name = models.CharField('Имя', max_length=20)
     surname = models.CharField('Фамилия', max_length=20)
