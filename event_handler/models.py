@@ -3,9 +3,10 @@ from user_handler.models import User
 from enum import Enum
 
 
-class Event(models.Model):
+class EventData(models.Model):
     name = models.CharField("Название мероприятия", default="Новое мероприятие", max_length=50)
     description = models.TextField(null=True, blank=True, max_length=500)
+
 
 class Stage(models.Model):
     class StageStatus(models.IntegerChoices):
