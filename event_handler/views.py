@@ -30,7 +30,7 @@ def create_event(request):
         user = request.user
 
         if user.is_authenticated:
-            record = EventData()
+            record = Event()
             record.save()
 
     return render(request, 'create_event.html', context)
