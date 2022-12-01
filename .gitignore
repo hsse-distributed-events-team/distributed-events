@@ -333,4 +333,4 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/macos,linux,django,python,windows,pycharm+all
 
-/eventsSite/migrations/
+/all_events/migrations/
