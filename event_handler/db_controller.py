@@ -1,5 +1,5 @@
 from user_handler.models import User, PersonalData
-from event_handler.models import Stage, Event, StageData, EventData
+from event_handler.models import Stage, Event
 
 
 def get_all_events():
