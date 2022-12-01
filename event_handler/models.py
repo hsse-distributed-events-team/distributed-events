@@ -1,9 +1,8 @@
 from django.db import models
 from user_handler.models import User
-from enum import Enum
 
 
-class EventData(models.Model):
+class Event(models.Model):
     name = models.CharField("Название мероприятия", default="Новое мероприятие", max_length=50)
     description = models.TextField(null=True, blank=True, max_length=500)
 

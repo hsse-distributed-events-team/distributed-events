@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from event_handler.forms import EventForm
-from event_handler.models import EventData
+from event_handler.forms import Event as EventForm
+from event_handler.models import Event as EventData
 
-from db_controller import *
+from event_handler.db_controller import *
+
+from django.http import Http404
 
 
 @login_required
@@ -42,10 +44,14 @@ def all_events(request):
     return render(request, 'all_events/all_events.html', context)
 
 
-def cur_event(request):
-    context = {"event_id": request.GET.get("event_id")}
-    event = get_event_by_id(context["event_id"])
-    context['name'] = event.name
-    context['description'] = event.description
-    context['stages'] = [get_stages_by_event(context["event_id"])]
-    return render(request, 'all_events/templates/cur_event.html', context)
+def cur_event(request, id):
+    # try:
+        context = {}
+        context["event_id"] = request.GET.get("event_id")
+        # event = get_event_by_id(context["event_id"])
+        # context['name'] = event.name
+        # context['description'] = event.description
+        # context['stages'] = [get_stages_by_event(context["event_id"])]
+        return render(request, 'event.html', context)
+    # except:
+    #     raise Http404
