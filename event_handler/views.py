@@ -2,8 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from event_handler.forms import Event
-from event_handler.models import Event
-from django.views.generic import DetailView
+from event_handler.models import Event, Stage
 
 
 @login_required
@@ -40,13 +39,10 @@ def all_events(request):
     context = []
     return render(request, 'all_events/all_events.html', context)
 
-class EventDetailView(DetailView):
-    pass
 
 def cur_event(request):
-    context = {}
-    context['name'] = Event.name
+    context = {"event_id": request.GET.get("event_id")}
+    context['name'] = Event.objects.get
     context['date'] = Event.date
-    context['info'] = "default"
-    context['sub_events'] = {}
+    context['sub_events'] = [Stage.objects.filter(event__name=Event.name)]
     return render(request, 'all_events/templates/cur_event.html', context)
