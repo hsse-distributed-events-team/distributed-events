@@ -7,9 +7,16 @@ class PersonalData(models.Model):
     surname = models.CharField('Фамилия', max_length=20)
     # Пока что в стадии заглушки. Возможно расширить без ущерба для производства
 
+    def __str__(self):
+        return str(self.name) + " " + str(self.surname)
+
 
 # Create your models here.
 class User(models.Model):
     user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE, related_name="django_user")
     personal_data = models.OneToOneField(DjangoUser, on_delete=models.CASCADE)
     is_verified = models.BooleanField('Проверенный пользователь', default=False)
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
