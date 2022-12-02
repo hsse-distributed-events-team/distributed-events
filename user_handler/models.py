@@ -18,5 +18,8 @@ class User(models.Model):
     is_verified = models.BooleanField('Проверенный пользователь', default=False)
 
     class Meta:
+        """
+        Настройка отображения в админ-панели
+        """
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'

@@ -5,10 +5,16 @@ from django.contrib.auth.admin import User as DjangoUser
 from django.db.models.query import QuerySet
 from typing import Union, List, Tuple, Set
 
-ITEMS_PER_PAGE = 10
+ITEMS_PER_PAGE = 12  # Количество объектов в одной странице выдачи
 
 
 def get_all_events(page=0, django_user: DjangoUser = None) -> Union[List, Union[Tuple, Event, Stage, int]]:
+    """
+    Получить список всех мероприятий по заданным параметрам
+    :param page: Номер страницы отображения
+    :param django_user: Пользователь, сделавший запрос
+    :return: Список из троек: мероприятие, его первый этап, bool участвует ли django_user в этом мероприятии
+    """
     event_ids = set()
     if (not django_user.is_anonymous) and django_user is not None:
         user = get_user_by_django_user(django_user)
@@ -27,6 +33,10 @@ def get_all_events(page=0, django_user: DjangoUser = None) -> Union[List, Union[
 
 
 def get_user_events_id(user: User) -> Union[Set, int]:
+    """
+    :param user: Пользователь. Удивительно, да?
+    :return: Множество id мероприятий, в которых участвует user
+    """
     result = set()
     stages = get_user_stages(user)
     for stage in stages:
@@ -38,8 +48,13 @@ def get_user_stages(user: User) -> QuerySet:
     return user.stage_set.all()
 
 
-def get_user_by_django_user(dj_user: DjangoUser) -> User:
-    us = User.objects.get(user=dj_user)
+def get_user_by_django_user(django_user: DjangoUser) -> User:
+    """
+
+    :param dj_user: Пользователь в django-формате (обычно передаётся в качестве request.user)
+    :return: User from user_handler
+    """
+    us = User.objects.get(user=django_user)
     return us
 
 
