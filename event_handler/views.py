@@ -74,5 +74,5 @@ def all_events(request, page_number=1):
 
     context = {'event_list': event_list}
 
-    return render(request, 'event_handler/event_handler.html', context)
+    return render(request, 'event_handler/all_events.html', context)
     # return render(request, 'event_handler/all_events.html', context)

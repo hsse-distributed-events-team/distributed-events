@@ -8,7 +8,7 @@ from typing import Union, List, Tuple, Set
 ITEMS_PER_PAGE = 10
 
 
-def get_all_events(page=0, django_user: DjangoUser = None) -> Union[List, Union[Tuple, Event]]:
+def get_all_events(page=0, django_user: DjangoUser = None) -> Union[List, Union[Tuple, Event, Stage, int]]:
     event_ids = set()
     if django_user is not None:
         user = get_user_by_django_user(django_user)
@@ -20,9 +20,9 @@ def get_all_events(page=0, django_user: DjangoUser = None) -> Union[List, Union[
         events = Event.objects.all()[10 * (page - 1):10 * page]
     for event in events:
         if event.id in event_ids:
-            result.append((event, True))
+            result.append((event, event.stage_set.first, True))
         else:
-            result.append((event, False))
+            result.append((event, event.stage_set.first, False))
     return result
 
 
