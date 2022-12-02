@@ -10,7 +10,7 @@ ITEMS_PER_PAGE = 10
 
 def get_all_events(page=0, django_user: DjangoUser = None) -> Union[List, Union[Tuple, Event, Stage, int]]:
     event_ids = set()
-    if django_user is not None:
+    if (not django_user.is_anonymous) and django_user is not None:
         user = get_user_by_django_user(django_user)
         event_ids = get_user_events_id(user)
     result = list()
