@@ -25,5 +25,10 @@ urlpatterns = [
     path('create_event/', views.create_event, name='create_event'),
     re_path(r'^events/event/(\d+)$', views.cur_event, name="cur_event"),
     path('', views.all_events, name="all_events"),
-    re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events")
+    re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events"),
+
+    path('register/', user_views.register, name='register'),
+    path('profile/', user_views.profile, name='profile'),
+    path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
 ]
