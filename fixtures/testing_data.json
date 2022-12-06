@@ -1,0 +1,143 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$HcrfiN74m3vUlyz3aUxHeA$3rfemhJJtn18Qbehg/S6+4a2bfLxdTEohCz9yjYWPls=",
+      "last_login": "2022-12-06T16:18:23Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-12-01T10:41:45Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$E4bzKaSb720CtgI09LpbCS$oTnZlyFcjknbR5FkJ4Og60CVNX/+dL4h6YP5TSvqkJQ=",
+      "last_login": "2022-12-06T16:17:36Z",
+      "is_superuser": false,
+      "username": "user",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-12-06T16:15:48Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "event_handler.event",
+    "pk": 1,
+    "fields": {
+      "name": "Мероприятие_3",
+      "description": "А тут могла быть ваша реклама"
+    }
+  },
+  {
+    "model": "event_handler.event",
+    "pk": 2,
+    "fields": {
+      "name": "Мероприятие_1",
+      "description": "Оно вообще где-то отображается?"
+    }
+  },
+  {
+    "model": "event_handler.event",
+    "pk": 3,
+    "fields": {
+      "name": "Мероприятие_2",
+      "description": "hgrld\r\ndfjhgfh\r\ndhjgd\r\nghd]hjd\r\nhd"
+    }
+  },
+  {
+    "model": "user_handler.personaldata",
+    "pk": 1,
+    "fields": {
+      "name": "Jake",
+      "surname": "Pupa"
+    }
+  },
+  {
+    "model": "user_handler.personaldata",
+    "pk": 2,
+    "fields": {
+      "name": "Josh",
+      "surname": "Lupa"
+    }
+  },
+  {
+    "model": "event_handler.stage",
+    "pk": 1,
+    "fields": {
+      "name": "Тест1",
+      "parent": 2,
+      "description": "",
+      "preview": "Тут превью",
+      "status": 0,
+      "time_start": null,
+      "time_end": null
+    }
+  },
+  {
+    "model": "event_handler.stage",
+    "pk": 2,
+    "fields": {
+      "name": "Этап-2",
+      "parent": 3,
+      "description": "",
+      "preview": "И тут превью",
+      "status": 0,
+      "time_start": null,
+      "time_end": null
+    }
+  },
+  {
+    "model": "event_handler.stage",
+    "pk": 3,
+    "fields": {
+      "name": "А это не этап",
+      "parent": 1,
+      "description": "",
+      "preview": "Хватит смотреть",
+      "status": 0,
+      "time_start": null,
+      "time_end": null
+    }
+  },
+  {
+    "model": "user_handler.user",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "personal_data": 1,
+      "is_verified": false
+    }
+  },
+  {
+    "model": "user_handler.user",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "personal_data": 2,
+      "is_verified": false
+    }
+  },
+  {
+    "model": "event_handler.venue",
+    "pk": 1,
+    "fields": {
+      "name": "Первая и единственная площадка",
+      "address": "ya.ru"
+    }
+  }
+]
