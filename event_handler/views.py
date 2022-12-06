@@ -45,13 +45,13 @@ def all_events(request):
 
 
 def cur_event(request, id):
-    # try:
+    try:
         context = {}
-        context["event_id"] = request.GET.get("event_id")
+        context["event_id"] = id
         # event = get_event_by_id(context["event_id"])
         # context['name'] = event.name
         # context['description'] = event.description
         # context['stages'] = [get_stages_by_event(context["event_id"])]
         return render(request, 'event.html', context)
-    # except:
-    #     raise Http404
+    except:
+        raise Http404
