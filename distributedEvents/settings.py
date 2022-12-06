@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'creator_handler',
     'event_handler',
     'user_handler',
-    'users'
 ]
 
 MIDDLEWARE = [
