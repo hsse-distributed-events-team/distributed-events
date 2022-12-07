@@ -1,8 +1,11 @@
 from user_handler.models import User, PersonalData
 from event_handler.models import Stage, Event
 
+from user_handler.db_controller import create_user_for_django_user
+
 from django.contrib.auth.admin import User as DjangoUser
 from django.db.models.query import QuerySet
+from django.core.exceptions import ObjectDoesNotExist
 from typing import Union, List, Tuple, Set
 
 ITEMS_PER_PAGE = 12  # Количество объектов в одной странице выдачи
@@ -50,12 +53,14 @@ def get_user_stages(user: User) -> QuerySet:
 
 def get_user_by_django_user(django_user: DjangoUser) -> User:
     """
-
     :param dj_user: Пользователь в django-формате (обычно передаётся в качестве request.user)
     :return: User from user_handler
     """
-    us = User.objects.get(user=django_user)
-    return us
+    try:
+        user = User.objects.get(user=django_user)
+    except ObjectDoesNotExist:
+        user = create_user_for_django_user(django_user=django_user)
+    return user
 
 
 def create_default_stage() -> Stage:
