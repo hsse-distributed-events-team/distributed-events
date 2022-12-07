@@ -56,7 +56,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            'event_handler/templates',
             'distributedEvents/templates'
         ],
         'APP_DIRS': True,
@@ -117,10 +116,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "../static"),
 ]
 FIXTURE_DIRS = [
-    'root/fixtures',
+
 ]
 
 # Default primary key field type

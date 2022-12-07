@@ -72,10 +72,10 @@ def all_events(request, page_number=1):
 def cur_event(request, id):
     try:
         context = {"event_id": id}
-        # event = get_event_by_id(context["event_id"])
-        # context['name'] = event.name
-        # context['description'] = event.description
-        # context['stages'] = [get_stages_by_event(context["event_id"])]
-        return render(request, 'event.html', context)
+        event = get_event_by_id(id)
+        context['name'] = event.name
+        context['description'] = event.description
+        context['stages'] = [get_stages_by_event(context["event_id"])]
+        return render(request, 'event_handler/event.html', context)
     except ValueError:
         raise Http404
