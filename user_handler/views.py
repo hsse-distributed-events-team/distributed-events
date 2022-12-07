@@ -19,4 +19,4 @@ def register(request):  # place where the user can register
 
 @login_required
 def profile(request):   # go to profile page
-    return render(request, 'user_handler/profile.html')
+    return render(request, 'user_handler/user_profile.html')
