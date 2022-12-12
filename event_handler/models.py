@@ -1,8 +1,17 @@
 from django.db import models
 from user_handler.models import User
 
-
 class Event(models.Model):
+    """
+     ***************
+     Класс **Event**
+     ***************
+
+     :param name: название мероприятия
+     :param description: информация о мероприятии
+
+    """
+
     name = models.CharField("Название мероприятия", default="Новое мероприятие", max_length=50)
     description = models.TextField(null=True, blank=True, max_length=500)
 
@@ -12,6 +21,9 @@ class Event(models.Model):
     class Meta:
         """
         Настройка отображения в админ-панели
+
+        :param verbose_name: Событие
+
         """
         verbose_name = 'Событие'
         verbose_name_plural = 'События'
@@ -23,6 +35,11 @@ class Stage(models.Model):
         """
         Именованные константы, отображающие статус этапа мероприятия
         Можно расширить
+
+        :param WAITING: 0
+        :param ACTIVE: 1
+        :param ENDED: 2
+
         """
         WAITING = 0
         ACTIVE = 1
