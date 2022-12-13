@@ -57,19 +57,19 @@ def all_events(request, page_number=1):
     return render(request, 'all_events.html', context)
 
 
-def cur_event(request, id):
+def cur_event(request, event_id):
     """
     Страница конкретного мероприятия
 
     :param request: объект с деталями запроса
     :type request: :class: 'django.http.HttpRequest'
-    :param id: id мероприятия
-    :type id: :class: 'int'
+    :param event_id: id мероприятия
+    :type event_id: :class: 'int'
     :return: html страница
     """
     try:
-        context = {"event_id": id}
-        event = get_event_by_id(id)
+        context = {"event_id": event_id}
+        event = get_event_by_id(event_id)
         context['name'] = event.name
         context['description'] = event.description
         context['stages'] = [get_stages_by_event(context["event_id"])]
