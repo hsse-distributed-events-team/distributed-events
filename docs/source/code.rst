@@ -1,18 +1,9 @@
-Документация разработчика
-=========================
+Документация к проекту Распределённые мероприятия
+=================================================
 
-=============
-event_handler
-=============
+.. toctree::
+   :maxdepth: 2
+   :caption: Разработчику:
 
-*********
-models.py
-*********
-.. automodule:: event_handler.models
-    :members:
-
-*********
-views.py
-*********
-.. automodule:: event_handler.views
-    :members:
+   event_handler.rst
+   user_handler.rst
