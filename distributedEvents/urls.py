@@ -25,5 +25,5 @@ urlpatterns = [
     # path('login/', auth_views.LoginView.as_view(), name='login'),
     # path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('create_event/', views.create_event, name='create_event'),
-    path('events/<int:id>', views.cur_event, name="cur_event")
+    path('all_events/<int:id>', views.cur_event, name="cur_event")
 ]

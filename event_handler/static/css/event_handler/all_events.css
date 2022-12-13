@@ -1,0 +1,126 @@
+body {
+  background-color: #f6f5f3;
+  font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.handler {
+   margin-top: 10px;
+   font-size: 28px;
+   font-weight: bold;
+   text-align: left;
+   margin-bottom: 30px;
+}
+
+.tool_bar {
+  overflow: hidden;
+  background-color: #fc3f1d;
+}
+.tool_bar a {
+  float: right;
+  color: #e6e6e6;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+.tool_bar a:hover {
+  color: white;
+}
+
+.lots_of_events {
+    float: left;
+    margin-top: 2%;
+    margin-left: 5%;
+    text-align: center;
+    width: 90%;
+}
+
+.event_card-wrapper {
+	display: block;
+	width: 100%;
+	float: left;
+}
+@media only screen and (min-width: 450px) {
+	.event_card-wrapper {
+		width: 50%;
+	}
+}
+
+@media only screen and (min-width: 768px) {
+	.event_card-wrapper {
+		width: 33.333%;
+	}
+}
+
+@media only screen and (min-width: 900px) {
+	.event_card-wrapper {
+		width: 25%;
+	}
+}
+.event_card {
+    display: block;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	border-radius: 10px;
+	position: relative;
+	background: white;
+	margin: 0 20px 20px 0;
+	text-align: left;
+	color: #black;
+	z-index: 0;
+	height: 240px;
+}
+
+a.event_name {
+
+    padding: 1rem 1rem;
+    font-size: 25px;
+    color: black;
+    font-weight: 500;
+    text-decoration: none;
+    height: 25px;
+}
+a:hover.event_name  {
+    font-weight: 600;
+    padding: 1rem 1rem;
+    font-size: 25px;
+    color: #494D4E;
+    text-decoration: none;
+    height: 25px;
+}
+.event_preview {
+    padding: 1rem 1rem;
+    text-align: left;
+    margin-left = 5px;
+    font-size: 20px;
+    color: black;
+    height: 100px;
+}
+.event_time {
+    padding: 1rem 1rem;
+    text-align: left;
+    margin-left = 5px;
+    font-size: 16px;
+    color: gray;
+    height: 25px;
+}
+a.event_registration {
+    font-size: 20px;
+    display: inline-block;
+    color: green;
+    padding: 1rem 1rem;
+    text-decoration: none;
+    border-radius: 3px;
+    height: 30px;
+}
+a:hover.event_registration  {
+    font-size: 20px;
+    font-weight: 600;
+    display: inline-block;
+    color: green;
+    padding: 1rem 1rem;
+    text-decoration: none;
+    border-radius: 3px;
+    height: 30px;
+}

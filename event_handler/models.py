@@ -6,9 +6,24 @@ class Event(models.Model):
     name = models.CharField("Название мероприятия", default="Новое мероприятие", max_length=50)
     description = models.TextField(null=True, blank=True, max_length=500)
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        """
+        Настройка отображения в админ-панели
+        """
+        verbose_name = 'Событие'
+        verbose_name_plural = 'События'
+        ordering = ['name']
+
 
 class Stage(models.Model):
-    class StageStatus(models.IntegerChoices):
+    class Status(models.IntegerChoices):
+        """
+        Именованные константы, отображающие статус этапа мероприятия
+        Можно расширить
+        """
         WAITING = 0
         ACTIVE = 1
         ENDED = 2
@@ -18,9 +33,20 @@ class Stage(models.Model):
     description = models.TextField(null=True, blank=True, max_length=500)
     preview = models.TextField(null=True, blank=True, max_length=100)
     users = models.ManyToManyField(User, through="Application")
-    status = models.SmallIntegerField(null=True, default=StageStatus.WAITING, choices=StageStatus.choices)
+    status = models.SmallIntegerField(null=True, default=Status.WAITING, choices=Status.choices)
     time_start = models.DateTimeField(null=True, blank=True)
     time_end = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        """
+               Настройка отображения в админ-панели
+        """
+        verbose_name = 'Этап'
+        verbose_name_plural = 'Этапы'
+        ordering = ['name']
 
 
 class StageRelation(models.Model):
@@ -32,15 +58,34 @@ class Venue(models.Model):
     name = models.CharField("Название", max_length=50)
     address = models.TextField("Адрес", max_length=500)
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        """
+        Настройка отображения в админ-панели
+        """
+        verbose_name = 'Площадка проведения'
+        verbose_name_plural = 'Площадки проведения'
+        ordering = ['name']
+
 
 class Application(models.Model):
     class Status(models.IntegerChoices):
+        """
+        Именованные константы для отображения статуса заявки(участия) в мероприятии
+        Можно расширить
+        """
         AWAITED = 0
         ACCEPTED = 200
         REJECTED = 400
         BANNED = 404
 
     class Roles(models.IntegerChoices):
+        """
+        Именованные константы для отображеня роли учатися в мероприятии
+        Можно расширить
+        """
         PARTICIPANT = 0
         STAFF = 1
         ADMIN = 100
