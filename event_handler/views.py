@@ -1,25 +1,11 @@
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from event_handler.forms import Event as EventForm
 from event_handler.models import Event as EventData
 
 from event_handler.db_controller import *
-
-from event_handler.db_controller import *
-
-
-def error404(request):
-    """
-    Страница 404 - page not found
-
-    :param request: объект с деталями запроса
-    :type request: :class: 'django.http.HttpRequest'
-    :return: html страница
-    """
-
-    return render(request, "404.html")
 
 
 @login_required
@@ -68,16 +54,25 @@ def all_events(request, page_number=1):
 
     context = {'event_list': event_list}
 
-    return render(request, 'event_handler/all_events.html', context)
+    return render(request, 'all_events.html', context)
+
 
 def cur_event(request, id):
+    """
+    Страница конкретного мероприятия
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :param id: id мероприятия
+    :type id: :class: 'int'
+    :return: html страница
+    """
     try:
-        context = {}
-        context["event_id"] = id
-        event = get_event_by_id(context["event_id"])
+        context = {"event_id": id}
+        event = get_event_by_id(id)
         context['name'] = event.name
         context['description'] = event.description
         context['stages'] = [get_stages_by_event(context["event_id"])]
         return render(request, 'event.html', context)
-    except:
+    except ValueError:
         raise Http404
