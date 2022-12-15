@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import *
+from .models import Event, Stage, StageRelation, StageSettings, StageStaff, StageParticipants
 
 
 @admin.register(Event)
@@ -20,7 +20,12 @@ class StageAdmin(admin.ModelAdmin):
 class StageRelationAdmin(admin.ModelAdmin):
     list_display = ('stage_from', 'stage_to')
 
+@admin.register(StageParticipants)
+class StageParticipantsAdmin(admin.ModelAdmin):
+    list_display = ("user", "stage", "role", "status")
 
-@admin.register(Venue)
-class VenueAdmin(admin.ModelAdmin):
-    list_display = ('name', 'address')
+@admin.register(StageStaff)
+class StageStaffAdmin(admin.ModelAdmin):
+    list_display = ("user", "stage", "role", "status")
+
+
