@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import StageSettings
 
-# Register your models here.
+@admin.register(StageSettings)
+class AdminStageSetting(admin.ModelAdmin):
+    list_display = ("stage", )
