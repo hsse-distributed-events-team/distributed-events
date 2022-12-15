@@ -78,7 +78,7 @@ def get_event_by_id(id: int) -> Event:
 
 
 def get_stages_by_event(event: Event):
-    return Stage.onjects.filter(parent=event)
+    return Stage.objects.filter(parent=event)
 
 
 def get_event_by_stage(stage: Stage) -> Event:

@@ -126,3 +126,21 @@ a:hover.event_registration  {
     border-radius: 3px;
     height: 30px;
 }
+
+.full_event_description_handler {
+   margin-top: 40px;
+   font-size: 25px;
+   font-weight: bold;
+   text-align: left;
+   margin-bottom: 30px;
+}
+
+.current_event_time {
+    font-size: 20px;
+    text-align: left!important;
+}
+.full_event_description {
+    margin-top: 18px;
+    font-size: 23px;
+    text-align: left!important;
+}
