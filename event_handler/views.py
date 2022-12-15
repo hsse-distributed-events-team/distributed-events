@@ -46,16 +46,39 @@ def create_event(request):
             record = Event()
             record.save()
 
-    return render(request, 'create_event.html', context)
+    return render(request, '/create_event.html', context)
 
 
-def cur_event(request):
-    context = {"event_id": request.GET.get("event_id")}
-    event = get_event_by_id(context["event_id"])
+def cur_event(request, event_id):
+    """
+    Страница конкретного мероприятия
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :param event_id: id мероприятия
+    :type event_id: :class: 'int'
+    :return: html страница
+    """
+    context = {"event_id": event_id}
+    event = get_event_by_id(event_id)
     context['name'] = event.name
     context['description'] = event.description
-    context['sub_events'] = [get_stages_by_event(context["event_id"])]
-    return render(request, 'all_events/templates/cur_event.html', context)
+    context['stages'] = [get_stages_by_event(context["event_id"])]
+    context['navigation_buttons'] = [
+        {
+            'name': "Главная",
+            'href': ".."
+        },
+        {
+            'name': "Зарегистрироваться",
+            'href': f"../event_registration/{event_id}"
+        },
+        {
+           'name': "Профиль",
+           'href': "/user_profile"
+        }
+    ]
+    return render(request, 'event_handler/event.html', context)
 
 
 def all_events(request, page_number=1):
@@ -72,7 +95,21 @@ def all_events(request, page_number=1):
     # if not event_list:
     #     return error404(request)
 
-    context = {'event_list': event_list}
+    context = {'event_list': event_list,
+               'navigation_buttons' : [
+                   {
+                       'name': "О нас",
+                       'href': "https://hsse.mipt.ru/"
+                   },
+                   {
+                       'name': "Создать мероприятие",
+                       'href': "/create_event"
+                   },
+                   {
+                       'name': "Профиль",
+                       'href': "/user_profile"
+                   }
+               ]
+               }
 
     return render(request, 'event_handler/all_events.html', context)
-    # return render(request, 'event_handler/all_events.html', context)
