@@ -46,7 +46,7 @@ def create_event(request):
             record = Event()
             record.save()
 
-    return render(request, 'create_event.html', context)
+    return render(request, '/create_event.html', context)
 
 
 def cur_event(request):
@@ -55,7 +55,7 @@ def cur_event(request):
     context['name'] = event.name
     context['description'] = event.description
     context['sub_events'] = [get_stages_by_event(context["event_id"])]
-    return render(request, 'all_events/templates/cur_event.html', context)
+    return render(request, 'event_handler/event.html', context)
 
 
 def all_events(request, page_number=1):
@@ -72,7 +72,21 @@ def all_events(request, page_number=1):
     # if not event_list:
     #     return error404(request)
 
-    context = {'event_list': event_list}
+    context = {'event_list': event_list,
+               'navigation_buttons' : [
+                   {
+                       'name': "Профиль",
+                       'href': "/user_profile"
+                   },
+                   {
+                       'name': "Создать мероприятие",
+                       'href': "/create_event"
+                   },
+                   {
+                       'name': "О нас",
+                       'href': "/about"
+                   }
+               ]
+               }
 
     return render(request, 'event_handler/all_events.html', context)
-    # return render(request, 'event_handler/all_events.html', context)

@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -8,10 +8,7 @@
     <title>Все мероприятия</title>
 </head>
 <body>
-  <div class = "tool_bar">
-      <a class = "active" href="/user_profile">Профиль</a>
-      <a href = "/about">О нас</a>
-  </div>
+    {% include "layouts/navigation_bar.html" %}
   <div class = "lots_of_events">
       <h1 class = "handler">ВСЕ МЕРОПРИЯТИЯ</h1>
       {% for event, stage, status in event_list %}

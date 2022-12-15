@@ -13,28 +13,6 @@ body {
    margin-bottom: 30px;
 }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-.tool_bar {
-  overflow: hidden;
-  background-color: #fc3f1d;
-}
-.tool_bar a {
-  float: right;
-  color: #e6e6e6;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
-.tool_bar a:hover {
-  color: white;
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 /*navigation bar*/
 .navbar-nav {
     margin-left: auto!important;
@@ -46,18 +24,11 @@ body {
 .nav-link {
     margin-left: 10px!important;
     margin-right: 10px!important;
-    color: #ffffff!important;
+    color: #f6f5f3d4!important;
     font-size: 20px!important;
 }
 .nav-link:hover {
     color: #ffffff!important;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
 
 .lots_of_events {
