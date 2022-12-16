@@ -13,20 +13,22 @@ body {
    margin-bottom: 30px;
 }
 
-.tool_bar {
-  overflow: hidden;
-  background-color: #fc3f1d;
+/*navigation bar*/
+.navbar-nav {
+    margin-left: auto!important;
+    margin-right: auto!important;
 }
-.tool_bar a {
-  float: right;
-  color: #e6e6e6;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
+.my-navbar {
+    background-color: #fc3f1d;
 }
-.tool_bar a:hover {
-  color: white;
+.nav-link {
+    margin-left: 10px!important;
+    margin-right: 10px!important;
+    color: #f6f5f3d4!important;
+    font-size: 20px!important;
+}
+.nav-link:hover {
+    color: #ffffff!important;
 }
 
 .lots_of_events {
@@ -123,4 +125,22 @@ a:hover.event_registration  {
     text-decoration: none;
     border-radius: 3px;
     height: 30px;
+}
+
+.full_event_description_handler {
+   margin-top: 40px;
+   font-size: 25px;
+   font-weight: bold;
+   text-align: left;
+   margin-bottom: 30px;
+}
+
+.current_event_time {
+    font-size: 20px;
+    text-align: left!important;
+}
+.full_event_description {
+    margin-top: 18px;
+    font-size: 23px;
+    text-align: left!important;
 }

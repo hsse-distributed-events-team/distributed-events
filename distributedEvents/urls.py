@@ -22,8 +22,13 @@ from event_handler import views
 from user_handler import views as user_views
 
 urlpatterns = [
-    path('', views.all_events),
+    path('', views.all_events, name="all_events"),
     path('admin/', admin.site.urls),
+    # path('login/', auth_views.LoginView.as_view(), name='login'),
+    # path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('create_event/', views.create_event, name='create_event'),
+    path('all_events/<int:event_id>', views.cur_event, name="cur_event"),
+    #re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events"),
     path('register/', user_views.register, name='register'),
     path('user_profile/', user_views.profile, name='user_profile'),
     path('login/', auth_views.LoginView.as_view(template_name='user_handler/login.html'), name='login'),
