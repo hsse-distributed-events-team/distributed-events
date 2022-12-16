@@ -22,6 +22,7 @@ def create_event(request):
 
     if request.method == 'POST':
         form = EventForm(request.POST)
+        context['form'] = form
 
         if form.is_valid():
             name = form.cleaned_data['name']
