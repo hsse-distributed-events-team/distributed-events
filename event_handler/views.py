@@ -3,12 +3,13 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from event_handler.forms import Event as EventForm
+from event_handler.models import Event as EventData
 from event_handler.models import Stage as StageData
 
 from event_handler.db_controller import *
 
 
-#@login_required
+@login_required
 def create_event(request):
     """
     Страница создания мероприятия
@@ -21,12 +22,11 @@ def create_event(request):
 
     if request.method == 'POST':
         form = EventForm(request.POST)
-        context['form'] = form
 
         if form.is_valid():
             name = form.cleaned_data['name']
             privacy = form.cleaned_data['privacy']
-            thematic = form.cleaned_data['thematic']
+            preview = form.cleaned_data['preview']
             date_start = form.cleaned_data['date_start']
             date_finish = form.cleaned_data['date_finish']
             description = form.cleaned_data['description']
@@ -34,15 +34,22 @@ def create_event(request):
             user = request.user
 
             if user.is_authenticated:
-                record = StageData(name=name,
-                                   description=description,
-                                   preview=thematic,
-                                   time_start=date_start,
-                                   time_finish=date_finish
-                                   )
+                record = EventData(name=name, description=description)
+                record.save()
+                event = Event.objects.create(name=name, description=description)
+                record = StageData(
+                    name=name,
+                    parent=event,
+                    preview=preview,
+                    time_start=date_start,
+                    time_end=date_finish,
+                    description=description
+                )
                 record.save()
         else:
-            HttpResponse('Invalid data')
+            return HttpResponse('Invalid data')
+    else:
+        context['form'] = EventForm()
 
     return render(request, 'create_event.html', context)
 
