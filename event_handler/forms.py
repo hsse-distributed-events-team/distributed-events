@@ -7,5 +7,7 @@ from django import forms
 class Event(forms.Form):
     name = forms.CharField(label='Название мероприятия', required=True)
     privacy = forms.BooleanField(label='Приватное', required=True)
-    date = forms.DateField(label="Сроки проведения", required=False)
-    thematic = forms.ChoiceField(label='Тематика', choices=[])
+    thematic = forms.ChoiceField(label='Тематика', choices=['Олимпиада спортивная', 'Олимпиада ученическая'])
+    date_start = forms.DateField(label='Дата начала', required=False)
+    date_finsh = forms.DateField(label='Дата окончания', required=False)
+    description = forms.TextInput()
