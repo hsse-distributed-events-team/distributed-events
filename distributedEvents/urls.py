@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import path, include
+from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from event_handler import views
@@ -31,7 +31,7 @@ urlpatterns = [
     path('user_profile/', user_views.profile, name='user_profile'),
     path('create_event/', views.create_event, name='create_event'),
     path('all_events/<int:event_id>', views.cur_event, name="cur_event"),
-    #
+    #re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events"),
     # path('creator_events/<int:event_id>/participants', views.participants, name='participants'),
     #
 ]

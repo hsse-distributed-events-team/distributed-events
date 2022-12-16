@@ -48,7 +48,7 @@ def get_user_events_id(user: User) -> Union[Set, int]:
 
 
 def get_user_stages(user: User) -> QuerySet:
-    return user.stage_set.all()
+    return user.stagestaff_set.all()
 
 
 def get_user_by_django_user(django_user: DjangoUser) -> User:
