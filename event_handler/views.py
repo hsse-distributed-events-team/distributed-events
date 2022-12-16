@@ -22,7 +22,6 @@ def create_event(request):
 
     if request.method == 'POST':
         form = EventForm(request.POST)
-        context['form'] = form
 
         if form.is_valid():
             name = form.cleaned_data['name']
@@ -49,8 +48,7 @@ def create_event(request):
                 record.save()
         else:
             return HttpResponse('Invalid data')
-    else:
-        context['form'] = EventForm()
+    context['form'] = EventForm()
 
     return render(request, 'create_event.html', context)
 
