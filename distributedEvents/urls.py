@@ -35,8 +35,8 @@ urlpatterns = [
     #re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events"),
     #
     # path('events/edit/<int:event_id>/venues/delete', creator_views.delete_venue, name="delete_venue"),
-    path('creator_events/<int:event_id>/participants', creator_views.view_participants, name='participants'),
-    path('creator_events/<int:event_id>/participants/add', creator_views.add_participant, name='add_participant'),
+    path('events/<int:event_id>/staff', creator_views.view_participants, name='participants'),
+    path('events/edit/add_staff', creator_views.add_staff, name='add_staff'),
     # path('creator_events/<int:event_id>/participants/delete', creator_views.delete_participant,
     # name='delete_participant'),
     #

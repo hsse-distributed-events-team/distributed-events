@@ -1,12 +1,12 @@
 from django import forms
-from .models import Participant
+from event_handler.models import StageStaff
 
 """
     Форма для сбора информации мероприятия
 """
 
 
-class ParticipantForm(forms.ModelForm):
+class StaffForm(forms.ModelForm):
     class Meta:
-        model = Participant
+        model = StageStaff
         fields = '__all__'

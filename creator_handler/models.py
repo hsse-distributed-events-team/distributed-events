@@ -32,12 +32,3 @@ class StageSettings(models.Model):
         """
         verbose_name = 'Настройки этапа'
         verbose_name_plural = 'Настройки этапа'
-
-
-class Participant:
-    name = models.CharField(label='Имя')
-    surname = models.CharField(label='Фамилия')
-    email = models.CharField(label="почта")
-
-    def __str__(self):
-        return self.name

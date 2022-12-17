@@ -3,12 +3,11 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from creator_handler.db_controller import *
-from .forms import ParticipantForm
-import json
+from .forms import StaffForm
 
 
 @login_required
-def add_participant(request):
+def add_staff(request):
     """
     Страница добавления участника
 
@@ -16,17 +15,15 @@ def add_participant(request):
     :type request: :class: 'django.http.HttpRequest'
     :return: html страница
     """
-    form = ParticipantForm()
+    form = StaffForm()
     if request.method == "POST" and request.is_ajax():
-        form = ParticipantForm(request.POST)
+        form = StaffForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            surname = form.cleaned_data['surname']
-            email = form.cleaned_data['email']
+            event_id = form.cleaned_data['stage'].parent
+            username = form.cleaned_data['username']
             form.save()
-            return JsonResponse({'name': name,
-                                 'surname': surname,
-                                 'email': email
+            return JsonResponse({'event_id': event_id,
+                                 'username': username,
                                  }, status=200)
         else:
             return JsonResponse({'errors': form.errors.as_json()}, status=400)
@@ -46,6 +43,6 @@ def view_participants(request, event_id):
     :return: html страница
     """
 
-    context = {'participants_list': get_participants_by_event(event_id)}
+    context = {'participants_list': get_participants_by_event(get_event_by_id(event_id))}
 
     return render(request, 'creator_handler/view_participants.html', context)

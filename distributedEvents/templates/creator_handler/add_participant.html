@@ -26,7 +26,7 @@
                 $.ajax({
                     data: $(this).serialize(),
                     type: $(this).attr('method'),
-                    url: "{% url 'contact_form' %}",
+                    url: "{% url 'add_staff' %}",
                     success: function (response) {
                         alert("Участник " + response.name);
                     },
