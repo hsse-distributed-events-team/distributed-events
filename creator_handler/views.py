@@ -18,8 +18,9 @@ def venues_list(request, event_id: int):
 
 
 @login_required(login_url="login")
-def delete_venue(request, event_id: int, venue_id):
+def delete_venue(request, event_id: int):
     if request.method == "POST" and request.is_ajax():
+        venue_id = request.data
         if not user_have_access(request.user, event_id):
             return JsonResponse({"reason": "Not enough rights"}, status=400)
         try:
