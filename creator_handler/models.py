@@ -15,6 +15,8 @@ class StageSettings(models.Model):
     application_auto_accept = models.BooleanField("Автопринятие заявок", default=False)
     public_participant_list = models.BooleanField("Публичный список участников", default=False)
     contacts_is_visible = models.BooleanField("Отображение контактов", default=False)
+    who_can_edit_venues = models.SmallIntegerField("Кто может радактировать площадки", choices=AccessLevel.choices,
+                                                   default=AccessLevel.PROVIDER)
     who_can_accept_applications = models.SmallIntegerField("Кто может принимать заявки", choices=AccessLevel.choices,
                                                            default=AccessLevel.PROVIDER)
     who_can_manage_mailing_list = models.SmallIntegerField("Кто может управлять рассылкой", choices=AccessLevel.choices,

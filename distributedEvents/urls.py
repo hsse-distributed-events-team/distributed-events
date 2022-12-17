@@ -34,7 +34,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='user_handler/logout.html'), name='logout'),
 
     path('events/edit/<int:event_id>/venues/', creator_views.venues_list, name="test"),
-    # path('events/edit/<int:event_id>/venues/delete/<int:venue_id>', creator_views., name=""),
+    path('events/edit/<int:event_id>/venues/delete/<int:venue_id>', creator_views.delete_venue, name="delete_venue"),
     # path('events/edit/<int:event_id>/venues/edit/<int:venue_id>', creator_views., name=""),
     # path('events/edit/<int:event_id>', creator_views., name=""),
     # path('events/edit/<int:event_id>', creator_views., name=""),

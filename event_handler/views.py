@@ -19,7 +19,7 @@ def error404(request):
     return render(request, "404.html")
 
 
-@login_required
+@login_required(login_url="login")
 def create_event(request):
     """
     Страница создания мероприятия
