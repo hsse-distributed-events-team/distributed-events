@@ -22,8 +22,9 @@ def venues_list(request, event_id: int):
 @login_required(login_url="login")
 def delete_venue(request, event_id: int):
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
     if request.method == "POST" and is_ajax:
-        print(request)
+        print(request.POST)
 
         venue_id = request.POST.get("id", None)
         print(venue_id)
@@ -31,11 +32,11 @@ def delete_venue(request, event_id: int):
             return JsonResponse({"errors": "Not enough rights"}, status=400)
         try:
             Venue.objects.get(id=venue_id).delete()
-            return JsonResponse({"errors": None}, status=200)
+            return JsonResponse({}, status=200)
         except ObjectDoesNotExist:
             print("А где")
             return JsonResponse({"errors": "There is no such venue"}, status=400)
         except Exception as e:
             print(e)
             return JsonResponse({"errors": "Undefined server error"}, status=400)
-    return redirect('/')
+    return JsonResponse({}, status=400)

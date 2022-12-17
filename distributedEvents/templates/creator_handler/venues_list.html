@@ -48,7 +48,7 @@
             <td>{{ venue.region }}</td>
             <td>{{ venue.contacts }}</td>
             <td>
-                <button type="button" class="btn btn-danger" id="{{ venue.id }}">удалить</button>
+                <button type="button" class="btn btn-danger" id="remove-button" data-id="{{ venue.id }}">удалить</button>
                 {% csrf_token %}
             </td>
         </tr>
@@ -57,25 +57,16 @@
     </table>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        var index, table = document.getElementById('table');
-        for(var i = 1; i < table.rows.length; i++)
-        {
-            table.rows[i].cells[4].onclick = function()
-            {
-
+        $("#remove-button").on('click', (e) => {
                 $.ajax({
                   data: {
-                    "id": $(this).attr("id")
+                    'id': $(e.target).attr('data-id')
                   },
-                  method: 'post',
+                  method: "POST",
                   dataType: 'json',
-                  contentType: 'json',
-
                   url: document.URL + "delete",
-
                   success: function (data) {
-                      index = this.parentElement.rowIndex;
-                        table.deleteRow(index);
+                      e.parentElement.delete();
                       alert("Удалена площадка");
                   },
                   error: function (data) {
@@ -84,8 +75,8 @@
                   }
               });
               return false;
-            };
-        }
+            })
+
 
     $(function () {
         $.ajaxSetup({
@@ -107,6 +98,7 @@
     }
     return "";
  }
+
 
 
 
