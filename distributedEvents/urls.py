@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from event_handler import views
 from user_handler import views as user_views
+from creator_handler import views as creator_views
 
 urlpatterns = [
     path('', views.all_events, name="all_events"),
@@ -34,8 +35,9 @@ urlpatterns = [
     #re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events"),
     #
     # path('events/edit/<int:event_id>/venues/delete', creator_views.delete_venue, name="delete_venue"),
-    path('creator_events/<int:event_id>/participants', views.view_participants, name='participants'),
-    path('creator_events/<int:event_id>/participants/add', views.add_participant, name='add_participant'),
-    path('creator_events/<int:event_id>/participants/delete', views.delete_participant, name='add_participant'),
+    path('creator_events/<int:event_id>/participants', creator_views.view_participants, name='participants'),
+    path('creator_events/<int:event_id>/participants/add', creator_views.add_participant, name='add_participant'),
+    # path('creator_events/<int:event_id>/participants/delete', creator_views.delete_participant,
+    # name='delete_participant'),
     #
 ]

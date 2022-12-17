@@ -134,21 +134,3 @@ def current_event(request, event_id):
     except ValueError:
         raise Http404
 
-
-@login_required
-def view_participants(request, event_id):
-    """
-    Страница всех участников
-
-    :param request: объект с деталями запроса
-    :type request: :class: 'django.http.HttpRequest'
-    :param event_id: id мероприятия
-    :type event_id: :class: 'int'
-    :return: html страница
-    """
-
-    context = {}
-    event = get_event_by_id(event_id)
-    # context['participants'] = get_participants_of_event()
-
-    return render(request, 'creator_handler/view_participants.html', context)
