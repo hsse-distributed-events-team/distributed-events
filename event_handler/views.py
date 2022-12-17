@@ -62,38 +62,6 @@ def create_event(request):
     return render(request, 'creator_handler/create_event.html', context)
 
 
-def cur_event(request, event_id):
-    """
-    Страница конкретного мероприятия
-
-    :param request: объект с деталями запроса
-    :type request: :class: 'django.http.HttpRequest'
-    :param event_id: id мероприятия
-    :type event_id: :class: 'int'
-    :return: html страница
-    """
-    context = {"event_id": event_id}
-    event = get_event_by_id(event_id)
-    context['name'] = event.name
-    context['description'] = event.description
-    context['stages'] = [get_stages_by_event(context["event_id"])]
-    context['navigation_buttons'] = [
-        {
-            'name': "Главная",
-            'href': ".."
-        },
-        {
-            'name': "Зарегистрироваться",
-            'href': f"../event_registration/{event_id}"
-        },
-        {
-            'name': "Профиль",
-            'href': "/user_profile"
-        }
-    ]
-    return render(request, 'event_handler/event.html', context)
-
-
 def all_events(request, page_number=1):
     """
     Страница всех мероприятий
@@ -142,6 +110,14 @@ def current_event(request, event_id):
     try:
         event = get_event_by_id(event_id)
         context = {'page-name': f'{event.name}', 'navigation_buttons': [
+            {
+                'name': "Главная",
+                'href': ".."
+            },
+            {
+                'name': "Зарегистрироваться",
+                'href': f"../event_registration/{event_id}"
+            },
             {
                 'name': "Профиль",
                 'href': "/user_profile"
