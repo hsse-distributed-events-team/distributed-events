@@ -4,7 +4,7 @@ from creator_handler.models import StageSettings
 
 
 class Event(models.Model):
-    name = models.CharField("Название мероприятия", default="Новое мероприятие", max_length=50)
+    name = models.CharField("Название мероприятия", default="Новое мероприятие", max_length=50, unique=True)
     description = models.TextField(null=True, blank=True, max_length=500)
 
     def __str__(self):
