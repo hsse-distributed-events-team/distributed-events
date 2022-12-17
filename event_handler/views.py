@@ -3,8 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from event_handler.forms import Event as EventForm
-from event_handler.models import Event as EventData
-from event_handler.models import Stage as StageData
+from event_handler.models import Event, Stage
 
 from event_handler.db_controller import *
 
@@ -35,7 +34,7 @@ def create_event(request):
 
         if form.is_valid():
             name = form.cleaned_data['name']
-            privacy = form.cleaned_data['privacy']
+            # privacy = form.cleaned_data['privacy']
             preview = form.cleaned_data['preview']
             date_start = form.cleaned_data['date_start']
             date_finish = form.cleaned_data['date_finish']
@@ -44,10 +43,10 @@ def create_event(request):
             user = request.user
 
             if user.is_authenticated:
-                record = EventData(name=name, description=description)
+                record = Event(name=name, description=description)
                 record.save()
                 event = Event.objects.create(name=name, description=description)
-                record = StageData(
+                record = Stage(
                     name=name,
                     parent=event,
                     preview=preview,
@@ -141,8 +140,16 @@ def current_event(request, event_id):
     :return: html страница
     """
     try:
-        context = {"event_id": event_id}
         event = get_event_by_id(event_id)
+        context = {'page-name': f'{event.name}', 'navigation_buttons': [
+            {
+                'name': "Профиль",
+                'href': "/user_profile"
+            }
+        ]
+                   }
+        event = get_event_by_id(event_id)
+        context['event_id'] = event_id
         context['name'] = event.name
         context['page-name'] = context['name']
         context['description'] = event.description
@@ -168,4 +175,4 @@ def view_participants(request, event_id):
     event = get_event_by_id(event_id)
     # context['participants'] = get_participants_of_event()
 
-    return render(request, 'creator_handler/view_participants.html')
+    return render(request, 'creator_handler/view_participants.html', context)
