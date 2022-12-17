@@ -6,6 +6,10 @@ from creator_handler.db_controller import *
 from .forms import StaffForm
 
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
 @login_required
 def add_staff(request):
     """
@@ -16,7 +20,7 @@ def add_staff(request):
     :return: html страница
     """
     form = StaffForm()
-    if request.method == "POST" and request.is_ajax():
+    if request.method == "POST" and is_ajax(request):
         form = StaffForm(request.POST)
         if form.is_valid():
             event_id = form.cleaned_data['stage'].parent
@@ -44,5 +48,20 @@ def view_participants(request, event_id):
     """
 
     context = {'participants_list': get_participants_by_event(get_event_by_id(event_id))}
+
+    return render(request, 'creator_handler/view_participants.html', context)
+
+
+@login_required
+def view_staff(request):
+    """
+    Страница просмотра всех участников
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+    """
+
+    context = {}
 
     return render(request, 'creator_handler/view_participants.html', context)
