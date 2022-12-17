@@ -50,7 +50,7 @@ def create_event(request):
             return HttpResponse('Invalid data')
     context['form'] = EventForm()
 
-    return render(request, '/create_event.html', context)
+    return render(request, 'event_handler/create_event.html', context)
 
 
 def cur_event(request, event_id):
@@ -117,7 +117,7 @@ def all_events(request, page_number=1):
                ]
                }
 
-    return render(request, 'all_events.html', context)
+    return render(request, 'event_handler/all_events.html', context)
 
 
 def cur_event(request, event_id):
@@ -159,4 +159,4 @@ def participants(request, event_id):
     event = get_event_by_id(event_id)
     # context['participants'] = get_participants_of_event()
 
-    return render(request, 'view_participants')
+    return render(request, 'event_handler/view_participants')
