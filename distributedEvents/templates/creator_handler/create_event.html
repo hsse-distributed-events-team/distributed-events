@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Создание мероприятия</title>
+    <title>{ page-name }</title>
 </head>
 <body>
-
+<form method="POST">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Send">
+</form>
 </body>
 </html>
