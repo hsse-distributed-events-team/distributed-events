@@ -28,14 +28,16 @@ urlpatterns = [
     path('all_events/<int:event_id>', views.cur_event, name="cur_event"),
     path('', views.all_events, name="all_events"),
     re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events"),
+
     path('register/', user_views.register, name='register'),
     path('user_profile/', user_views.profile, name='user_profile'),
     path('login/', auth_views.LoginView.as_view(template_name='user_handler/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='user_handler/logout.html'), name='logout'),
 
-    path('events/edit/<int:event_id>/venues/create', creator_views.create_venue, name="create_venue"),
     path('events/edit/<int:event_id>/venues/', creator_views.venues_list, name="test"),
+    path('events/edit/<int:event_id>/venues/create', creator_views.create_venue, name="create_venue"),
     path('events/edit/<int:event_id>/venues/delete', creator_views.delete_venue, name="delete_venue"),
+
     # path('events/edit/<int:event_id>/venues/edit/<int:venue_id>', creator_views., name=""),
     # path('events/edit/<int:event_id>', creator_views., name=""),
     # path('events/edit/<int:event_id>', creator_views., name=""),

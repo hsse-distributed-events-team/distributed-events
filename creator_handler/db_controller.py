@@ -33,3 +33,17 @@ def user_have_access(django_user: DjangoUser, event_id: int, setting=-1) -> bool
         return staff.status == StageStaff.Status.ACCEPTED and staff.role >= setting_rule
     except ObjectDoesNotExist:
         return False
+
+
+def create_venue(name: str, address: str, region: int, participants_maximum: int, contacts: str, event_id: int) -> None:
+    try:
+        Venue.objects.create(
+            name=name,
+            address=address,
+            region=region,
+            participants_maximum=participants_maximum,
+            parental_event=get_event_by_id(event_id),
+            contacts=contacts,
+        )
+    except Exception as e:
+        print(e)
