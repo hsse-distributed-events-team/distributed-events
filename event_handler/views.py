@@ -2,7 +2,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from event_handler.forms import Event
+from event_handler.forms import Event as EventForm
 from event_handler.models import Event, Stage
 
 from event_handler.db_controller import *
@@ -17,24 +17,14 @@ def create_event(request):
     :type request: :class: 'django.http.HttpRequest'
     :return: html страница
     """
-    context = {'page-name': "Создать мероприятие",
-               'navigation_buttons': [
-                   {
-                       'name': "Главная",
-                       'href': ".."
-                   },
-                   {
-                       'name': "Профиль",
-                       'href': "/user_profile"
-                   }
-               ]
-               }
+    context = {'page-name': "Создать мероприятие"}
+
     if request.method == 'POST':
         form = EventForm(request.POST)
 
         if form.is_valid():
             name = form.cleaned_data['name']
-            # privacy = form.cleaned_data['privacy']
+            privacy = form.cleaned_data['privacy']
             preview = form.cleaned_data['preview']
             date_start = form.cleaned_data['date_start']
             date_finish = form.cleaned_data['date_finish']
@@ -43,10 +33,8 @@ def create_event(request):
             user = request.user
 
             if user.is_authenticated:
-                record = Event(name=name, description=description)
-                record.save()
                 event = Event.objects.create(name=name, description=description)
-                record = Stage(
+                Stage.objects.create(
                     name=name,
                     parent=event,
                     preview=preview,
@@ -54,12 +42,11 @@ def create_event(request):
                     time_end=date_finish,
                     description=description
                 )
-                record.save()
         else:
             return HttpResponse('Invalid data')
     context['form'] = EventForm()
 
-    return render(request, 'creator_handler/create_event.html', context)
+    return render(request, 'event_handler/create_event.html', context)
 
 
 def all_events(request, page_number=1):
