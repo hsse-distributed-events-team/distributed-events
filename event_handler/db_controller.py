@@ -83,3 +83,20 @@ def get_stages_by_event(event: Event):
 
 def get_event_by_stage(stage: Stage) -> Event:
     return stage.parent
+
+
+# def make_record_event(event: Event):
+#     record = Event(name=Event.name, description=Event.description)
+#     record.save()
+#
+#
+# def make_record_stage(stage: Stage, event: Event):
+#     record = Stage(
+#         name=Stage.name,
+#         parent=Event,
+#         preview=Stage.preview,
+#         time_start=Stage.time_start,
+#         time_end=Stage.time_end,
+#         description=Stage.description
+#     )
+#     record.save()
