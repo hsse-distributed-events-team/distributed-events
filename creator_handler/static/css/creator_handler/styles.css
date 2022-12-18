@@ -1,0 +1,59 @@
+body {
+  background-color: #f6f5f3;
+  font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.handler {
+   margin-top: 10px;
+   font-size: 28px;
+   font-weight: bold;
+   text-align: left;
+   margin-bottom: 30px;
+}
+
+/*navigation bar*/
+.navbar-nav {
+    margin-left: auto!important;
+    margin-right: auto!important;
+}
+.my-navbar {
+    background-color: #fc3f1d;
+}
+.nav-link {
+    margin-left: 10px!important;
+    margin-right: 10px!important;
+    color: #f6f5f3d4!important;
+    font-size: 20px!important;
+}
+.nav-link:hover {
+    color: #ffffff!important;
+}
+
+/*table*/
+.btn.btn-primary {
+    margin-top: 40px;
+    margin-left: 70px;
+    box-shadow: 0 0 0 0.2rem rgb(41, 195, 41);
+    border-color:rgb(41, 195, 41);
+    background-color: rgb(41, 195, 41);
+}
+.btn.btn-primary:active {
+    box-shadow: 0 0 0 0.1rem rgb(101, 228, 101);
+}
+
+.table-area {
+    margin-top: 70px;
+    margin-left: 18%;
+    margin-right: 18%;
+
+    border-radius: 10px;
+}
+.table {
+    border: 1px solid black;
+    text-align: center!important;
+}
+.btn.btn-danger {
+    background-color: #fc3f1d!important;
+}

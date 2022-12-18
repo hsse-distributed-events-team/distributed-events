@@ -14,7 +14,28 @@ def venues_list(request, event_id: int):
     venues = get_venues_by_event(event_id)
     context = {
         "venues_list": venues,
-
+        "navigation_buttons" : [
+            {
+                'name': "Главная",
+                'href': "/"
+            },
+            {
+                'name': "Участники",
+                'href': "/participantes"
+            },
+            {
+                'name': "Площадки",
+                'href': "/venues"
+            },
+            {
+               'name': "Персонал",
+               'href': "/staff"
+            },
+            {
+                'name': "Настройки",
+                'href': "/settings"
+            }
+        ]
     }
     return render(request, 'creator_handler/venues_list.html', context)
 
@@ -26,7 +47,7 @@ def delete_venue(request, event_id: int):
     if request.method == "POST" and is_ajax:
         print(request.POST)
 
-        venue_id = request.POST.get("id", None)
+        venue_id = request.POST.get('id', None)
         print(venue_id)
         if not user_have_access(request.user, event_id):
             return JsonResponse({"errors": "Not enough rights"}, status=400)
