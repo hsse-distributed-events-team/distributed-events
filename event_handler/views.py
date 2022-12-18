@@ -3,8 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from event_handler.forms import Event as EventForm
-from event_handler.models import Event as EventData
-from event_handler.models import Stage as StageData
+from event_handler.models import Event, Stage
 
 from event_handler.db_controller import *
 
@@ -50,38 +49,6 @@ def create_event(request):
     return render(request, 'event_handler/create_event.html', context)
 
 
-def cur_event(request, event_id):
-    """
-    Страница конкретного мероприятия
-
-    :param request: объект с деталями запроса
-    :type request: :class: 'django.http.HttpRequest'
-    :param event_id: id мероприятия
-    :type event_id: :class: 'int'
-    :return: html страница
-    """
-    context = {"event_id": event_id}
-    event = get_event_by_id(event_id)
-    context['name'] = event.name
-    context['description'] = event.description
-    context['stages'] = [get_stages_by_event(context["event_id"])]
-    context['navigation_buttons'] = [
-        {
-            'name': "Главная",
-            'href': ".."
-        },
-        {
-            'name': "Зарегистрироваться",
-            'href': f"../event_registration/{event_id}"
-        },
-        {
-            'name': "Профиль",
-            'href': "/user_profile"
-        }
-    ]
-    return render(request, 'event_handler/event.html', context)
-
-
 def all_events(request, page_number=1):
     """
     Страница всех мероприятий
@@ -117,7 +84,7 @@ def all_events(request, page_number=1):
     return render(request, 'event_handler/all_events.html', context)
 
 
-def cur_event(request, event_id):
+def current_event(request, event_id):
     """
     Страница одного мероприятия
 
@@ -128,32 +95,29 @@ def cur_event(request, event_id):
     :return: html страница
     """
     try:
-        context = {}
-        context["event_id"] = event_id
         event = get_event_by_id(event_id)
+        context = {'page-name': f'{event.name}', 'navigation_buttons': [
+            {
+                'name': "Главная",
+                'href': ".."
+            },
+            {
+                'name': "Зарегистрироваться",
+                'href': f"../event_registration/{event_id}"
+            },
+            {
+                'name': "Профиль",
+                'href': "/user_profile"
+            }
+        ]
+                   }
+        event = get_event_by_id(event_id)
+        context['event_id'] = event_id
         context['name'] = event.name
         context['page-name'] = context['name']
         context['description'] = event.description
         context['stages'] = [get_stages_by_event(context["event_id"])]
-        return render(request, 'event.html', context)
+        return render(request, 'event_handler/event.html', context)
     except ValueError:
         raise Http404
 
-
-@login_required
-def participants(request, event_id):
-    """
-    Страница всех участников
-
-    :param request: объект с деталями запроса
-    :type request: :class: 'django.http.HttpRequest'
-    :param event_id: id мероприятия
-    :type event_id: :class: 'int'
-    :return: html страница
-    """
-
-    context = {}
-    event = get_event_by_id(event_id)
-    # context['participants'] = get_participants_of_event()
-
-    return render(request, 'event_handler/view_participants')
