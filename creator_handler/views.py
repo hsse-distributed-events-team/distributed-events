@@ -21,6 +21,7 @@ def add_staff(request):
     """
     form = StaffForm()
     if request.method == "POST" and is_ajax(request):
+        print('YEEEES')
         form = StaffForm(request.POST)
         if form.is_valid():
             event_id = form.cleaned_data['stage'].parent
