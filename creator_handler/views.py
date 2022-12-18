@@ -50,9 +50,9 @@ def delete_venue(request, event_id: int):
         if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
             return JsonResponse({"errors": "Not enough rights"}, status=400)
         try:
-            Venue.objects.get(id=venue_id).delete()
+            c_db.Venue.objects.get(id=venue_id).delete()
             return JsonResponse({}, status=200)
-        except ObjectDoesNotExist:
+        except c_db.ObjectDoesNotExist:
             return JsonResponse({"errors": "There is no such venue"}, status=400)
         except Exception as e:
             print(e)  # - Заменить на логгирование
@@ -62,8 +62,6 @@ def delete_venue(request, event_id: int):
 
 @login_required(login_url="login")
 def create_venue(request, event_id: int):
-    if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
-        return redirect("/404")
     if request.method == 'POST':
         form = VenueForm(request.POST)
         if form.is_valid():
