@@ -33,7 +33,7 @@ def add_staff(request):
         else:
             return JsonResponse({'errors': form.errors.as_json()}, status=400)
 
-    return render(request, 'creator_handler/add_participant.html', {'form': form})
+    return render(request, 'creator_handler/add_staff.html', {'form': form})
 
 
 @login_required

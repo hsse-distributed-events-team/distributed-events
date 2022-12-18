@@ -26,7 +26,7 @@
             $('#StaffForm').submit(function () {
                 $.ajax({
                     data: $(this).serialize(),
-                    type: $(this).attr('method'),
+                    type: 'POST',
                     url: "{% url 'add_staff' %}",
                     success: function (response) {
                         alert("Участник " + response.name);
