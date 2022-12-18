@@ -34,10 +34,8 @@ def create_event(request):
             user = request.user
 
             if user.is_authenticated:
-                record = EventData(name=name, description=description)
-                record.save()
                 event = Event.objects.create(name=name, description=description)
-                record = StageData(
+                Stage.objects.create(
                     name=name,
                     parent=event,
                     preview=preview,
@@ -45,7 +43,6 @@ def create_event(request):
                     time_end=date_finish,
                     description=description
                 )
-                record.save()
         else:
             return HttpResponse('Invalid data')
     context['form'] = EventForm()
