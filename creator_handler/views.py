@@ -86,3 +86,29 @@ def create_venue(request, event_id: int):
         "navigation_buttons": NAVIGATE_BUTTONS,
     }
     return render(request, 'creator_handler/create_venue.html', context)
+
+
+@login_required(login_url="login")
+def edit_venue(request, event_id: int, venue_id: int):
+    # if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
+    #     return redirect("/404")
+    if request.method == 'POST':
+        form = VenueForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            address = form.cleaned_data['address']
+            region = form.cleaned_data['region']
+            participants_maximum = form.cleaned_data['participants_maximum']
+            contacts = form.cleaned_data['contacts']
+
+            pass  # Изменить данные площадки
+
+            return redirect(f'/events/edit/{event_id}/venues/')
+    else:
+        venue_data = c_db.get_venue_by_id(venue_id)
+        form = VenueForm(venue_data)
+    context = {
+        "form": form,
+        "navigation_buttons": NAVIGATE_BUTTONS,
+    }
+    return render(request, 'creator_handler/create_venue.html', context)

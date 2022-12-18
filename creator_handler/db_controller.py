@@ -18,6 +18,17 @@ def get_venues_by_event(event_id: int):
     return Venue.objects.filter(parental_event_id=event_id)
 
 
+def get_venue_by_id(venue_id: int):
+    try:
+        venue = Venue.objects.get(id=venue_id).__dict__
+    except ObjectDoesNotExist:
+        venue = {}
+    except Exception as e:
+        print(e)
+        venue = {}
+    return venue
+
+
 def user_have_access(django_user: DjangoUser, event_id: int, setting=-1) -> bool:
     user = get_user_by_django_user(django_user)
     try:
