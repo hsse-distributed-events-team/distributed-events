@@ -23,7 +23,7 @@ from user_handler import views as user_views
 
 urlpatterns = [
     path('', views.all_events, name="all_events"),
-    # path('', include('django.contrib.auth.urls')),
+    #path('', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('login/', auth_views.LoginView.as_view(template_name='user_handler/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='user_handler/logout.html'), name='logout'),
@@ -31,8 +31,7 @@ urlpatterns = [
     path('user_profile/', user_views.profile, name='user_profile'),
     path('create_event/', views.create_event, name='create_event'),
     path('all_events/<int:event_id>', views.cur_event, name="cur_event"),
-    path('test/', user_views.test, name='test'),
-    # re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events"),
+    #re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events"),
     # path('creator_events/<int:event_id>/participants', views.participants, name='participants'),
     #
 ]

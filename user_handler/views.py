@@ -1,9 +1,7 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm
-from .db_controller import *
 
 
 def register(request):  # place where the user can register
@@ -11,15 +9,9 @@ def register(request):  # place where the user can register
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            region = form.cleaned_data.get("region")
             username = form.cleaned_data.get('username')
-            django_user = get_django_user(username)
-            user = create_user_for_django_user(django_user)  # НЕ ТРОГАТЬ. КОСТЫЛЬ.
-
-            add_region_of_user(username=str(username), region=region)
-
             messages.success(request, f'Ваш аккаунт создан: можно войти на сайт.')
-            return redirect('/login')
+            return redirect('login')
     else:
         form = UserRegisterForm()
     return render(request, 'user_handler/register.html', {'form': form})
@@ -28,8 +20,3 @@ def register(request):  # place where the user can register
 @login_required
 def profile(request):   # go to profile page
     return render(request, 'user_handler/user_profile.html')
-
-
-def test(request):  # тест-функция. адрес: /test
-    print(add_region_of_user(username=str("TEST10"), region=30))
-    return HttpResponse('С кайфом')

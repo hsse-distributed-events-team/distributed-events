@@ -11,4 +11,4 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(PersonalData)
 class PersonalDataAdmin(admin.ModelAdmin):
-    list_display = ("name", "surname", "region")
+    list_display = ("name", "surname")
