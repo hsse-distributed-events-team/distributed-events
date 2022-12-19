@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, UserUpdateForm
 from .db_controller import *
 
 
@@ -22,11 +22,26 @@ def register(request):  # place where the user can register
             return redirect('/login')
     else:
         form = UserRegisterForm()
-    return render(request, 'user_handler/register.html', {'form': form})
+
+    return render(request, 'register.html', {'form': form})
 
 
 @login_required
 def profile(request):   # go to profile page
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        #print(u_form)
+        if u_form.is_valid():
+            u_form.save()
+            messages.success(request, f'Ваш профиль успешно обновлен.')
+            return redirect('user_profile')
+
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+    name = {
+        'u_form': u_form
+    }
+
     return render(request, 'user_handler/user_profile.html')
 
 

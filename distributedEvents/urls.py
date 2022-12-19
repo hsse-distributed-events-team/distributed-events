@@ -29,7 +29,7 @@ urlpatterns = [
     path('all_events/<int:event_id>', views.current_event, name="cur_event"),
     path('', views.all_events, name="all_events"),
     re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events"),
-
+  
     path('register/', user_views.register, name='register'),
     path('user_profile/', user_views.profile, name='user_profile'),
     path('login/', auth_views.LoginView.as_view(template_name='user_handler/login.html'), name='login'),
