@@ -11,3 +11,11 @@ class VenueForm(forms.Form):
     region = forms.IntegerField(label='Регион', required=False)
     participants_maximum = forms.IntegerField(label='Максимальное число участников', required=False, min_value=1)
     contacts = forms.CharField(label='Контакты', required=False, max_length=100, widget=forms.Textarea)
+
+class EmailForm(forms.Form):
+    '''
+        Форма для массовой отправки email
+    '''
+
+    subject = forms.CharField(label='Заголовок', required=True, max_length=50)
+    text = forms.CharField(label='Текст письма', required=True, max_length=1000)
