@@ -96,6 +96,8 @@ def reject_participant(user: User, event_id: int):
         return True
     except ObjectDoesNotExist:
         return False
+
+
 def accept_participant(user: User, event_id: int):
     try:
         stage = get_stages_by_event(get_event_by_id(event_id)).first()
@@ -103,6 +105,8 @@ def accept_participant(user: User, event_id: int):
         return True
     except ObjectDoesNotExist:
         return False
+
+
 def ban_participant(user: User, event_id: int):
     try:
         stage = get_stages_by_event(get_event_by_id(event_id)).first()

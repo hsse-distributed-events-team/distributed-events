@@ -47,17 +47,17 @@
                 {% endif %}
             {% endif %}
             <td>
-                <button type="button" class="btn btn-success" data-id="{{ participant.id }}">Принять заявку
+                <button type="button" class="btn btn-success" data-id="{{ participant.user.id }}">Принять заявку
                 </button>
                 {% csrf_token %}
             </td>
             <td>
-                <button type="button" class="btn btn-warning" data-id="{{ participant.id }}">Отклонить заявку
+                <button type="button" class="btn btn-warning" data-id="{{ participant.user.id }}">Отклонить заявку
                 </button>
                 {% csrf_token %}
             </td>
             <td>
-                <button type="button" class="btn btn-danger" data-id="{{ participant.id }}">Забанить
+                <button type="button" class="btn btn-danger" data-id="{{ participant.user.id }}">Забанить
                 </button>
                 {% csrf_token %}
             </td>
