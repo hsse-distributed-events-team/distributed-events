@@ -21,10 +21,9 @@ def create_event(request):
 
     if request.method == 'POST':
         form = EventForm(request.POST)
-
         if form.is_valid():
             name = form.cleaned_data['name']
-            privacy = form.cleaned_data['privacy']
+            # privacy = form.cleaned_data['privacy']
             preview = form.cleaned_data['preview']
             date_start = form.cleaned_data['date_start']
             date_finish = form.cleaned_data['date_finish']
