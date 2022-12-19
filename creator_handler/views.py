@@ -45,8 +45,8 @@ def view_staff(request, event_id):
     """
 
     context = {"navigation_buttons": NAVIGATE_BUTTONS,
-               "staff_list": c_db.get_staff_by_event(c_db.get_event_by_id(event_id))}
-
+               "staff_list": c_db.get_staff_by_event(event_id)}
+    print(c_db.get_staff_by_event(event_id))
     return render(request, 'creator_handler/view_staff.html', context)
 
 
