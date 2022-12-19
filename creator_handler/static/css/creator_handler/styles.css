@@ -47,7 +47,6 @@ body {
     margin-top: 70px;
     margin-left: 18%;
     margin-right: 18%;
-
     border-radius: 10px;
 }
 .table {
@@ -56,4 +55,38 @@ body {
 }
 .btn.btn-danger {
     background-color: #fc3f1d!important;
+}
+
+.form-area {
+    margin-top: 10%!important;
+    margin-left: 33%!important;
+    margin-right: 33%!important;
+}
+
+.btn-add {
+    display: block;
+    margin: 30px auto;
+    width: 200px;
+    height: 45px;
+    border-radius: 10px;
+    color: #ffffff;
+    border-color: rgb(41, 195, 41);
+    background-color: rgb(41, 195, 41);
+}
+.form-group {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+.form-control {
+    border-radius: 10px!important;
+}
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgb(41, 195, 41)!important;
+    border-color: rgb(41, 195, 41);
+}
+.btn-close {
+    float: right;
+    font-size: 1.7vw;
+    margin-bottom: 4px;
 }
