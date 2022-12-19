@@ -1,10 +1,11 @@
-from event_handler.models import Event, Stage, StageStaff, Venue
+from event_handler.models import Event, Stage, StageStaff, StageParticipants, Venue
 from user_handler.models import DjangoUser, User
 
 from django.core.exceptions import ObjectDoesNotExist
 from enum import Enum
 
 from event_handler.db_controller import get_user_by_django_user, get_stages_by_event, get_event_by_id
+
 
 def get_participants_by_event(event: Event):
     stage = get_stages_by_event(event).first()
@@ -23,6 +24,7 @@ def get_venues_by_event(event_id: int):
 
 def get_venue_by_id(venue_id: int):
     return Venue.objects.get(id=venue_id)
+
 
 def get_venue_by_id_dict(venue_id: int):
     try:
@@ -85,3 +87,17 @@ def is_venue_attached_to_event(event_id: int, venue_id: int) -> bool:
         return venue.parental_event.id == event_id
     except ObjectDoesNotExist:
         return False
+
+
+def reject_participant(user: User, event_id: int):
+    try:
+        stage = get_stages_by_event(get_event_by_id(event_id)).first()
+        StageParticipants.objects.filter(user=user, stage=stage).update(status=StageParticipants.Status.REJECTED)
+        return True
+    except ObjectDoesNotExist:
+        return False
+
+
+def get_event_partcipants(event_id: int):
+    stage = get_stages_by_event(get_event_by_id(event_id)).first()
+    return StageParticipants.objects.filter(stage=stage)
