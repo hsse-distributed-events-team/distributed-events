@@ -39,46 +39,46 @@ def is_ajax(request):
 #     return render(request, 'creator_handler/add_staff.html', {'form': form})
 
 
-# @login_required(login_url="login")
-# def view_participants(request, event_id):
-#     """
-#     Страница просмотра всех участников
-#
-#     :param request: объект с деталями запроса
-#     :type request: :class: 'django.http.HttpRequest'
-#     :param event_id: id мероприятия
-#     :type event_id: :class: 'int'
-#     :return: html страница
-#     """
-#     # if not user_have_access(request.user, event_id):
-#     #     return redirect('/404')
-#     context = {'participants_list': get_participants_by_event(get_event_by_id(event_id)),
-#                "navigation_buttons": [
-#                    {
-#                        'name': "Главная",
-#                        'href': "/"
-#                    },
-#                    {
-#                        'name': "Участники",
-#                        'href': "/participantes"
-#                    },
-#                    {
-#                        'name': "Площадки",
-#                        'href': "/venues"
-#                    },
-#                    {
-#                        'name': "Персонал",
-#                        'href': "/staff"
-#                    },
-#                    {
-#                        'name': "Настройки",
-#                        'href': "/settings"
-#                    }
-#                ]
-#     }
-#
-#     return render(request, 'creator_handler/view_participants.html', context)
-#
+@login_required(login_url="login")
+def participants_list(request, event_id):
+    """
+    Страница просмотра всех участников
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :param event_id: id мероприятия
+    :type event_id: :class: 'int'
+    :return: html страница
+    """
+    if not user_have_access(request.user, event_id):
+        return redirect('/404')
+    context = {'participants_list': get_participants_by_event(get_event_by_id(event_id)),
+               "navigation_buttons": [
+                   {
+                       'name': "Главная",
+                       'href': "/"
+                   },
+                   {
+                       'name': "Участники",
+                       'href': "/participantes"
+                   },
+                   {
+                       'name': "Площадки",
+                       'href': "/venues"
+                   },
+                   {
+                       'name': "Персонал",
+                       'href': "/staff"
+                   },
+                   {
+                       'name': "Настройки",
+                       'href': "/settings"
+                   }
+               ]
+    }
+    print(get_participants_by_event(get_event_by_id(event_id)))
+    return render(request, 'creator_handler/participants_list.html', context)
+
 # # @login_required(login_url="login")
 # def delete_participant(request, event_id: int):
 #     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
