@@ -52,7 +52,7 @@ def participants_list(request, event_id):
     """
     if not user_have_access(request.user, event_id):
         return redirect('/404')
-    context = {'participants_list': get_participants_by_event(get_event_by_id(event_id)),
+    context = {'participants_list': get_participants_by_event(event_id),
                "navigation_buttons": [
                    {
                        'name': "Главная",
@@ -76,7 +76,7 @@ def participants_list(request, event_id):
                    }
                ]
     }
-    print(get_participants_by_event(get_event_by_id(event_id)))
+    print(get_participants_by_event(event_id))
     return render(request, 'creator_handler/participants_list.html', context)
 
 # # @login_required(login_url="login")

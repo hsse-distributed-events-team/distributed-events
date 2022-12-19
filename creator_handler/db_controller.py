@@ -7,9 +7,9 @@ from enum import Enum
 from event_handler.db_controller import get_user_by_django_user, get_stages_by_event, get_event_by_id
 
 
-def get_participants_by_event(event: Event):
-    stage = get_stages_by_event(event).first()
-    return [] if stage.users is None else stage.users
+def get_participants_by_event(event_id: int):
+    stage = get_stages_by_event(get_event_by_id(event_id)).first()
+    return StageParticipants.objects.filter(stage=stage)
 
 
 class SettingsSet(Enum):
