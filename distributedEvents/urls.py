@@ -41,8 +41,10 @@ urlpatterns = [
     path('events/edit/<int:event_id>/venues/delete', creator_views.delete_venue, name="delete_venue"),
 
     path('events/edit/<int:event_id>/participants/', creator_views.participants_list, name="participants_list"),
+    path('events/edit/<int:event_id>/participants/reject', creator_views.reject_participant, name="reject_participant"),
+    path('events/edit/<int:event_id>/participants/accepted', creator_views.accept_participant, name="accept_participant"),
+    path('events/edit/<int:event_id>/participants/ban', creator_views.ban_participant, name="ban_participant"),
 
-    # path('events/edit/<int:event_id>/venues/edit/<int:venue_id>', creator_views., name=""),
     # path('events/edit/<int:event_id>', creator_views., name=""),
     # path('events/edit/<int:event_id>', creator_views., name=""),
     # path('events/edit/<int:event_id>', creator_views., name=""),

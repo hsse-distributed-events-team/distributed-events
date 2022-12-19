@@ -96,6 +96,20 @@ def reject_participant(user: User, event_id: int):
         return True
     except ObjectDoesNotExist:
         return False
+def accept_participant(user: User, event_id: int):
+    try:
+        stage = get_stages_by_event(get_event_by_id(event_id)).first()
+        StageParticipants.objects.filter(user=user, stage=stage).update(status=StageParticipants.Status.ACCEPTED)
+        return True
+    except ObjectDoesNotExist:
+        return False
+def ban_participant(user: User, event_id: int):
+    try:
+        stage = get_stages_by_event(get_event_by_id(event_id)).first()
+        StageParticipants.objects.filter(user=user, stage=stage).update(status=StageParticipants.Status.BANNED)
+        return True
+    except ObjectDoesNotExist:
+        return False
 
 
 def get_event_partcipants(event_id: int):

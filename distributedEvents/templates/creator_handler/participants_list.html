@@ -10,25 +10,54 @@
 </head>
 <body>
 {% include "layouts/navigation_bar.html" %}
-<a class="btn btn-primary" href="/new" role="button">Добавить персонал</a>
 <div class="table-area">
     <table class="table" id="table">
         <thead>
         <tr>
             <th scope="col">Имя пользователя</th>
-            <th scope="col">Роль</th>
+            <th scope="col">Результат</th>
             <th scope="col">Статус заявки</th>
-            <th scope="col">Действие</th>
+            <th colspan="3">Действие</th>
         </tr>
         </thead>
         <tbody>
         {% for participant in participants_list %}
         <tr>
             <th scope="row">{{ participant.user.personal_data }}</th>
-            <td>{{ participant.role }}</td>
-            <td>{{ participant.status }}</td>
+            {% if participant.role == 0 %}
+                <td>Участник</td>
+            {% else %}
+                {% if participant.role == 10 %}
+                    <td>Призер</td>
+                {% else %}
+                    <td>Победитель</td>
+                {% endif %}
+            {% endif %}
+            {% if participant.status == 0 %}
+                <td id="status">Ожидается</td>
+            {% else %}
+                {% if participant.status == 200 %}
+                    <td id="status">Принята</td>
+                {% else %}
+                    {% if participant.status == 400 %}
+                        <td id="status">Отклонена</td>
+                    {% else %}
+                        <td id="status">Забанен</td>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
             <td>
-                <button type="button" class="btn btn-danger" id="remove-button" data-id="{{ participant.id }}">забанить
+                <button type="button" class="btn btn-success" data-id="{{ participant.id }}">Принять заявку
+                </button>
+                {% csrf_token %}
+            </td>
+            <td>
+                <button type="button" class="btn btn-warning" data-id="{{ participant.id }}">Отклонить заявку
+                </button>
+                {% csrf_token %}
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger" data-id="{{ participant.id }}">Забанить
                 </button>
                 {% csrf_token %}
             </td>
@@ -47,9 +76,45 @@
                      },
                      method: "POST",
                      dataType: 'json',
-                     url: document.URL + "delete",
+                     url: document.URL + "accepted",
                      success: function (data) {
-                         $("[data-id=" + $(e.target).attr('data-id') + "]").parent().parent().remove();
+                         $("[data-id=" + $(e.target).attr('data-id') + "]").parent().parent().children('#status').text('Принята')
+                     },
+                     error: function (data) {
+                         alert(response.responseJSON.errors);
+                         console.log(response.responseJSON.errors)
+                     }
+                 });
+                 return false;
+            })
+            $(table.rows[i].cells[4]).on('click', (e) => {
+                 $.ajax({
+                     data: {
+                         'id': $(e.target).attr('data-id'),
+                     },
+                     method: "POST",
+                     dataType: 'json',
+                     url: document.URL + "reject",
+                     success: function (data) {
+                         $("[data-id=" + $(e.target).attr('data-id') + "]").parent().parent().children('#status').text('Отклонена')
+                     },
+                     error: function (data) {
+                         alert(response.responseJSON.errors);
+                         console.log(response.responseJSON.errors)
+                     }
+                 });
+                 return false;
+            })
+            $(table.rows[i].cells[5]).on('click', (e) => {
+                 $.ajax({
+                     data: {
+                         'id': $(e.target).attr('data-id'),
+                     },
+                     method: "POST",
+                     dataType: 'json',
+                     url: document.URL + "ban",
+                     success: function (data) {
+                         $("[data-id=" + $(e.target).attr('data-id') + "]").parent().parent().children('#status').text('Забанен')
                      },
                      error: function (data) {
                          alert(response.responseJSON.errors);

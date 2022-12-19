@@ -12,7 +12,28 @@ import user_handler.db_controller as u_db
 
 # from .forms import StaffForm
 
-
+NAVIGATE_BUTTONS = [
+    {
+        'name': "Главная",
+        'href': "/"
+    },
+    {
+        'name': "Участники",
+        'href': "../participants"
+    },
+    {
+        'name': "Площадки",
+        'href': "../venues"
+    },
+    {
+        'name': "Персонал",
+        'href': "../staff"
+    },
+    {
+        'name': "Настройки",
+        'href': "../settings"
+    }
+]
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
@@ -56,29 +77,8 @@ def participants_list(request, event_id):
     if not user_have_access(request.user, event_id):
         return redirect('/404')
     context = {'participants_list': get_participants_by_event(event_id),
-               "navigation_buttons": [
-                   {
-                       'name': "Главная",
-                       'href': "/"
-                   },
-                   {
-                       'name': "Участники",
-                       'href': "/participants"
-                   },
-                   {
-                       'name': "Площадки",
-                       'href': "/venues"
-                   },
-                   {
-                       'name': "Персонал",
-                       'href': "/staff"
-                   },
-                   {
-                       'name': "Настройки",
-                       'href': "/settings"
-                   }
-               ]
-               }
+               "navigation_buttons": NAVIGATE_BUTTONS,
+    }
     return render(request, 'creator_handler/participants_list.html', context)
 
 
@@ -89,7 +89,37 @@ def reject_participant(request, event_id: int):
         if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
             return JsonResponse({"errors": "Not enough rights"}, status=400)
         try:
-            c_db.reject_participant(u_db.get_user_by_id(user_id))
+            c_db.reject_participant(u_db.get_user_by_id(user_id), event_id)
+            return JsonResponse({}, status=200)
+        except c_db.ObjectDoesNotExist:
+            return JsonResponse({"errors": "There is no such venue"}, status=400)
+        except Exception as e:
+            print(e)  # - Заменить на логгирование
+            return JsonResponse({"errors": "Undefined server error"}, status=400)
+    return JsonResponse({}, status=400)
+@login_required(login_url="login")
+def accept_participant(request, event_id: int):
+    if request.method == "POST" and is_ajax(request):
+        user_id = request.POST.get('id', None)
+        if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
+            return JsonResponse({"errors": "Not enough rights"}, status=400)
+        try:
+            c_db.accept_participant(u_db.get_user_by_id(user_id), event_id)
+            return JsonResponse({}, status=200)
+        except c_db.ObjectDoesNotExist:
+            return JsonResponse({"errors": "There is no such venue"}, status=400)
+        except Exception as e:
+            print(e)  # - Заменить на логгирование
+            return JsonResponse({"errors": "Undefined server error"}, status=400)
+    return JsonResponse({}, status=400)
+@login_required(login_url="login")
+def ban_participant(request, event_id: int):
+    if request.method == "POST" and is_ajax(request):
+        user_id = request.POST.get('id', None)
+        if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
+            return JsonResponse({"errors": "Not enough rights"}, status=400)
+        try:
+            c_db.ban_participant(u_db.get_user_by_id(user_id), event_id)
             return JsonResponse({}, status=200)
         except c_db.ObjectDoesNotExist:
             return JsonResponse({"errors": "There is no such venue"}, status=400)
@@ -98,29 +128,6 @@ def reject_participant(request, event_id: int):
             return JsonResponse({"errors": "Undefined server error"}, status=400)
     return JsonResponse({}, status=400)
 
-
-# # @login_required(login_url="login")
-# def delete_participant(request, event_id: int):
-#     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-#
-#     if request.method == "POST" and is_ajax:
-#         print(request.POST)
-#
-#         participant_id = request.POST.get('id', None)
-#         print(participant_id)
-#         if not user_have_access(request.user, event_id):
-#             return JsonResponse({"errors": "Not enough rights"}, status=400)
-#         # try:
-#         #     Venue.objects.get(id=participant_id).delete()
-#         #     return JsonResponse({}, status=200)
-#         # except ObjectDoesNotExist:
-#         #     print("А где")
-#         #     return JsonResponse({"errors": "There is no such venue"}, status=400)
-#         # except Exception as e:
-#         #     print(e)
-#         #     return JsonResponse({"errors": "Undefined server error"}, status=400)
-#     return JsonResponse({}, status=400)
-#
 #
 #
 # @login_required
@@ -136,29 +143,6 @@ def reject_participant(request, event_id: int):
 #     context = {}
 #
 #     return render(request, 'creator_handler/view_participants.html', context)
-
-NAVIGATE_BUTTONS = [
-    {
-        'name': "Главная",
-        'href': "/"
-    },
-    {
-        'name': "Участники",
-        'href': "../participantes"
-    },
-    {
-        'name': "Площадки",
-        'href': "../venues"
-    },
-    {
-        'name': "Персонал",
-        'href': "../staff"
-    },
-    {
-        'name': "Настройки",
-        'href': "../settings"
-    }
-]
 
 
 @login_required(login_url="login")
