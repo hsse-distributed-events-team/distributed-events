@@ -13,19 +13,19 @@ NAVIGATE_BUTTONS = [
     },
     {
         'name': "Участники",
-        'href': "/participantes"
+        'href': "../participantes"
     },
     {
         'name': "Площадки",
-        'href': "/venues"
+        'href': "../venues"
     },
     {
         'name': "Персонал",
-        'href': "/staff"
+        'href': "../staff"
     },
     {
         'name': "Настройки",
-        'href': "/settings"
+        'href': "../settings"
     }
 ]
 
@@ -85,7 +85,6 @@ def create_venue(request, event_id: int):
         form = VenueForm()
     context = {
         "form": form,
-        "navigation_buttons": NAVIGATE_BUTTONS,
     }
     return render(request, 'creator_handler/create_venue.html', context)
 
@@ -108,9 +107,10 @@ def edit_venue(request, event_id: int, venue_id: int):
             return redirect(f'/events/edit/{event_id}/venues/')
     else:
         venue_data = c_db.get_venue_by_id_dict(venue_id)
+
         form = VenueForm(venue_data)
     context = {
         "form": form,
-        "navigation_buttons": NAVIGATE_BUTTONS,
+        "saved_form": venue_data,
     }
-    return render(request, 'creator_handler/create_venue.html', context)
+    return render(request, 'creator_handler/edit_venue.html', context)

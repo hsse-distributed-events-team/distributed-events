@@ -53,9 +53,14 @@ body {
     border: 1px solid black;
     text-align: center!important;
 }
-.btn.btn-danger {
+.btn-danger {
     background-color: #fc3f1d!important;
 }
+.btn-warning {
+    background-color: #ffd633!important;
+    color: black!important;
+}
+
 
 .form-area {
     margin-top: 10%!important;
