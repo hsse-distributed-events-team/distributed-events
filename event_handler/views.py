@@ -7,6 +7,7 @@ from event_handler.models import Event, Stage
 
 from event_handler.db_controller import *
 
+
 def error404(request):
     """
     Страница 404 - page not found
@@ -60,7 +61,7 @@ def create_event(request):
     return render(request, 'creator_handler/create_event.html', context)
 
 
-def all_events(request, page_number=1):
+def all_events(request):
     """
     Страница всех мероприятий
 
@@ -69,7 +70,7 @@ def all_events(request, page_number=1):
     :return: html страница
     """
 
-    event_list = get_all_events(int(page_number), request.user)
+    event_list = get_all_events(request.user)
 
     # if not event_list:
     #     return error404(request)
@@ -89,6 +90,56 @@ def all_events(request, page_number=1):
                        'name': "Профиль",
                        'href': "/user_profile"
                    }
+               ]
+               }
+
+    return render(request, 'event_handler/all_events.html', context)
+
+
+@login_required(login_url="login")
+def participant_event_list(request):
+    """
+    Страница всех мероприятий, в которых пользователь - участник
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+    """
+
+    event_list = get_all_events(request.user, 1)
+
+    # if not event_list:
+    #     return error404(request)
+
+    context = {'page-name': 'Мои мероприятия(участник)',
+               'event_list': event_list,
+               'navigation_buttons': [
+                   {}
+               ]
+               }
+
+    return render(request, 'event_handler/all_events.html', context)
+
+
+@login_required(login_url="login")
+def staff_event_list(request):
+    """
+    Страница всех мероприятий, в которых пользователь - модератор
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+    """
+
+    event_list = get_all_events(request.user, 2)
+
+    # if not event_list:
+    #     return error404(request)
+
+    context = {'page-name': 'Мои мероприятия(Модератор)',
+               'event_list': event_list,
+               'navigation_buttons': [
+                   {}
                ]
                }
 
@@ -131,4 +182,3 @@ def current_event(request, event_id):
         return render(request, 'event_handler/event.html', context)
     except ValueError:
         raise Http404
-

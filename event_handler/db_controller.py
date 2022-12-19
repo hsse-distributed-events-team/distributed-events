@@ -8,25 +8,26 @@ from django.db.models.query import QuerySet
 from django.core.exceptions import ObjectDoesNotExist
 from typing import Union, List, Tuple, Set
 
+from itertools import chain
+
 ITEMS_PER_PAGE = 12  # Количество объектов в одной странице выдачи
 
 
-def get_all_events(page=0, django_user: DjangoUser = None) -> Union[List, Union[Tuple, Event, Stage, int]]:
+def get_all_events(django_user: DjangoUser = None, user_role=0) -> Union[List, Union[Tuple, Event, Stage, int]]:
     """
     Получить список всех мероприятий по заданным параметрам
-    :param page: Номер страницы отображения
     :param django_user: Пользователь, сделавший запрос
+    :param user_role: Роль пользователя. (0 - все, 1 - участник, 2 - модератор)
     :return: Список из троек: мероприятие, его первый этап, bool участвует ли django_user в этом мероприятии
     """
+
     event_ids = set()
     if (not django_user.is_anonymous) and django_user is not None:
         user = get_user_by_django_user(django_user)
-        event_ids = get_user_events_id(user)
+        event_ids = get_user_events_id(user, user_role)
+
     result = list()
-    if page == 0:
-        events = Event.objects.all()
-    else:
-        events = Event.objects.all()[10 * (page - 1):10 * page]
+    events = Event.objects.all()
     for event in events:
         if event.id in event_ids:
             result.append((event, event.stage_set.first, True))
@@ -35,20 +36,27 @@ def get_all_events(page=0, django_user: DjangoUser = None) -> Union[List, Union[
     return result
 
 
-def get_user_events_id(user: User) -> Union[Set, int]:
+def get_user_events_id(user: User, user_role=0) -> Union[Set, int]:
     """
     :param user: Пользователь. Удивительно, да?
+    :param user_role: Роль пользователя. (0 - все, 1 - участник, 2 - модератор)
     :return: Множество id мероприятий, в которых участвует user
     """
     result = set()
-    stages = get_user_stages(user)
+    stages = get_user_stages(user, user_role)
     for stage in stages:
-        result.add(stage.parent.id)
+        result.add(stage.stage.parent.id)
     return result
 
 
-def get_user_stages(user: User) -> QuerySet:
-    return user.stageparticipants_set.all()
+def get_user_stages(user: User, user_role=0):
+    if user_role == 0:
+        stages = list(chain(user.stageparticipants_set.all(), user.stagestaff_set.all()))
+    elif user_role == 1:
+        stages = list(user.stageparticipants_set.all())
+    else:
+        stages = list(user.stagestaff_set.all())
+    return stages
 
 
 def get_user_by_django_user(django_user: DjangoUser) -> User:
@@ -83,7 +91,6 @@ def get_stages_by_event(event: Event):
 
 def get_event_by_stage(stage: Stage) -> Event:
     return stage.parent
-
 
 # def make_record_event(event: Event):
 #     record = Event(name=Event.name, description=Event.description)
