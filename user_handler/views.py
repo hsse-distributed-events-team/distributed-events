@@ -11,12 +11,12 @@ def register(request):  # place where the user can register
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            #region = form.cleaned_data.get("region")
+            region = form.cleaned_data.get("region")
             username = form.cleaned_data.get('username')
-            #django_user = get_django_user(username)
-            #user = create_user_for_django_user(django_user)  # НЕ ТРОГАТЬ. КОСТЫЛЬ.
+            django_user = get_django_user(username)
+            user = create_user_for_django_user(django_user)  # НЕ ТРОГАТЬ. КОСТЫЛЬ.
 
-            #add_region_of_user(username=str(username), region=region)
+            add_region_of_user(username=str(username), region=region)
 
             messages.success(request, f'Ваш аккаунт создан: можно войти на сайт.')
             return redirect('/login')
@@ -32,6 +32,18 @@ def profile(request):   # go to profile page
         u_form = UserUpdateForm(request.POST, instance=request.user)
         if u_form.is_valid():
             u_form.save()
+
+            username = request.user.username
+
+            region = u_form.cleaned_data.get("region")
+            email = u_form.cleaned_data.get('email')
+            name = u_form.cleaned_data.get('name')
+            surname = u_form.cleaned_data.get('surname')
+            data = [username, email, name, surname, region]
+            update_user_profile(data)
+
+            # print(update_user_profile(data), '\n\n', username)
+
             messages.success(request, f'Ваш профиль успешно обновлен.')
             return redirect('user_profile')
 
