@@ -75,7 +75,6 @@ body {
 }
 
 a.event_name {
-
     padding: 1rem 1rem;
     font-size: 25px;
     color: black;
@@ -140,7 +139,6 @@ a:hover.event_registration  {
     text-align: left!important;
 }
 .full_event_description {
-    margin-top: 18px;
     font-size: 23px;
     text-align: left!important;
 }
