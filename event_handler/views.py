@@ -6,6 +6,7 @@ from event_handler.forms import Event as EventForm
 from event_handler.models import Event, Stage
 
 from event_handler.db_controller import *
+from creator_handler.db_controller import *
 
 def error404(request):
     """
@@ -134,7 +135,7 @@ def current_event(request, event_id):
 
 def current_event_registration(request, event_id):
     """
-    Страница одного мероприятия
+    Страница регистрации на мероприятие
 
     :param request: объект с деталями запроса
     :type request: :class: 'django.http.HttpRequest'
@@ -166,6 +167,9 @@ def current_event_registration(request, event_id):
         context['description'] = event.description
         context['venues_list'] = get_venues_by_event(event)
         context['stages'] = [get_stages_by_event(context["event_id"])]
+        user = request.user
+        if user.is_authenticated:
+
         return render(request, 'event_handler/event_registration.html', context)
     except ValueError:
         raise Http404
