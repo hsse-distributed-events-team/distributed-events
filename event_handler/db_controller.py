@@ -13,39 +13,37 @@ from itertools import chain
 ITEMS_PER_PAGE = 12  # Количество объектов в одной странице выдачи
 
 
-def get_all_events(django_user: DjangoUser = None, user_role=0) -> Union[List, Union[Tuple, Event, Stage, int]]:
+def get_all_events(django_user: DjangoUser = None) -> Union[List, Union[Tuple, Event, Stage, int]]:
     """
     Получить список всех мероприятий по заданным параметрам
     :param django_user: Пользователь, сделавший запрос
-    :param user_role: Роль пользователя. (0 - все, 1 - участник, 2 - модератор)
     :return: Список из троек: мероприятие, его первый этап, bool участвует ли django_user в этом мероприятии
     """
 
-    event_ids = set()
+    user_events = set()
     if (not django_user.is_anonymous) and django_user is not None:
         user = get_user_by_django_user(django_user)
-        event_ids = get_user_events_id(user, user_role)
+        user_events = get_user_events(user)
 
     result = list()
     events = Event.objects.all()
     for event in events:
-        if event.id in event_ids:
+        if event in user_events:
             result.append((event, event.stage_set.first, True))
         else:
             result.append((event, event.stage_set.first, False))
     return result
 
 
-def get_user_events_id(user: User, user_role=0) -> Union[Set, int]:
+def get_user_events(user: User, user_role=0) -> Union[Set, int]:
     """
     :param user: Пользователь. Удивительно, да?
-    :param user_role: Роль пользователя. (0 - все, 1 - участник, 2 - модератор)
-    :return: Множество id мероприятий, в которых участвует user
+    :return: Множество мероприятий, в которых участвует user
     """
     result = set()
     stages = get_user_stages(user, user_role)
     for stage in stages:
-        result.add(stage.stage.parent.id)
+        result.add(stage.stage.parent)
     return result
 
 
@@ -57,6 +55,25 @@ def get_user_stages(user: User, user_role=0):
     else:
         stages = list(user.stagestaff_set.all())
     return stages
+
+
+def get_events_by_role(django_user: DjangoUser = None, user_role=0) -> Union[List, Union[Tuple, Event, Stage, int]]:
+    """
+    Получить список всех мероприятий по заданным параметрам
+    :param django_user: Пользователь, сделавший запрос
+    :param user_role: Роль пользователя. (0 - все, 1 - участник, 2 - модератор)
+    :return: Список из троек: мероприятие, его первый этап, bool участвует ли django_user в этом мероприятии
+    """
+
+    user_events = set()
+    if (not django_user.is_anonymous) and django_user is not None:
+        user = get_user_by_django_user(django_user)
+        user_events = get_user_events(user, user_role)
+
+    result = list()
+    for event in user_events:
+        result.append((event, event.stage_set.first, True))
+    return result
 
 
 def get_user_by_django_user(django_user: DjangoUser) -> User:

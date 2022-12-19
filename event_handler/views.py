@@ -106,7 +106,7 @@ def participant_event_list(request):
     :return: html страница
     """
 
-    event_list = get_all_events(request.user, 1)
+    event_list = get_events_by_role(request.user, 1)
 
     # if not event_list:
     #     return error404(request)
@@ -131,7 +131,7 @@ def staff_event_list(request):
     :return: html страница
     """
 
-    event_list = get_all_events(request.user, 2)
+    event_list = get_events_by_role(request.user, 2)
 
     # if not event_list:
     #     return error404(request)
