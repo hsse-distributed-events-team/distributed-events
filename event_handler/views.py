@@ -46,7 +46,7 @@ def create_event(request):
             return HttpResponse('Invalid data')
     context['form'] = EventForm()
 
-    return render(request, 'event_handler/create_event.html', context)
+    return render(request, 'creator_handler/create_event.html', context)
 
 
 def all_events(request, page_number=1):
