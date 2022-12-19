@@ -23,7 +23,7 @@ def register(request):  # place where the user can register
     else:
         form = UserRegisterForm()
 
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'user_handler/register.html', {'form': form})
 
 
 @login_required
