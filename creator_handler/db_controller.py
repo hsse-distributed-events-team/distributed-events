@@ -106,7 +106,8 @@ def make_record_stage(name, event, preview, time_start, time_end, description):
     return stage
 
 
-def create_staff(user, stage, role):
+def create_staff(user, stage, role, status=Stage.Status.WAITING):
     StageStaff.objects.create(user=user,
                               stage=stage,
-                              role=role)
+                              role=role,
+                              status=status)

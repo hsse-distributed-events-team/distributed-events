@@ -46,7 +46,7 @@ def create_event(request):
 
             event = c_db.make_record_event(name, description)
             stage = c_db.make_record_stage(name, event, preview, date_start, date_finish, description)
-            c_db.create_staff(user, stage, StageStaff.Roles.PROVIDER)
+            c_db.create_staff(user, stage, StageStaff.Roles.PROVIDER, StageStaff.Status.ACCEPTED)
 
             return redirect('all_events')
         else:
