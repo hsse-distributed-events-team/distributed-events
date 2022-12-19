@@ -117,10 +117,13 @@ def create_staff(user, stage, role):
                               role=role)
 
 
-def get_staff_by_event(event_id: int):
+def get_staff_by_event(event_id: int, status: int = -1):
     try:
-        stage = get_stages_by_event(get_event_by_id(event_id))
-        staff = StageStaff.objects.filter(stage=stage)
+        stage = get_stages_by_event(get_event_by_id(event_id)).first()
+        if status == -1:
+            staff = StageStaff.objects.filter(stage=stage)
+        else:
+            staff = StageStaff.objects.filter(stage=stage, status=status)
         return staff
-    except Exception:
+    except ObjectDoesNotExist:
         return []
