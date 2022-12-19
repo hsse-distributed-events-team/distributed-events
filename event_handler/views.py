@@ -132,3 +132,40 @@ def current_event(request, event_id):
     except ValueError:
         raise Http404
 
+def current_event_registration(request, event_id):
+    """
+    Страница одного мероприятия
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :param event_id: id мероприятия
+    :type event_id: :class: 'int'
+    :return: html страница
+    """
+    try:
+        event = get_event_by_id(event_id)
+        context = {'page-name': f'{event.name}', 'navigation_buttons': [
+            {
+                'name': "Главная",
+                'href': ".."
+            },
+            {
+                'name': "Зарегистрироваться",
+                'href': f"../event_registration/{event_id}"
+            },
+            {
+                'name': "Профиль",
+                'href': "/user_profile"
+            }
+        ]
+                   }
+        event = get_event_by_id(event_id)
+        context['event_id'] = event_id
+        context['name'] = event.name
+        context['page-name'] = context['name']
+        context['description'] = event.description
+        context['venues_list'] = get_venues_by_event(event)
+        context['stages'] = [get_stages_by_event(context["event_id"])]
+        return render(request, 'event_handler/event_registration.html', context)
+    except ValueError:
+        raise Http404
