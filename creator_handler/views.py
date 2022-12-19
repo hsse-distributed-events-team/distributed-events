@@ -50,7 +50,7 @@ def view_staff(request, event_id):
     return render(request, 'creator_handler/view_staff.html', context)
 
 @login_required
-def add_staff(request):
+def add_staff(request, event_id):
     """
     Страница добавления участника
 
