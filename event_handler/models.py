@@ -4,7 +4,7 @@ from creator_handler.models import StageSettings
 
 
 class Event(models.Model):
-    name = models.CharField("Название мероприятия", default="Новое мероприятие", max_length=50, unique=True)
+    name = models.CharField("Название мероприятия", default="Новое мероприятие", max_length=50)
     description = models.TextField(null=True, blank=True, max_length=500)
 
     def __str__(self):
@@ -25,6 +25,7 @@ class Venue(models.Model):
     region = models.SmallIntegerField("Регион, в котором площадка", null=True, blank=True)
     participants_maximum = models.IntegerField("Максимальное число участников", null=True, blank=True)
     parental_event = models.ForeignKey(Event, null=True, on_delete=models.SET_NULL)
+    contacts = models.TextField("Контакты", max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.name
