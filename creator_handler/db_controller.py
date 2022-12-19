@@ -58,3 +58,16 @@ def create_venue(name: str, address: str, region: int, participants_maximum: int
         )
     except Exception as e:
         print(e)
+
+
+def edit_venue(name: str, address: str, region: int, participants_maximum: int, contacts: str, venue_id: int) -> None:
+    try:
+        venue = Venue.objects.filter(id=venue_id).update(
+            name=name,
+            address=address,
+            region=region,
+            participants_maximum=participants_maximum,
+            contacts=contacts,
+        )
+    except Exception as e:
+        print(e)
