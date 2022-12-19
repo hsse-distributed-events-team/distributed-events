@@ -7,6 +7,9 @@ from creator_handler.db_controller import *
 from .forms import VenueForm
 
 import creator_handler.db_controller as c_db
+import user_handler.db_controller as u_db
+
+
 # from .forms import StaffForm
 
 
@@ -60,7 +63,7 @@ def participants_list(request, event_id):
                    },
                    {
                        'name': "Участники",
-                       'href': "/participantes"
+                       'href': "/participants"
                    },
                    {
                        'name': "Площадки",
@@ -75,9 +78,26 @@ def participants_list(request, event_id):
                        'href': "/settings"
                    }
                ]
-    }
-    print(get_participants_by_event(event_id))
+               }
     return render(request, 'creator_handler/participants_list.html', context)
+
+
+@login_required(login_url="login")
+def reject_participant(request, event_id: int):
+    if request.method == "POST" and is_ajax(request):
+        user_id = request.POST.get('id', None)
+        if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
+            return JsonResponse({"errors": "Not enough rights"}, status=400)
+        try:
+            c_db.reject_participant(u_db.get_user_by_id(user_id))
+            return JsonResponse({}, status=200)
+        except c_db.ObjectDoesNotExist:
+            return JsonResponse({"errors": "There is no such venue"}, status=400)
+        except Exception as e:
+            print(e)  # - Заменить на логгирование
+            return JsonResponse({"errors": "Undefined server error"}, status=400)
+    return JsonResponse({}, status=400)
+
 
 # # @login_required(login_url="login")
 # def delete_participant(request, event_id: int):
@@ -155,8 +175,7 @@ def venues_list(request, event_id: int):
 
 @login_required(login_url="login")
 def delete_venue(request, event_id: int):
-    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-    if request.method == "POST" and is_ajax:
+    if request.method == "POST" and is_ajax(request):
         venue_id = request.POST.get('id', None)
         if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
             return JsonResponse({"errors": "Not enough rights"}, status=400)

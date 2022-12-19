@@ -15,3 +15,7 @@ def add_region_of_user(username, region):
 
 def get_django_user(username):
     return DjangoUser.objects.get(username=username)
+
+
+def get_user_by_id(user_id: int) -> User:
+    return User.objects.get(id=user_id)
