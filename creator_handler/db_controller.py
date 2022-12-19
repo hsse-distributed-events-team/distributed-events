@@ -1,4 +1,4 @@
-from event_handler.models import Event, Stage, StageStaff
+from event_handler.models import Event, Stage, StageStaff, Venue
 from user_handler.models import DjangoUser, User
 
 from django.core.exceptions import ObjectDoesNotExist
