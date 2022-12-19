@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm
 from .db_controller import *
@@ -23,11 +24,25 @@ def register(request):  # place where the user can register
     else:
         form = UserRegisterForm()
 
-    return render(request, 'user_handler/register.html', {'form': form})
+    context = {'page-name': 'Мои мероприятия(участник)',
+               'form': form,
+               'navigation_buttons': [
+                   {
+                       'name': "Главная",
+                       'href': ".."
+                   },
+                   {
+                       'name': "Войти",
+                       'href': "../login/"
+                   }
+               ]
+               }
+
+    return render(request, 'user_handler/register.html', context)
 
 
 @login_required
-def profile(request):   # go to profile page
+def profile(request):  # go to profile page
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         if u_form.is_valid():
@@ -49,11 +64,26 @@ def profile(request):   # go to profile page
 
     else:
         u_form = UserUpdateForm(instance=request.user)
-    name = {
-        'u_form': u_form
-    }
 
-    return render(request, 'user_handler/user_profile.html', name)
+    context = {'page-name': 'хз',
+               'u_form': u_form,
+               'navigation_buttons': [
+                   {
+                       'name': 'О нас',
+                       'href': 'https://hsse.mipt.ru/'
+                   },
+                   {
+                       'name': "Главная",
+                       'href': ".."
+                   },
+                   {
+                       'name': 'Выйти',
+                       'href': '/logout'
+                   },
+               ]
+               }
+
+    return render(request, 'user_handler/user_profile.html', context)
 
 
 def test(request):  # тест-функция. адрес: /test

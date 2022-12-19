@@ -11,12 +11,13 @@
      <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900' rel='stylesheet' type='text/css'>
      <link rel="stylesheet" type="text/css" href="{% static 'user_handler/main.css' %}">
      <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
-     <title>Мероприятия</title>
+     <title>ЗАГЛУШКА</title>
 </head>
 <body>
-    <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-blue fixed-top">
-        <div class="container">
+    {% include "layouts/navigation_bar.html" %}
+    <!-- <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-blue fixed-top">
+          <div class="container">
           <a class="navbar-brand mr-4" href="{% url 'user_profile' %}"> Мероприятия</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -25,7 +26,7 @@
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link " href="{% url 'all_events' %}">Главная</a>
             </div>
-            <!-- Правая часть навигационной панели -->
+
             <div class="navbar-nav">
               {% if user.is_authenticated %}
                 <a class="nav-item nav-link" href="{% url 'user_profile' %}">Профиль</a>
@@ -38,7 +39,7 @@
           </div>
         </div>
       </nav>
-    </header>
+    </header> -->
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8">
@@ -54,10 +55,6 @@
       </div>
 
     </main>
-    <!-- Футер закреплен внизу, независимо от количества постов на странице -->
-    <footer class="text-center bg-dark">
-      <p><a href="{% url 'user_profile' %}"> Something interesting</a></p>
-    </footer>
 
     <!-- Дополнительные скрипты JavaScript -->
     <!-- Сначала jQuery, затем Popper.js, последним Bootstrap JS -->
