@@ -8,8 +8,19 @@ from event_handler.models import Stage as StageData
 
 from event_handler.db_controller import *
 
+def error404(request):
+    """
+    Страница 404 - page not found
 
-@login_required
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+    """
+
+    return render(request, "404.html")
+
+
+@login_required(login_url="login")
 def create_event(request):
     """
     Страница создания мероприятия

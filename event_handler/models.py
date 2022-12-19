@@ -25,6 +25,7 @@ class Venue(models.Model):
     region = models.SmallIntegerField("Регион, в котором площадка", null=True, blank=True)
     participants_maximum = models.IntegerField("Максимальное число участников", null=True, blank=True)
     parental_event = models.ForeignKey(Event, null=True, on_delete=models.SET_NULL)
+    contacts = models.TextField("Контакты", max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.name
