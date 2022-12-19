@@ -1,4 +1,4 @@
-from event_handler.models import Event, Stage, StageStaff
+from event_handler.models import Event, Stage, StageStaff, Venue
 from user_handler.models import DjangoUser, User
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,6 +10,9 @@ def get_participants_by_event(event: Event):
     stage = get_stages_by_event(event).first()
     return [] if stage.users is None else stage.users
 
+def get_staff_by_event(event: Event):
+    stage = get_stages_by_event(event).first()
+    return [] if stage.users is None else stage.users
 
 class SettingsSet(Enum):
     EDIT_VENUES = 1
@@ -85,3 +88,25 @@ def is_venue_attached_to_event(event_id: int, venue_id: int) -> bool:
         return venue.parental_event.id == event_id
     except ObjectDoesNotExist:
         return False
+
+def make_record_event(name, description):
+    event = Event.objects.create(name=name, description=description)
+    return event
+
+
+def make_record_stage(name, event, preview, time_start, time_end, description):
+    stage = Stage.objects.create(
+        name=name,
+        parent=event,
+        preview=preview,
+        time_start=time_start,
+        time_end=time_end,
+        description=description
+    )
+    return stage
+
+
+def create_staff(user, stage, role):
+    StageStaff.objects.create(user=user,
+                              stage=stage,
+                              role=role)
