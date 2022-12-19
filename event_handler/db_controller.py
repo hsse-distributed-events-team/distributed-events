@@ -38,6 +38,7 @@ def get_all_events(django_user: DjangoUser = None) -> Union[List, Union[Tuple, E
 def get_user_events(user: User, user_role=0) -> Union[Set, int]:
     """
     :param user: Пользователь. Удивительно, да?
+    :param user_role: Роль пользователя. (0 - все, 1 - участник, 2 - модератор)
     :return: Множество мероприятий, в которых участвует user
     """
     result = set()
@@ -48,6 +49,11 @@ def get_user_events(user: User, user_role=0) -> Union[Set, int]:
 
 
 def get_user_stages(user: User, user_role=0):
+    """
+    :param user: Пользователь. Удивительно, да?
+    :param user_role: Роль пользователя. (0 - все, 1 - участник, 2 - модератор)
+    :return: Список этапов, в которых участвует user
+    """
     if user_role == 0:
         stages = list(chain(user.stageparticipants_set.all(), user.stagestaff_set.all()))
     elif user_role == 1:
