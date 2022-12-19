@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from event_handler.forms import Event as EventForm
@@ -41,6 +41,7 @@ def create_event(request):
                     time_end=date_finish,
                     description=description
                 )
+            return redirect('all_events')
         else:
             return HttpResponse('Invalid data')
     context['form'] = EventForm()
