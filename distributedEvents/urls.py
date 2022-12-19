@@ -40,12 +40,12 @@ urlpatterns = [
     path('events/edit/<int:event_id>/venues/create', creator_views.create_venue, name="create_venue"),
     path('events/edit/<int:event_id>/venues/delete', creator_views.delete_venue, name="delete_venue"),
 
-    # path('events/edit/<int:event_id>/stages/', creator_views.stages_list, name="test"),
+    # path('events/edit/<int:event_id>/stages/', creator_views.stages_list, name="event_stages"),
     # path('events/edit/<int:event_id>/stages/edit/<int:venue_id>', creator_views.edit_stage, name="edit_stage"),
     # path('events/edit/<int:event_id>/stages/create', creator_views.create_stage, name="create_stage"),
     # path('events/edit/<int:event_id>/stages/delete', creator_views.delete_stage, name="delete_stage"),
     path('events/edit/<int:event_id>/staff', creator_views.view_staff, name="view_staff"),
-    path('events/edit/<int:event_id>/staff/create_staff', creator_views.add_staff, name="create_staff"),
+    path('events/edit/<int:event_id>/staff/create', creator_views.add_staff, name="create_staff"),
 
     # path('events/edit/<int:event_id>/venues/edit/<int:venue_id>', creator_views., name=""),
     # path('events/edit/<int:event_id>', creator_views., name=""),

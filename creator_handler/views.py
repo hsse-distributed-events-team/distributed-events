@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
-from creator_handler.db_controller import *
 from .forms import VenueForm, StaffForm
 
 import creator_handler.db_controller as c_db
@@ -34,6 +33,7 @@ NAVIGATE_BUTTONS = [
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
+
 @login_required
 def view_staff(request, event_id):
     """
@@ -44,10 +44,11 @@ def view_staff(request, event_id):
     :return: html страница
     """
 
-    context = {"navigation_buttons": NAVIGATE_BUTTONS}
-    # context["staff_list"] = get_staff_by_stage(stage_id)
+    context = {"navigation_buttons": NAVIGATE_BUTTONS,
+               "staff_list": c_db.get_staff_by_event(c_db.get_event_by_id(event_id))}
 
     return render(request, 'creator_handler/view_staff.html', context)
+
 
 @login_required
 def add_staff(request, event_id):
@@ -97,12 +98,11 @@ def view_participants(request, event_id):
     :type event_id: :class: 'int'
     :return: html страница
     """
-    context = {'participants_list': get_participants_by_event(get_event_by_id(event_id)),
+    context = {'participants_list': c_db.get_participants_by_event(c_db.get_event_by_id(event_id)),
                "navigation_buttons": NAVIGATE_BUTTONS,
-    }
+               }
 
     return render(request, 'creator_handler/view_staff.html', context)
-
 
 
 @login_required(login_url="login")
@@ -190,6 +190,3 @@ def edit_venue(request, event_id: int, venue_id: int):
     }
     return render(request, 'creator_handler/edit_venue.html', context)
 
-
-def stages_list(request):
-    return None
