@@ -1,6 +1,6 @@
 import json
 
-file = open('user_handler/regions/regions.json')
+file = open('user_handler/regions/regions.json', encoding='utf-8')
 # file = open('./regions.json')
 
 
