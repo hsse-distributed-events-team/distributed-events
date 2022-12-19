@@ -92,7 +92,9 @@ def create_venue(request, event_id: int):
 
 @login_required(login_url="login")
 def edit_venue(request, event_id: int, venue_id: int):
-    if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
+    if not (c_db.user_have_access(request.user, event_id,
+                                  c_db.SettingsSet.EDIT_VENUES) and c_db.is_venue_attached_to_event(event_id,
+                                                                                                    venue_id)):
         return redirect("/404")
     if request.method == 'POST':
         form = VenueForm(request.POST)
@@ -105,7 +107,7 @@ def edit_venue(request, event_id: int, venue_id: int):
             c_db.edit_venue(name, address, region, participants_maximum, contacts, venue_id)
             return redirect(f'/events/edit/{event_id}/venues/')
     else:
-        venue_data = c_db.get_venue_by_id(venue_id)
+        venue_data = c_db.get_venue_by_id_dict(venue_id)
         form = VenueForm(venue_data)
     context = {
         "form": form,

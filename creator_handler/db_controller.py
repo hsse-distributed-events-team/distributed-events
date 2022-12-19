@@ -19,8 +19,11 @@ def get_venues_by_event(event_id: int):
 
 
 def get_venue_by_id(venue_id: int):
+    return Venue.objects.get(id=venue_id)
+
+def get_venue_by_id_dict(venue_id: int):
     try:
-        venue = Venue.objects.get(id=venue_id).__dict__
+        venue = get_venue_by_id(venue_id)
     except ObjectDoesNotExist:
         venue = {}
     except Exception as e:
@@ -71,3 +74,11 @@ def edit_venue(name: str, address: str, region: int, participants_maximum: int, 
         )
     except Exception as e:
         print(e)
+
+
+def is_venue_attached_to_event(event_id: int, venue_id: int) -> bool:
+    try:
+        venue = get_venue_by_id(venue_id)
+        return venue.parental_event.id == event_id
+    except ObjectDoesNotExist:
+        return False
