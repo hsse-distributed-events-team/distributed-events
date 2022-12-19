@@ -1,6 +1,8 @@
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+import pytz
 
 from event_handler.forms import Event as EventForm
 from event_handler.models import Event, Stage, StageStaff
@@ -122,5 +124,5 @@ def current_event(request, event_id):
         context['description'] = event.description
         context['stages'] = [e_db.get_stages_by_event(context["event_id"])]
         return render(request, 'event_handler/event.html', context)
-    except ValueError:
+    except Exception:
         raise Http404
