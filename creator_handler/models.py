@@ -27,6 +27,7 @@ class StageSettings(models.Model):
             return str(self.stage)
         except:
             return f"А настроек то нема {self.id}"
+
     class Meta:
         """
         Настройка отображения в админ-панели

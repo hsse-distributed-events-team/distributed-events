@@ -1,11 +1,14 @@
-from event_handler.models import Venue, StageStaff
+from event_handler.models import Event, Stage, StageStaff
 from user_handler.models import DjangoUser, User
+
+from django.core.exceptions import ObjectDoesNotExist
+from enum import Enum
 
 from event_handler.db_controller import get_user_by_django_user, get_stages_by_event, get_event_by_id
 
-from django.core.exceptions import ObjectDoesNotExist
-
-from enum import Enum
+def get_participants_by_event(event: Event):
+    stage = get_stages_by_event(event).first()
+    return [] if stage.users is None else stage.users
 
 
 class SettingsSet(Enum):

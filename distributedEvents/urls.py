@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import path
+from django.urls import path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from event_handler import views
@@ -25,7 +25,8 @@ from creator_handler import views as creator_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('create_event/', views.create_event, name='create_event'),
-    path('all_events/<int:event_id>', views.cur_event, name="cur_event"),
+
+    path('all_events/<int:event_id>', views.current_event, name="cur_event"),
     path('', views.all_events, name="all_events"),
     re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events"),
 
