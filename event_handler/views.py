@@ -25,6 +25,7 @@ def create_event(request):
     Страница создания мероприятия
 
     :param request: объект с деталями запроса
+    :param context: информация о создаваемом мероприятии
     :type request: :class: 'django.http.HttpRequest'
     :return: html страница
     """
@@ -50,6 +51,14 @@ def create_event(request):
 
 
 def cur_event(request):
+    """
+    Страница текущего мероприятия
+
+    :param request: объект с деталями запроса
+    :param context: информация о текущем мероприятии
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+    """
     context = {"event_id": request.GET.get("event_id")}
     event = get_event_by_id(context["event_id"])
     context['name'] = event.name
@@ -63,6 +72,7 @@ def all_events(request, page_number=1):
     Страница всех мероприятий
 
     :param request: объект с деталями запроса
+    :param context: информация о всеx мероприятиях
     :type request: :class: 'django.http.HttpRequest'
     :return: html страница
     """
@@ -75,4 +85,3 @@ def all_events(request, page_number=1):
     context = {'event_list': event_list}
 
     return render(request, 'event_handler/all_events.html', context)
-    # return render(request, 'event_handler/all_events.html', context)
