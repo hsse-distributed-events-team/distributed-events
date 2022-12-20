@@ -112,6 +112,11 @@ class StageParticipants(models.Model):
         """
         Именованные константы для отображения статуса заявки(участия) в мероприятии
         Можно расширить
+
+        :param AWAITED: 0
+        :param ACCEPTED: 200
+        :param REJECTED: 400
+        :param BANNED: 404
         """
         AWAITED = 0
         ACCEPTED = 200
@@ -122,6 +127,10 @@ class StageParticipants(models.Model):
         """
         Именованные константы для отображеня роли учатися в мероприятии
         Можно расширить
+
+        :param PARTICIPANT: 0
+        :param AWARDEE: 10
+        :param WINNER: 100
         """
         PARTICIPANT = 0
         AWARDEE = 10
