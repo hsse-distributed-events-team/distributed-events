@@ -1,10 +1,18 @@
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from event_handler.forms import Event
-from event_handler.models import Event, Stage
+from event_handler.forms import Event as EventForm
+from event_handler.forms import RegistrateEventForm
 
 from event_handler.db_controller import *
+from creator_handler.db_controller import *
+import creator_handler.db_controller as c_db
+
+from event_handler.models import Event, Stage, StageStaff
+
+import event_handler.db_controller as e_db
+import creator_handler.db_controller as c_db
 
 
 def error404(request):
@@ -19,7 +27,7 @@ def error404(request):
     return render(request, "404.html")
 
 
-@login_required
+@login_required(login_url="login")
 def create_event(request):
     """
     Страница создания мероприятия
@@ -29,42 +37,29 @@ def create_event(request):
     :type request: :class: 'django.http.HttpRequest'
     :return: html страница
     """
+    context = {'page-name': "Создать мероприятие"}
 
-    form = Event(request.POST)
-    context = {'form': form}
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            # privacy = form.cleaned_data['privacy']
+            preview = form.cleaned_data['preview']
+            date_start = form.cleaned_data['date_start']
+            date_finish = form.cleaned_data['date_finish']
+            description = form.cleaned_data['description']
 
-    with open("static/txt/create_event.txt") as f:
-        context['info'] += f.readline()
+            user = c_db.get_user_by_django_user(request.user)
 
-    if form.is_valid():
-        date = form.cleaned_data['date']
-        name = form.cleaned_data['name']
-        privacy = form.cleaned_data['privacy']
+            event = c_db.make_record_event(name, description)
+            stage = c_db.make_record_stage(name, event, preview, date_start, date_finish, description)
+            c_db.create_staff(user, stage, StageStaff.Roles.PROVIDER, StageStaff.Status.ACCEPTED)
 
-        user = request.user
-
-        if user.is_authenticated:
-            record = Event()
-            record.save()
-
-    return render(request, 'create_event.html', context)
-
-
-def cur_event(request):
-    """
-    Страница текущего мероприятия
-
-    :param request: объект с деталями запроса
-    :param context: информация о текущем мероприятии
-    :type request: :class: 'django.http.HttpRequest'
-    :return: html страница
-    """
-    context = {"event_id": request.GET.get("event_id")}
-    event = get_event_by_id(context["event_id"])
-    context['name'] = event.name
-    context['description'] = event.description
-    context['sub_events'] = [get_stages_by_event(context["event_id"])]
-    return render(request, 'all_events/templates/cur_event.html', context)
+            return redirect('all_events')
+        else:
+            return HttpResponse('Invalid data')
+    context['form'] = EventForm()
+    return render(request, 'creator_handler/create_event.html', context)
 
 
 def all_events(request, page_number=1):
@@ -77,11 +72,103 @@ def all_events(request, page_number=1):
     :return: html страница
     """
 
-    event_list = get_all_events(int(page_number), request.user)
+    event_list = e_db.get_all_events(int(page_number), request.user)
 
-    # if not event_list:
-    #     return error404(request)
-
-    context = {'event_list': event_list}
+    context = {'page-name': 'Все мероприятия',
+               'event_list': event_list,
+               'navigation_buttons': [
+                   {
+                       'name': "О нас",
+                       'href': "https://hsse.mipt.ru/"
+                   },
+                   {
+                       'name': "Создать мероприятие",
+                       'href': "/create_event"
+                   },
+                   {
+                       'name': "Профиль",
+                       'href': "../user_profile"
+                   }
+               ]
+               }
 
     return render(request, 'event_handler/all_events.html', context)
+
+
+
+def current_event(request, event_id):
+    """
+    Страница одного мероприятия
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :param event_id: id мероприятия
+    :type event_id: :class: 'int'
+    :return: html страница
+    """
+    try:
+        event = e_db.get_event_by_id(event_id)
+        context = {'page-name': f'{event.name}', 'navigation_buttons': [
+            {
+                'name': "Главная",
+                'href': ".."
+            },
+            {
+                'name': "Зарегистрироваться",
+                'href': f"../event_registration/{event_id}"
+            },
+            {
+                'name': "Профиль",
+                'href': "../user_profile"
+            }
+        ]
+                   }
+        event = e_db.get_event_by_id(event_id)
+        context['event_id'] = event_id
+        context['name'] = event.name
+        context['page-name'] = context['name']
+        context['description'] = event.description
+        context['stages'] = [e_db.get_stages_by_event(context["event_id"])]
+        return render(request, 'event_handler/event.html', context)
+    except ValueError:
+        raise Http404
+
+@login_required(login_url="login")
+def current_event_registration(request, event_id):
+    """
+    Страница регистрации на мероприятие
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :param event_id: id мероприятия
+    :type event_id: :class: 'int'
+    :return: html страница
+    """
+    if request.method == "POST":
+        form = RegistrateEventForm(request.POST)
+        if form.is_valid():
+            venue_id = form.cleaned_data['venue_id']
+            user = get_user_by_django_user(request.user)
+            c_db.register_on_event(event_id, venue_id, user)
+            return redirect('all_events')
+
+    context = {'navigation_buttons': [
+            {
+                'name': "Главная",
+                'href': ".."
+            },
+            {
+                'name': "Профиль",
+                'href': "../user_profile"
+            }
+        ]
+    }
+    event = get_event_by_id(event_id)
+    context['event_id'] = event_id
+    context['name'] = event.name
+    context['page-name'] = context['name']
+    context['description'] = event.description
+    context['venues_list'] = get_venues_by_event(event)
+    context['stages'] = [get_stages_by_event(context["event_id"])]
+    user = request.user
+    return render(request, 'event_handler/event_registration.html', context)

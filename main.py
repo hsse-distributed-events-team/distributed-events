@@ -11,9 +11,6 @@ def run_server(statement=0):
 
 
 if __name__ == '__main__':
-    state = input('Выполнить миграции? Y/N').lower()
-    if state == 'y':
-        state = 1
-    else:
-        state = 0
+    state = input('Выполнить миграции? Y/N \n').lower()
+    state = 1 if state == 'y' else 0
     run_server(state)

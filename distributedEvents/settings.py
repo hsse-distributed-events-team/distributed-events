@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'creator_handler',
     'event_handler',
-    'user_handler'
+    'user_handler',
+    "crispy_forms",
 ]
 
 MIDDLEWARE = [
@@ -56,8 +57,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            'event_handler/templates',
-            'distributedEvents/templates'
+            'distributedEvents/templates/',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -128,6 +128,7 @@ FIXTURE_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = '/login'
+LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

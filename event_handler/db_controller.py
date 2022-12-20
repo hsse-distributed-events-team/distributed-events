@@ -1,5 +1,5 @@
 from user_handler.models import User, PersonalData
-from event_handler.models import Stage, Event
+from event_handler.models import Stage, Event, StageStaff
 
 from user_handler.db_controller import create_user_for_django_user
 
@@ -43,12 +43,12 @@ def get_user_events_id(user: User) -> Union[Set, int]:
     result = set()
     stages = get_user_stages(user)
     for stage in stages:
-        result.add(stage.parent.id)
+        result.add(stage.stage.parent.id)
     return result
 
 
 def get_user_stages(user: User) -> QuerySet:
-    return user.stage_set.all()
+    return user.stageparticipants_set.all()
 
 
 def get_user_by_django_user(django_user: DjangoUser) -> User:
@@ -78,8 +78,11 @@ def get_event_by_id(id: int) -> Event:
 
 
 def get_stages_by_event(event: Event):
-    return Stage.onjects.filter(parent=event)
+    return Stage.objects.filter(parent=event)
 
 
 def get_event_by_stage(stage: Stage) -> Event:
     return stage.parent
+
+
+
