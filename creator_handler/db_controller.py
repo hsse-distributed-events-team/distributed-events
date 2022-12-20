@@ -11,6 +11,9 @@ def get_participants_by_event(event_id: int):
     stage = get_stages_by_event(get_event_by_id(event_id)).first()
     return StageParticipants.objects.filter(stage=stage)
 
+def get_staff_by_event(event: Event):
+    stage = get_stages_by_event(event).first()
+    return [] if stage.users is None else stage.users
 
 class SettingsSet(Enum):
     EDIT_VENUES = 1
@@ -88,6 +91,28 @@ def is_venue_attached_to_event(event_id: int, venue_id: int) -> bool:
     except ObjectDoesNotExist:
         return False
 
+def make_record_event(name, description):
+    event = Event.objects.create(name=name, description=description)
+    return event
+
+
+def make_record_stage(name, event, preview, time_start, time_end, description):
+    stage = Stage.objects.create(
+        name=name,
+        parent=event,
+        preview=preview,
+        time_start=time_start,
+        time_end=time_end,
+        description=description
+    )
+    return stage
+
+
+def create_staff(user, stage, role, status=Stage.Status.WAITING):
+    StageStaff.objects.create(user=user,
+                              stage=stage,
+                              role=role,
+                              status=status)
 
 def reject_participant(user: User, event_id: int):
     try:
