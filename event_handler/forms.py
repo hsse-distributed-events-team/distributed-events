@@ -13,3 +13,6 @@ class Event(forms.Form):
     date_start = forms.DateField(label='Дата начала', required=False)
     date_finish = forms.DateField(label='Дата окончания', required=False)
     description = forms.CharField()
+
+class RegistrateEventForm(forms.Form):
+    venue_id = forms.IntegerField(label='id площадки', required=False, min_value=1)

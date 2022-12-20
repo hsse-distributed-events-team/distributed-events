@@ -225,17 +225,3 @@ def edit_venue(request, event_id: int, venue_id: int):
         "saved_form": venue_data,
     }
     return render(request, 'creator_handler/edit_venue.html', context)
-
-@login_required(login_url="login")
-def register_on_event(request, event_id: int):
-    if request.method == "POST" and is_ajax(request):
-        venue_id = request.POST.get('id', None)
-        user = get_user_by_django_user(request.user)
-        try:
-           c_db.register_on_event(event_id, venue_id, user)
-        except c_db.ObjectDoesNotExist:
-            return JsonResponse({"errors": "There is no such venue"}, status=400)
-        except Exception as e:
-            print(e)  # - Заменить на логгирование
-            return JsonResponse({"errors": "Undefined server error"}, status=400)
-    return JsonResponse({}, status=400)

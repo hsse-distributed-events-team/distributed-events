@@ -48,9 +48,12 @@
                 <td></td>
                 {% endif %}
                 <td>
-                    <button type="button" class="btn btn-danger" data-id="{{ venue.id }}">
-                    </button>
-                    {% csrf_token %}
+                    <form method="POST">
+                        <input type="hidden" class="form-control" id="venue_id" placeholder="" name="venue_id" value="{{ venue.id }}">
+                        <input type="submit" value="Зарегистрироваться">
+                        {% csrf_token %}
+                    </form>
+
                 </td>
             </tr>
             {% endfor %}
@@ -58,46 +61,5 @@
         </table>
     </div>
 </div>
-    <script>
-        var table = document.getElementById('table');
-        for(let i = 1; i < table.rows.length; i++) {
-            $(table.rows[i].cells[5]).on('click', (e) => {
-                 $.ajax({
-                     data: {
-                         'participant-id': {{
-                         'id': $(e.target).attr('data-id'),
-                     },
-                     method: "POST",
-                     dataType: 'json',
-                     url: document.URL + "registrate",
-                     success: function (data) {
-                         $("[data-id=" + $(e.target).attr('data-id') + "]").parent().parent().remove();
-                     },
-                     error: function (data) {
-                         alert(response.responseJSON.errors);
-                         console.log(response.responseJSON.errors)
-                     }
-                 });
-                 return false;
-            })
-        }
-        $(function () {
-            $.ajaxSetup({
-                headers: { "X-CSRFToken": getCookie("csrftoken") }
-            });
-        });
-        function getCookie(c_name) {
-            if (document.cookie.length > 0) {
-                c_start = document.cookie.indexOf(c_name + "=");
-                if (c_start != -1) {
-                    c_start = c_start + c_name.length + 1;
-                    c_end = document.cookie.indexOf(";", c_start);
-                    if (c_end == -1) c_end = document.cookie.length;
-                    return unescape(document.cookie.substring(c_start,c_end));
-                }
-            }
-            return "";
-        }
-    </script>
 </body>
 </html>

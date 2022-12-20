@@ -3,10 +3,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from event_handler.forms import Event as EventForm
+from event_handler.forms import RegistrateEventForm
 from event_handler.models import Event, Stage
 
 from event_handler.db_controller import *
 from creator_handler.db_controller import *
+import creator_handler.db_controller as c_db
 
 def error404(request):
     """
@@ -88,7 +90,7 @@ def all_events(request, page_number=1):
                    },
                    {
                        'name': "Профиль",
-                       'href': "/user_profile"
+                       'href': "../user_profile"
                    }
                ]
                }
@@ -119,7 +121,7 @@ def current_event(request, event_id):
             },
             {
                 'name': "Профиль",
-                'href': "/user_profile"
+                'href': "../user_profile"
             }
         ]
                    }
@@ -133,6 +135,7 @@ def current_event(request, event_id):
     except ValueError:
         raise Http404
 
+@login_required(login_url="login")
 def current_event_registration(request, event_id):
     """
     Страница регистрации на мероприятие
@@ -143,9 +146,20 @@ def current_event_registration(request, event_id):
     :type event_id: :class: 'int'
     :return: html страница
     """
-    try:
-        event = get_event_by_id(event_id)
-        context = {'page-name': f'{event.name}', 'navigation_buttons': [
+    if request.method == "POST":
+        form = RegistrateEventForm(request.POST)
+        if form.is_valid():
+            venue_id = form.cleaned_data['venue_id']
+            user = get_user_by_django_user(request.user)
+            print(venue_id)
+            print(user)
+
+            c_db.register_on_event(event_id, venue_id, user)
+            print(venue_id)
+            print(user)
+            return redirect('all_events')
+
+    context = {'navigation_buttons': [
             {
                 'name': "Главная",
                 'href': ".."
@@ -156,20 +170,16 @@ def current_event_registration(request, event_id):
             },
             {
                 'name': "Профиль",
-                'href': "/user_profile"
+                'href': "../user_profile"
             }
         ]
-                   }
-        event = get_event_by_id(event_id)
-        context['event_id'] = event_id
-        context['name'] = event.name
-        context['page-name'] = context['name']
-        context['description'] = event.description
-        context['venues_list'] = get_venues_by_event(event)
-        context['stages'] = [get_stages_by_event(context["event_id"])]
-        user = request.user
-        if user.is_authenticated:
-
-        return render(request, 'event_handler/event_registration.html', context)
-    except ValueError:
-        raise Http404
+    }
+    event = get_event_by_id(event_id)
+    context['event_id'] = event_id
+    context['name'] = event.name
+    context['page-name'] = context['name']
+    context['description'] = event.description
+    context['venues_list'] = get_venues_by_event(event)
+    context['stages'] = [get_stages_by_event(context["event_id"])]
+    user = request.user
+    return render(request, 'event_handler/event_registration.html', context)
