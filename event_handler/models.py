@@ -3,12 +3,10 @@ from user_handler.models import User
 
 class Event(models.Model):
     """
-     ***************
-     Класс **Event**
-     ***************
+    Класс **Event**
 
-     :param name: название мероприятия
-     :param description: информация о мероприятии
+    :param name: название мероприятия
+    :param description: информация о мероприятии
 
     """
 
@@ -20,10 +18,7 @@ class Event(models.Model):
 
     class Meta:
         """
-        Настройка отображения в админ-панели
-
-        :param verbose_name: Событие
-
+        Настройка отображения в админпанели
         """
         verbose_name = 'Событие'
         verbose_name_plural = 'События'
@@ -31,6 +26,19 @@ class Event(models.Model):
 
 
 class Stage(models.Model):
+    """
+    Класс **Stage**
+
+    :param name: название этапа
+    :param description: описание этапа
+    :param parent: родитель
+    :param preview: превью
+    :param users: участники
+    :param status: статус
+    :param time_start: начало
+    :param time_end: конец
+
+    """
     class Status(models.IntegerChoices):
         """
         Именованные константы, отображающие статус этапа мероприятия
@@ -59,7 +67,7 @@ class Stage(models.Model):
 
     class Meta:
         """
-               Настройка отображения в админ-панели
+        Настройка отображения в админ-панели
         """
         verbose_name = 'Этап'
         verbose_name_plural = 'Этапы'
@@ -72,6 +80,13 @@ class StageRelation(models.Model):
 
 
 class Venue(models.Model):
+    """
+    Класс **Venue**
+
+    :param name: название этапа
+    :param address: адрес проведения
+
+    """
     name = models.CharField("Название", max_length=50)
     address = models.TextField("Адрес", max_length=500)
 
@@ -106,7 +121,19 @@ class Application(models.Model):
         PARTICIPANT = 0
         STAFF = 1
         ADMIN = 100
+        
+    """
+    Класс **Application**
 
+    :param stage: Stage
+    :param user: User
+    :param venue: Venue
+    :param role: Роль
+    :param last_update_time: время последнего обновления
+    :param status: Статус заявки
+    :param result: Результат события
+
+    """
     stage = models.ForeignKey(Stage, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     venue = models.ForeignKey(Venue, on_delete=models.SET_NULL, null=True)
