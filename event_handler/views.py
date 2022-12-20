@@ -8,6 +8,23 @@ from event_handler.models import Event, Stage, StageStaff
 import event_handler.db_controller as e_db
 import creator_handler.db_controller as c_db
 
+NAVIGATE_BUTTONS = {
+    "all_events": [
+        {
+            'name': "О нас",
+            'href': "https://hsse.mipt.ru/"
+        },
+        {
+            'name': "Создать мероприятие",
+            'href': "/create_event"
+        },
+        {
+            'name': "Профиль",
+            'href': "/user_profile"
+        }
+    ]
+}
+
 
 def error404(request):
     """
@@ -39,6 +56,7 @@ def create_event(request):
             # privacy = form.cleaned_data['privacy']
             preview = form.cleaned_data['preview']
             date_start = form.cleaned_data['date_start']
+            print(date_start)
             date_finish = form.cleaned_data['date_finish']
             description = form.cleaned_data['description']
 
@@ -69,20 +87,7 @@ def all_events(request, page_number=1):
 
     context = {'page-name': 'Все мероприятия',
                'event_list': event_list,
-               'navigation_buttons': [
-                   {
-                       'name': "О нас",
-                       'href': "https://hsse.mipt.ru/"
-                   },
-                   {
-                       'name': "Создать мероприятие",
-                       'href': "/create_event"
-                   },
-                   {
-                       'name': "Профиль",
-                       'href': "/user_profile"
-                   }
-               ]
+               'navigation_buttons': NAVIGATE_BUTTONS['all_events'],
                }
 
     return render(request, 'event_handler/all_events.html', context)

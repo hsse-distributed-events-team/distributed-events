@@ -52,7 +52,5 @@ urlpatterns = [
     path('events/edit/<int:event_id>/participants/accepted', creator_views.accept_participant, name="accept_participant"),
     path('events/edit/<int:event_id>/participants/ban', creator_views.ban_participant, name="ban_participant"),
 
-    # path('events/edit/<int:event_id>', creator_views., name=""),
-    # path('events/edit/<int:event_id>', creator_views., name=""),
-    # path('events/edit/<int:event_id>', creator_views., name=""),
+    path('participants/make_newsletter', creator_views.make_newsletter, name='make_newsletter')
 ]

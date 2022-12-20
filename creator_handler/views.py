@@ -309,6 +309,5 @@ def edit_venue(request, event_id: int, venue_id: int):
     }
     return render(request, 'creator_handler/edit_venue.html', context)
 
-
-def stages_list(request):
+def make_newsletter(request):
     return None
