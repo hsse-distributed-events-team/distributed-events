@@ -43,7 +43,7 @@ def get_user_events_id(user: User) -> Union[Set, int]:
     result = set()
     stages = get_user_stages(user)
     for stage in stages:
-        result.add(stage.parent.id)
+        result.add(stage.stage.parent.id)
     return result
 
 

@@ -90,12 +90,12 @@ def is_venue_attached_to_event(event_id: int, venue_id: int) -> bool:
 
 
 def register_on_event(event_id: int, venue_id: int, user: User):
-    stage = get_stages_by_event(get_event_by_id(event_id)).first
+    stage = get_stages_by_event(get_event_by_id(event_id)).first()
     venue = get_venue_by_id(venue_id)
     if not is_venue_attached_to_event(event_id, venue_id):
         raise ValueError
 
-    participation = StageParticipants.objects.get_or_create(stage=stage, user=user)
+    participation = StageParticipants.objects.get_or_create(stage=stage, user=user)[0]
     participation.role = StageParticipants.Roles.PARTICIPANT
     participation.status = StageParticipants.Status.ACCEPTED
     participation.venue = venue
