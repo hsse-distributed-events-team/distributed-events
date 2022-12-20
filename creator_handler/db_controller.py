@@ -1,4 +1,4 @@
-<from event_handler.models import Event, Stage, StageStaff, StageParticipants, Venue
+from event_handler.models import Event, Stage, StageStaff, StageParticipants, Venue
 
 from user_handler.models import DjangoUser, User
 
