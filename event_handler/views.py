@@ -151,12 +151,7 @@ def current_event_registration(request, event_id):
         if form.is_valid():
             venue_id = form.cleaned_data['venue_id']
             user = get_user_by_django_user(request.user)
-            print(venue_id)
-            print(user)
-
             c_db.register_on_event(event_id, venue_id, user)
-            print(venue_id)
-            print(user)
             return redirect('all_events')
 
     context = {'navigation_buttons': [
