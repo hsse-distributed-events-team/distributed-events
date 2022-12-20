@@ -53,6 +53,9 @@ body {
     border: 1px solid black;
     text-align: center!important;
 }
+.btn-success {
+     background-color: rgb(41, 195, 41)!important;
+}
 .btn-danger {
     background-color: #fc3f1d!important;
 }

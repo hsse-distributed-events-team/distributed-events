@@ -6,6 +6,9 @@ from creator_handler.db_controller import *
 from .forms import VenueForm, StaffForm
 
 import creator_handler.db_controller as c_db
+import user_handler.db_controller as u_db
+
+# from .forms import StaffForm
 
 NAVIGATE_BUTTONS = [
     {
@@ -14,7 +17,7 @@ NAVIGATE_BUTTONS = [
     },
     {
         'name': "Участники",
-        'href': "../participantes"
+        'href': "../participants"
     },
     {
         'name': "Площадки",
@@ -29,6 +32,123 @@ NAVIGATE_BUTTONS = [
         'href': "../settings"
     }
 ]
+
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
+# @login_required
+# def add_staff(request):
+#     """
+#     Страница добавления участника
+#
+#     :param request: объект с деталями запроса
+#     :type request: :class: 'django.http.HttpRequest'
+#     :return: html страница
+#     """
+#     form = StaffForm()
+#     if request.method == "POST" and is_ajax(request):
+#         form = StaffForm(request.POST)
+#         if form.is_valid():
+#             event_id = form.cleaned_data['stage'].parent
+#             username = form.cleaned_data['username']
+#             form.save()
+#             return JsonResponse({'event_id': event_id,
+#                                  'username': username,
+#                                  }, status=200)
+#         else:
+#             return JsonResponse({'errors': form.errors.as_json()}, status=400)
+#
+#     return render(request, 'creator_handler/add_staff.html', {'form': form})
+
+
+@login_required(login_url="login")
+def participants_list(request, event_id):
+    """
+    Страница просмотра всех участников
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :param event_id: id мероприятия
+    :type event_id: :class: 'int'
+    :return: html страница
+    """
+    if not user_have_access(request.user, event_id):
+        return redirect('/404')
+    context = {'participants_list': get_participants_by_event(event_id),
+               "navigation_buttons": NAVIGATE_BUTTONS,
+               }
+    return render(request, 'creator_handler/participants_list.html', context)
+
+
+@login_required(login_url="login")
+def reject_participant(request, event_id: int):
+    if request.method == "POST" and is_ajax(request):
+        user_id = request.POST.get('id', None)
+        if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
+            return JsonResponse({"errors": "Not enough rights"}, status=400)
+        try:
+            return JsonResponse({}, status=200)
+        except c_db.ObjectDoesNotExist:
+            return JsonResponse({"errors": "There is no such venue"}, status=400)
+        except Exception as e:
+            print(e)  # - Заменить на логгирование
+            return JsonResponse({"errors": "Undefined server error"}, status=400)
+    return JsonResponse({}, status=400)
+
+
+@login_required(login_url="login")
+def accept_participant(request, event_id: int):
+    if request.method == "POST" and is_ajax(request):
+        user_id = request.POST.get('id', None)
+        print(user_id)
+        if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
+            return JsonResponse({"errors": "Not enough rights"}, status=400)
+        try:
+            print(c_db.accept_participant(u_db.get_user_by_id(user_id), event_id))
+            return JsonResponse({}, status=200)
+        except c_db.ObjectDoesNotExist:
+            return JsonResponse({"errors": "There is no such venue"}, status=400)
+        except Exception as e:
+            print(e)  # - Заменить на логгирование
+            return JsonResponse({"errors": "Undefined server error"}, status=400)
+    return JsonResponse({}, status=400)
+
+
+@login_required(login_url="login")
+def ban_participant(request, event_id: int):
+    if request.method == "POST" and is_ajax(request):
+        user_id = request.POST.get('id', None)
+        if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
+            return JsonResponse({"errors": "Not enough rights"}, status=400)
+        try:
+            c_db.ban_participant(u_db.get_user_by_id(user_id), event_id)
+            return JsonResponse({}, status=200)
+        except c_db.ObjectDoesNotExist:
+            return JsonResponse({"errors": "There is no such venue"}, status=400)
+        except Exception as e:
+            print(e)  # - Заменить на логгирование
+            return JsonResponse({"errors": "Undefined server error"}, status=400)
+    return JsonResponse({}, status=400)
+
+
+#
+#
+# @login_required
+# def view_staff(request):
+#     """
+#     Страница просмотра всех участников
+#
+#     :param request: объект с деталями запроса
+#     :type request: :class: 'django.http.HttpRequest'
+#     :return: html страница
+#     """
+#
+#     context = {}
+#
+#     return render(request, 'creator_handler/view_participants.html', context)
+
 
 
 def is_ajax(request):
@@ -119,8 +239,7 @@ def venues_list(request, event_id: int):
 
 @login_required(login_url="login")
 def delete_venue(request, event_id: int):
-    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-    if request.method == "POST" and is_ajax:
+    if request.method == "POST" and is_ajax(request):
         venue_id = request.POST.get('id', None)
         if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
             return JsonResponse({"errors": "Not enough rights"}, status=400)
