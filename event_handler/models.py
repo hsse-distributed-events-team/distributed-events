@@ -103,6 +103,18 @@ class Venue(models.Model):
 
 
 class Application(models.Model):
+    """
+    Класс **Application**
+
+    :param stage: Stage
+    :param user: User
+    :param venue: Venue
+    :param role: Роль
+    :param last_update_time: время последнего обновления
+    :param status: Статус заявки
+    :param result: Результат события
+
+    """
     class Status(models.IntegerChoices):
         """
         Именованные константы для отображения статуса заявки(участия) в мероприятии
@@ -121,19 +133,7 @@ class Application(models.Model):
         PARTICIPANT = 0
         STAFF = 1
         ADMIN = 100
-        
-    """
-    Класс **Application**
 
-    :param stage: Stage
-    :param user: User
-    :param venue: Venue
-    :param role: Роль
-    :param last_update_time: время последнего обновления
-    :param status: Статус заявки
-    :param result: Результат события
-
-    """
     stage = models.ForeignKey(Stage, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     venue = models.ForeignKey(Venue, on_delete=models.SET_NULL, null=True)

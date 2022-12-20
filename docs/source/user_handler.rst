@@ -5,4 +5,4 @@
    :maxdepth: 1
    :caption: user_handler:
 
-   user_handler_modelsq.rst
+   user_handler_models.rst
