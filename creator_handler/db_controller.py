@@ -1,4 +1,5 @@
 from event_handler.models import Event, Stage, StageStaff, StageParticipants, Venue
+
 from user_handler.models import DjangoUser, User
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -7,7 +8,8 @@ from enum import Enum
 from event_handler.db_controller import get_user_by_django_user, get_stages_by_event, get_event_by_id
 
 
-def get_participants_by_event(event_id: int):
+
+def get_participants_by_event(event: Event):
     stage = get_stages_by_event(get_event_by_id(event_id)).first()
     return StageParticipants.objects.filter(stage=stage)
 
@@ -90,6 +92,18 @@ def is_venue_attached_to_event(event_id: int, venue_id: int) -> bool:
         return venue.parental_event.id == event_id
     except ObjectDoesNotExist:
         return False
+
+def register_on_event(event_id: int, venue_id: int, user: User):
+    stage = get_stages_by_event(get_event_by_id(event_id)).first()
+    venue = get_venue_by_id(venue_id)
+    if not is_venue_attached_to_event(event_id, venue_id):
+        raise ValueError
+
+    participation = StageParticipants.objects.get_or_create(stage=stage, user=user)[0]
+    participation.role = StageParticipants.Roles.PARTICIPANT
+    participation.status = StageParticipants.Status.ACCEPTED
+    participation.venue = venue
+    participation.save()
 
 def make_record_event(name, description):
     event = Event.objects.create(name=name, description=description)

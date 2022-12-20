@@ -26,7 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('create_event/', views.create_event, name='create_event'),
 
-    path('all_events/<int:event_id>', views.current_event, name="cur_event"),
+    path('event/<int:event_id>', views.current_event, name="cur_event"),
+    path('event_registration/<int:event_id>', views.current_event_registration, name="cur_event_registration"),
     path('', views.all_events, name="all_events"),
     re_path(r'^event_list/page/(\d+)', views.all_events, name="all_events"),
   
