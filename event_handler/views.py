@@ -114,7 +114,14 @@ def participant_event_list(request):
     context = {'page-name': 'Мои мероприятия(участник)',
                'event_list': event_list,
                'navigation_buttons': [
-                   {}
+                   {
+                       'name': "Главная",
+                       'href': "../.."
+                   },
+                   {
+                       'name': "Профиль",
+                       'href': "../user_profile"
+                   }
                ]
                }
 
