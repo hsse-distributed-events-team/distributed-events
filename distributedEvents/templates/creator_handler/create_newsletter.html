@@ -5,14 +5,17 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <title>email newsletter</title>
 <div class="form-area">
-    <a type="button" href="../venues" class="btn-close btn-lg" aria-label="Close"></a>
+    <a type="button" href="../" class="btn-close btn-lg" aria-label="Close"></a>
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
-            <label for="name">Ваша электронная почта:</label>
-            <input type="text" class="form-control" id="name" placeholder="Введите свою электронную почту" name="name"
-                   required>
+            <label for="name">Заголовок</label>
+            <input type="text" class="form-control" id="subject" placeholder="Введите заголовок" name="subject">
         </div>
-        <button type="submit" class="btn-add">Оформить рассылку</button>
+        <div class="form-group">
+            <label for="name">Текст письма</label>
+            <input type="text" class="form-control" id="text" placeholder="Введите текст" name="text">
+        </div>
+        <button type="submit" class="btn-add">Отправить</button>
     </form>
 </div>

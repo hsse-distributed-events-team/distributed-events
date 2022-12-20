@@ -27,5 +27,5 @@ class EmailForm(forms.Form):
     """
         Форма для массовой отправки email
     """
-    subject = forms.CharField(label='Заголовок', required=True, max_length=50)
-    text = forms.CharField(label='Текст письма', required=True, max_length=1000)
+    subject = forms.CharField(label='Заголовок', required=False, max_length=50)
+    text = forms.CharField(label='Текст письма', required=False, max_length=1000)

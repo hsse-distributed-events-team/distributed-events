@@ -3,7 +3,8 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from creator_handler.db_controller import *
-from .forms import VenueForm, StaffForm
+from . import email
+from .forms import VenueForm, StaffForm, EmailForm
 
 import creator_handler.db_controller as c_db
 import user_handler.db_controller as u_db
@@ -150,9 +151,9 @@ def ban_participant(request, event_id: int):
 #     return render(request, 'creator_handler/view_participants.html', context)
 
 
-
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 
 @login_required
 def view_staff(request, event_id):
@@ -168,6 +169,7 @@ def view_staff(request, event_id):
     # context["staff_list"] = get_staff_by_stage(stage_id)
 
     return render(request, 'creator_handler/view_staff.html', context)
+
 
 @login_required
 def add_staff(request):
@@ -219,10 +221,9 @@ def view_participants(request, event_id):
     """
     context = {'participants_list': get_participants_by_event(get_event_by_id(event_id)),
                "navigation_buttons": NAVIGATE_BUTTONS,
-    }
+               }
 
     return render(request, 'creator_handler/view_staff.html', context)
-
 
 
 @login_required(login_url="login")
@@ -309,6 +310,7 @@ def edit_venue(request, event_id: int, venue_id: int):
     }
     return render(request, 'creator_handler/edit_venue.html', context)
 
+@login_required
 def make_newsletter(request, event_id: int):
     if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
         return redirect("/404")
@@ -317,11 +319,7 @@ def make_newsletter(request, event_id: int):
         if form.is_valid():
             subject = form.cleaned_data['subject']
             text = form.cleaned_data['text']
-            email.send_message(..., text, subject)
+            email.send_message(c_db.get_participants_by_event(event_id), text, subject)
             return redirect(f'/events/edit/{event_id}/participants/')
-    else:
-        form = EmailForm()
-    context = {
-        "form": form,
-    }
-    return render(request, 'creator_handler/send_email.html', context)
+    form = EmailForm()
+    return render(request, 'creator_handler/create_newsletter.html', {"form": form})
