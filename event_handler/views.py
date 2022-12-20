@@ -4,11 +4,16 @@ from django.contrib.auth.decorators import login_required
 
 from event_handler.forms import Event as EventForm
 from event_handler.forms import RegistrateEventForm
-from event_handler.models import Event, Stage
 
 from event_handler.db_controller import *
 from creator_handler.db_controller import *
 import creator_handler.db_controller as c_db
+
+from event_handler.models import Event, Stage, StageStaff
+
+import event_handler.db_controller as e_db
+import creator_handler.db_controller as c_db
+
 
 def error404(request):
     """
@@ -43,18 +48,12 @@ def create_event(request):
             date_finish = form.cleaned_data['date_finish']
             description = form.cleaned_data['description']
 
-            user = request.user
+            user = c_db.get_user_by_django_user(request.user)
 
-            if user.is_authenticated:
-                event = Event.objects.create(name=name, description=description)
-                Stage.objects.create(
-                    name=name,
-                    parent=event,
-                    preview=preview,
-                    time_start=date_start,
-                    time_end=date_finish,
-                    description=description
-                )
+            event = c_db.make_record_event(name, description)
+            stage = c_db.make_record_stage(name, event, preview, date_start, date_finish, description)
+            c_db.create_staff(user, stage, StageStaff.Roles.PROVIDER, StageStaff.Status.ACCEPTED)
+
             return redirect('all_events')
         else:
             return HttpResponse('Invalid data')
@@ -72,10 +71,7 @@ def all_events(request, page_number=1):
     :return: html страница
     """
 
-    event_list = get_all_events(int(page_number), request.user)
-
-    # if not event_list:
-    #     return error404(request)
+    event_list = e_db.get_all_events(int(page_number), request.user)
 
     context = {'page-name': 'Все мероприятия',
                'event_list': event_list,
@@ -109,7 +105,7 @@ def current_event(request, event_id):
     :return: html страница
     """
     try:
-        event = get_event_by_id(event_id)
+        event = e_db.get_event_by_id(event_id)
         context = {'page-name': f'{event.name}', 'navigation_buttons': [
             {
                 'name': "Главная",
@@ -125,12 +121,12 @@ def current_event(request, event_id):
             }
         ]
                    }
-        event = get_event_by_id(event_id)
+        event = e_db.get_event_by_id(event_id)
         context['event_id'] = event_id
         context['name'] = event.name
         context['page-name'] = context['name']
         context['description'] = event.description
-        context['stages'] = [get_stages_by_event(context["event_id"])]
+        context['stages'] = [e_db.get_stages_by_event(context["event_id"])]
         return render(request, 'event_handler/event.html', context)
     except ValueError:
         raise Http404
