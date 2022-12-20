@@ -160,10 +160,6 @@ def current_event_registration(request, event_id):
                 'href': ".."
             },
             {
-                'name': "Зарегистрироваться",
-                'href': f"../event_registration/{event_id}"
-            },
-            {
                 'name': "Профиль",
                 'href': "../user_profile"
             }
