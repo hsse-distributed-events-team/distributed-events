@@ -1,4 +1,5 @@
 from event_handler.models import Event, Stage, StageStaff, StageParticipants, Venue
+from creator_handler.models import StageSettings
 from user_handler.models import DjangoUser, User
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -7,13 +8,15 @@ from enum import Enum
 from event_handler.db_controller import get_user_by_django_user, get_stages_by_event, get_event_by_id
 
 
-def get_participants_by_event(event_id: int):
-    stage = get_stages_by_event(get_event_by_id(event_id)).first()
+def get_participants_by_event(event: Event):
+    stage = get_stages_by_event(event).first()
     return StageParticipants.objects.filter(stage=stage)
+
 
 def get_staff_by_event(event: Event):
     stage = get_stages_by_event(event).first()
     return [] if stage.users is None else stage.users
+
 
 class SettingsSet(Enum):
     EDIT_VENUES = 1
@@ -91,6 +94,20 @@ def is_venue_attached_to_event(event_id: int, venue_id: int) -> bool:
     except ObjectDoesNotExist:
         return False
 
+
+def register_on_event(event_id: int, venue_id: int, user: User):
+    stage = get_stages_by_event(get_event_by_id(event_id)).first()
+    venue = get_venue_by_id(venue_id)
+    if not is_venue_attached_to_event(event_id, venue_id):
+        raise ValueError
+
+    participation = StageParticipants.objects.get_or_create(stage=stage, user=user)[0]
+    participation.role = StageParticipants.Roles.PARTICIPANT
+    participation.status = StageParticipants.Status.ACCEPTED
+    participation.venue = venue
+    participation.save()
+
+
 def make_record_event(name, description):
     event = Event.objects.create(name=name, description=description)
     return event
@@ -103,7 +120,8 @@ def make_record_stage(name, event, preview, time_start, time_end, description):
         preview=preview,
         time_start=time_start,
         time_end=time_end,
-        description=description
+        description=description,
+        settings=StageSettings.objects.create(),
     )
     return stage
 
@@ -113,6 +131,7 @@ def create_staff(user, stage, role, status=Stage.Status.WAITING):
                               stage=stage,
                               role=role,
                               status=status)
+
 
 def reject_participant(user: User, event_id: int):
     try:

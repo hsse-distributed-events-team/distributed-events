@@ -142,3 +142,52 @@ a:hover.event_registration  {
     font-size: 23px;
     text-align: left!important;
 }
+
+
+/*table*/
+.btn.btn-primary {
+    margin-top: 40px;
+    margin-left: 70px;
+    box-shadow: 0 0 0 0.2rem rgb(41, 195, 41);
+    border-color:rgb(41, 195, 41);
+    background-color: rgb(41, 195, 41);
+}
+.btn.btn-primary:active {
+    box-shadow: 0 0 0 0.1rem rgb(101, 228, 101);
+}
+
+.table-area {
+    margin-top: 70px;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 10px;
+}
+.table {
+    border: 1px solid black;
+    text-align: center!important;
+}
+.btn-danger {
+    background-color: #fc3f1d!important;
+}
+.btn-warning {
+    background-color: #ffd633!important;
+    color: black!important;
+}
+
+
+.form-area {
+    margin-top: 10%!important;
+    margin-left: 33%!important;
+    margin-right: 33%!important;
+}
+
+.btn-add {
+    display: block;
+    margin: 30px auto;
+    width: 200px;
+    height: 45px;
+    border-radius: 10px;
+    color: #ffffff;
+    border-color: rgb(41, 195, 41);
+    background-color: rgb(41, 195, 41);
+}

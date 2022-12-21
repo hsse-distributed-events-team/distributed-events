@@ -15,11 +15,10 @@
     {% for event, stage, status in event_list %}
     <div class="event_card-wrapper">
         <div class="event_card">
-            <a class="event_name" href="/event/{{ event.id }}">{{ event.name }}</a>
+            <a class="event_name" href="/events/edit/{{ event.id }}/participants/">{{ event.name }}</a>
             <h4 class="event_time">{{ stage.time_start }} - {{ stage.time_end }}</h4>
             <h4 class="event_preview">{{ stage.preview }}</h4>
             <!--  <h4>{{ status }}</h4> -->
-            <a class="event_registration" href="/event_registration/{{ event.id }}">зарегистрироваться</a>
         </div>
     </div>
     {% endfor %}

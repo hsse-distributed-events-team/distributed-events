@@ -4,8 +4,13 @@ from event_handler.models import StageStaff
 
 class StaffForm(forms.ModelForm):
     """
-        Форма для сбора информации о сотруднике
+    Класс **StaffForm**
+
+    Форма для сбора информации о сотруднике
+
+
     """
+
     class Meta:
         model = StageStaff
         fields = '__all__'
@@ -13,7 +18,16 @@ class StaffForm(forms.ModelForm):
 
 class VenueForm(forms.Form):
     """
-        Форма создания площадки
+    Класс **StaffForm**
+
+    Форма создания площадки
+
+    :param name: Название мероприятия
+    :param address: Адрес
+    :param region: Регион
+    :param participants_maximum: Максимальное число участников
+    :param contacts: Контакты
+
     """
 
     name = forms.CharField(label='Название', required=True, max_length=50)
