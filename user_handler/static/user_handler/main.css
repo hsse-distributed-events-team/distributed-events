@@ -5,11 +5,18 @@ html {
 }
 
 body {
-  margin:0;
-  padding:0;
-  background: #fafafa;
-  color: #333333;
-  font-family:Roboto;
+  background-color: #f6f5f3;
+  font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.handler {
+   margin-top: 10px;
+   font-size: 28px;
+   font-weight: bold;
+   text-align: left;
+   margin-bottom: 30px;
 }
 
 h1, h2, h3, h4, h5, h6 {

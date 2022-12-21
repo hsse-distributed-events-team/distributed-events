@@ -34,7 +34,11 @@ def register(request):  # place where the user can register
                    {
                        'name': "Войти",
                        'href': "../login/"
-                   }
+                   },
+                   {
+                       'name': "О нас",
+                       'href': "https://hsse.mipt.ru/"
+                   },
                ]
                }
 
@@ -49,14 +53,13 @@ def profile(request):  # go to profile page
             u_form.save()
 
             username = request.user.username
-
-            region = u_form.cleaned_data.get("region")
+            region = u_form.cleaned_data.get('region')
             email = u_form.cleaned_data.get('email')
             name = u_form.cleaned_data.get('name')
             surname = u_form.cleaned_data.get('surname')
             data = [username, email, name, surname, region]
             update_user_profile(data)
-
+            print(data)
             # print(update_user_profile(data), '\n\n', username)
 
             messages.success(request, f'Ваш профиль успешно обновлен.')

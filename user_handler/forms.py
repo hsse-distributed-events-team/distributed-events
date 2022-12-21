@@ -16,11 +16,11 @@ class UserRegisterForm(UserCreationForm):  # User class
         fields = ['username', 'email', 'password1', 'password2', 'region']
 
 
-class UserUpdateForm(forms.ModelForm):
+class UserUpdateForm(ModelForm):
     email = forms.EmailField()
+    name = forms.CharField(max_length=20, required=False)
+    surname = forms.CharField(max_length=20, required=False)
     region = forms.ChoiceField(choices=DATA_REGIONS, required=False)
-    name = forms.CharField(max_length=20)
-    surname = forms.CharField(max_length=20)
 
     class Meta:
         model = User
