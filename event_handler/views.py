@@ -73,7 +73,7 @@ def all_events(request):
     """
     event_list = get_all_events(request.user)
 
-    context = {'page-name': 'Все мероприятия',
+    context = {'page_name': 'Все мероприятия',
                'event_list': event_list,
                'navigation_buttons': [
                    {
