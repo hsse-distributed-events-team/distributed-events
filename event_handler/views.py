@@ -60,7 +60,6 @@ def create_event(request):
             # privacy = form.cleaned_data['privacy']
             preview = form.cleaned_data['preview']
             date_start = form.cleaned_data['date_start']
-            print(date_start)
             date_finish = form.cleaned_data['date_finish']
             description = form.cleaned_data['description']
 
