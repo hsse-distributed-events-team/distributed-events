@@ -8,14 +8,15 @@ from enum import Enum
 from event_handler.db_controller import get_user_by_django_user, get_stages_by_event, get_event_by_id
 
 
-
 def get_participants_by_event(event: Event):
     stage = get_stages_by_event(event).first()
     return StageParticipants.objects.filter(stage=stage)
 
+
 def get_staff_by_event(event: Event):
     stage = get_stages_by_event(event).first()
     return [] if stage.users is None else stage.users
+
 
 class SettingsSet(Enum):
     EDIT_VENUES = 1
@@ -93,6 +94,7 @@ def is_venue_attached_to_event(event_id: int, venue_id: int) -> bool:
     except ObjectDoesNotExist:
         return False
 
+
 def register_on_event(event_id: int, venue_id: int, user: User):
     stage = get_stages_by_event(get_event_by_id(event_id)).first()
     venue = get_venue_by_id(venue_id)
@@ -104,6 +106,7 @@ def register_on_event(event_id: int, venue_id: int, user: User):
     participation.status = StageParticipants.Status.ACCEPTED
     participation.venue = venue
     participation.save()
+
 
 def make_record_event(name, description):
     event = Event.objects.create(name=name, description=description)
@@ -128,6 +131,7 @@ def create_staff(user, stage, role, status=Stage.Status.WAITING):
                               stage=stage,
                               role=role,
                               status=status)
+
 
 def reject_participant(user: User, event_id: int):
     try:

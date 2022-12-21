@@ -76,8 +76,10 @@ def participants_list(request, event_id):
     """
     if not user_have_access(request.user, event_id):
         return redirect('/404')
-    context = {'participants_list': get_participants_by_event(get_event_by_id(event_id)),
+    event = get_event_by_id(event_id)
+    context = {'participants_list': get_participants_by_event(event),
                "navigation_buttons": NAVIGATE_BUTTONS,
+               "event": event,
                }
     return render(request, 'creator_handler/participants_list.html', context)
 
@@ -89,6 +91,7 @@ def reject_participant(request, event_id: int):
         if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
             return JsonResponse({"errors": "Not enough rights"}, status=400)
         try:
+            c_db.reject_participant(u_db.get_user_by_id(user_id), event_id)
             return JsonResponse({}, status=200)
         except c_db.ObjectDoesNotExist:
             return JsonResponse({"errors": "There is no such venue"}, status=400)
@@ -102,11 +105,10 @@ def reject_participant(request, event_id: int):
 def accept_participant(request, event_id: int):
     if request.method == "POST" and is_ajax(request):
         user_id = request.POST.get('id', None)
-        print(user_id)
         if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
             return JsonResponse({"errors": "Not enough rights"}, status=400)
         try:
-            print(c_db.accept_participant(u_db.get_user_by_id(user_id), event_id))
+            c_db.accept_participant(u_db.get_user_by_id(user_id), event_id)
             return JsonResponse({}, status=200)
         except c_db.ObjectDoesNotExist:
             return JsonResponse({"errors": "There is no such venue"}, status=400)
@@ -150,9 +152,9 @@ def ban_participant(request, event_id: int):
 #     return render(request, 'creator_handler/view_participants.html', context)
 
 
-
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 
 @login_required
 def view_staff(request, event_id):
@@ -168,6 +170,7 @@ def view_staff(request, event_id):
     # context["staff_list"] = get_staff_by_stage(stage_id)
 
     return render(request, 'creator_handler/view_staff.html', context)
+
 
 @login_required
 def add_staff(request):
@@ -207,32 +210,15 @@ def stages_list(request, event_id: int):
 
 
 @login_required(login_url="login")
-def view_participants(request, event_id):
-    """
-    Страница просмотра всех участников
-
-    :param request: объект с деталями запроса
-    :type request: :class: 'django.http.HttpRequest'
-    :param event_id: id мероприятия
-    :type event_id: :class: 'int'
-    :return: html страница
-    """
-    context = {'participants_list': get_participants_by_event(get_event_by_id(event_id)),
-               "navigation_buttons": NAVIGATE_BUTTONS,
-    }
-
-    return render(request, 'creator_handler/view_staff.html', context)
-
-
-
-@login_required(login_url="login")
 def venues_list(request, event_id: int):
     if not c_db.user_have_access(request.user, event_id):
         return redirect('/404')
     venues = c_db.get_venues_by_event(event_id)
+    event = get_event_by_id(event_id)
     context = {
         "venues_list": venues,
         "navigation_buttons": NAVIGATE_BUTTONS,
+        "event": event,
     }
     return render(request, 'creator_handler/venues_list.html', context)
 
