@@ -28,7 +28,6 @@ NAVIGATE_BUTTONS = [
             'href': "/user_profile"
         }
     ]
-]
 
 def error404(request):
     """
