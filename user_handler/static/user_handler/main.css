@@ -5,12 +5,18 @@ html {
 }
 
 body {
-  margin:0;
-  padding:0;
-  background: #fafafa;
-  color: #333333;
-  margin-top: 5rem;
-  font-family:Roboto;
+  background-color: #f6f5f3;
+  font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.handler {
+   margin-top: 10px;
+   font-size: 28px;
+   font-weight: bold;
+   text-align: left;
+   margin-bottom: 30px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -38,11 +44,17 @@ ul {
 }
 
 .content-section {
-  background: #ffffff;
+  background-color: #f6f5f3;
   padding: 10px 20px;
   border: 1px solid #dddddd;
-  border-radius: 3px;
+  border-radius: 15px;
+
   margin-bottom: 20px;
+  margin-top: 4rem;
+}
+.row {
+    margin-left: 15%!important;
+    margin-right: 15%!important;
 }
 
 .article-title {
@@ -92,27 +104,86 @@ a.article-title:hover {
   font-size: 2.5rem;
 }
 
-footer {
- position: sticky!important;
- top: 100%;
- padding-top:25px;
- padding-bottom:25px;
- border-top:1px solid #ddd;
+/*navigation bar*/
+.navbar-nav {
+    margin-left: auto!important;
+    margin-right: auto!important;
+}
+.my-navbar {
+    background-color: #fc3f1d;
+    margin-top: 0px;
+}
+.nav-link {
+    margin-left: 10px!important;
+    margin-right: 10px!important;
+    color: #f6f5f3d4!important;
+    font-size: 20px!important;
+}
+.nav-link:hover {
+    color: #ffffff!important;
+}
+/*table*/
+.btn.btn-primary {
+    margin-top: 40px;
+    margin-left: 70px;
+    box-shadow: 0 0 0 0.2rem rgb(41, 195, 41);
+    border-color:rgb(41, 195, 41);
+    background-color: rgb(41, 195, 41);
+}
+.btn.btn-primary:active {
+    box-shadow: 0 0 0 0.1rem rgb(101, 228, 101);
 }
 
-footer p {
- margin:2px;
- text-align:center;
- padding:0 40px;
- color:#fff;
- font-size:12px;
+.table-area {
+    margin-top: 70px;
+    margin-left: 18%;
+    margin-right: 18%;
+    border-radius: 10px;
+}
+.table {
+    border: 1px solid black;
+    text-align: center!important;
+}
+.btn-danger {
+    background-color: #fc3f1d!important;
+}
+.btn-warning {
+    background-color: #ffd633!important;
+    color: black!important;
 }
 
-footer a{
-  color:#777
+
+.form-area {
+    margin-top: 10%!important;
+    margin-left: 33%!important;
+    margin-right: 33%!important;
 }
 
-footer a:hover {
-  color:#777;
-  text-decoration: none;
+.btn-add {
+    display: block;
+    margin: 30px auto;
+    width: 200px;
+    height: 45px;
+    border-radius: 10px;
+    color: #ffffff;
+    border-color: rgb(41, 195, 41);
+    background-color: rgb(41, 195, 41);
 }
+.form-group {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+.form-control {
+    border-radius: 10px!important;
+}
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgb(41, 195, 41)!important;
+    border-color: rgb(41, 195, 41);
+}
+.btn-close {
+    float: right;
+    font-size: 1.7vw;
+    margin-bottom: 4px;
+}
+

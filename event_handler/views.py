@@ -62,7 +62,7 @@ def create_event(request):
     return render(request, 'creator_handler/create_event.html', context)
 
 
-def all_events(request, page_number=1):
+def all_events(request):
     """
     Страница всех мероприятий
 
@@ -71,8 +71,7 @@ def all_events(request, page_number=1):
     :type request: :class: 'django.http.HttpRequest'
     :return: html страница
     """
-
-    event_list = e_db.get_all_events(int(page_number), request.user)
+    event_list = get_all_events(request.user)
 
     context = {'page-name': 'Все мероприятия',
                'event_list': event_list,
@@ -89,6 +88,57 @@ def all_events(request, page_number=1):
                        'name': "Профиль",
                        'href': "../user_profile"
                    }
+               ]
+               }
+
+    return render(request, 'event_handler/all_events.html', context)
+
+
+
+@login_required(login_url="login")
+def participant_event_list(request):
+    """
+    Страница всех мероприятий, в которых пользователь - участник
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+    """
+
+    event_list = get_events_by_role(request.user, 1)
+
+    # if not event_list:
+    #     return error404(request)
+
+    context = {'page-name': 'Мои мероприятия(участник)',
+               'event_list': event_list,
+               'navigation_buttons': [
+                   {}
+               ]
+               }
+
+    return render(request, 'event_handler/all_events.html', context)
+
+
+@login_required(login_url="login")
+def staff_event_list(request):
+    """
+    Страница всех мероприятий, в которых пользователь - модератор
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+    """
+
+    event_list = get_events_by_role(request.user, 2)
+
+    # if not event_list:
+    #     return error404(request)
+
+    context = {'page-name': 'Мои мероприятия(Модератор)',
+               'event_list': event_list,
+               'navigation_buttons': [
+                   {}
                ]
                }
 
@@ -133,6 +183,7 @@ def current_event(request, event_id):
     except ValueError:
         raise Http404
 
+
 @login_required(login_url="login")
 def current_event_registration(request, event_id):
     """
@@ -153,15 +204,15 @@ def current_event_registration(request, event_id):
             return redirect('all_events')
 
     context = {'navigation_buttons': [
-            {
-                'name': "Главная",
-                'href': ".."
-            },
-            {
-                'name': "Профиль",
-                'href': "../user_profile"
-            }
-        ]
+        {
+            'name': "Главная",
+            'href': ".."
+        },
+        {
+            'name': "Профиль",
+            'href': "../user_profile"
+        }
+    ]
     }
     event = get_event_by_id(event_id)
     context['event_id'] = event_id
@@ -170,5 +221,5 @@ def current_event_registration(request, event_id):
     context['description'] = event.description
     context['venues_list'] = get_venues_by_event(event)
     context['stages'] = [get_stages_by_event(context["event_id"])]
-    user = request.user
     return render(request, 'event_handler/event_registration.html', context)
+
