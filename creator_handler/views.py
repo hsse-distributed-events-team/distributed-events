@@ -3,7 +3,8 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from creator_handler.db_controller import *
-from .forms import VenueForm, StaffForm
+from . import email
+from .forms import VenueForm, StaffForm, EmailForm
 
 import creator_handler.db_controller as c_db
 import user_handler.db_controller as u_db
@@ -209,7 +210,6 @@ def stages_list(request, event_id: int):
     return render(request, 'creator_handler/stages_list.html', context)
 
 
-@login_required(login_url="login")
 def venues_list(request, event_id: int):
     if not c_db.user_have_access(request.user, event_id):
         return redirect('/404')
@@ -295,6 +295,16 @@ def edit_venue(request, event_id: int, venue_id: int):
     }
     return render(request, 'creator_handler/edit_venue.html', context)
 
-
-def stages_list(request):
-    return None
+@login_required
+def make_newsletter(request, event_id: int):
+    # if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
+    #     return redirect("/404")
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            text = form.cleaned_data['text']
+            email.send_message(c_db.get_participants_by_event(event_id), text, subject)
+            return redirect(f'/events/edit/{event_id}/participants/')
+    form = EmailForm()
+    return render(request, 'creator_handler/create_newsletter.html', {"form": form})

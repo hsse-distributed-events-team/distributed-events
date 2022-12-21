@@ -46,15 +46,14 @@ urlpatterns = [
     # path('events/edit/<int:event_id>/stages/edit/<int:venue_id>', creator_views.edit_stage, name="edit_stage"),
     # path('events/edit/<int:event_id>/stages/create', creator_views.create_stage, name="create_stage"),
     # path('events/edit/<int:event_id>/stages/delete', creator_views.delete_stage, name="delete_stage"),
-    # path('events/edit/<int:event_id>/staff', creator_views.view_staff, name="view_staff"),
+    path('events/edit/<int:event_id>/staff', creator_views.view_staff, name="view_staff"),
     # path('events/stages/edit/add_staff', creator_views.add_staff, name="add_staff"),
 
     path('events/edit/<int:event_id>/participants/', creator_views.participants_list, name="participants_list"),
     path('events/edit/<int:event_id>/participants/reject', creator_views.reject_participant, name="reject_participant"),
-    path('events/edit/<int:event_id>/participants/accepted', creator_views.accept_participant, name="accept_participant"),
+    path('events/edit/<int:event_id>/participants/accepted', creator_views.accept_participant,
+         name="accept_participant"),
     path('events/edit/<int:event_id>/participants/ban', creator_views.ban_participant, name="ban_participant"),
 
-    # path('events/edit/<int:event_id>', creator_views., name=""),
-    # path('events/edit/<int:event_id>', creator_views., name=""),
-    # path('events/edit/<int:event_id>', creator_views., name=""),
+    path('events/edit/<int:event_id>/participants/make_newsletter', creator_views.make_newsletter, name='make_newsletter')
 ]

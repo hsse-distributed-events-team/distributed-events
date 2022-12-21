@@ -14,6 +14,20 @@ from event_handler.models import Event, Stage, StageStaff
 import event_handler.db_controller as e_db
 import creator_handler.db_controller as c_db
 
+NAVIGATE_BUTTONS = [
+        {
+            'name': "О нас",
+            'href': "https://hsse.mipt.ru/"
+        },
+        {
+            'name': "Создать мероприятие",
+            'href': "/create_event"
+        },
+        {
+            'name': "Профиль",
+            'href': "/user_profile"
+        }
+    ]
 
 def error404(request):
     """

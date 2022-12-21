@@ -18,8 +18,8 @@ class Event(forms.Form):
     preview = forms.CharField(label='Превью', required=True)
     privacy = forms.BooleanField(label='Приватное', required=False)
     # thematic = forms.ChoiceField(label='Тематика', choices=['Олимпиада спортивная', 'Олимпиада ученическая'])
-    date_start = forms.DateField(label='Дата начала', required=False)
-    date_finish = forms.DateField(label='Дата окончания', required=False)
+    date_start = forms.DateField(widget=forms.SelectDateWidget)
+    date_finish = forms.DateField(widget=forms.SelectDateWidget)
     description = forms.CharField()
 
 class RegistrateEventForm(forms.Form):
