@@ -6,6 +6,8 @@ class Event(models.Model):
     """
     Класс **Event**
 
+    Мероприятие и его описание
+
     :param name: название мероприятия
     :param description: информация о мероприятии
 
@@ -30,8 +32,14 @@ class Venue(models.Model):
     """
     Класс **Venue**
 
+    Площадка и информация о ней
+
     :param name: название этапа
     :param address: адрес проведения
+    :param region: Регион, в котором площадка
+    :param participants_maximum: Максимальное число участников
+    :param parental_event: Event
+    :param contacts: Контакты
 
     """
     name = models.CharField("Название", max_length=50)
@@ -57,6 +65,8 @@ class Stage(models.Model):
     """
     Класс **Stage**
 
+    Этап и информация о нём
+
     :param name: название этапа
     :param description: описание этапа
     :param parent: родитель
@@ -65,6 +75,7 @@ class Stage(models.Model):
     :param status: статус
     :param time_start: начало
     :param time_end: конец
+    :param contacts: Контакты
 
     """
     class Status(models.IntegerChoices):
@@ -72,9 +83,9 @@ class Stage(models.Model):
         Именованные константы, отображающие статус этапа мероприятия
         Можно расширить
 
-        :param WAITING: 0
-        :param ACTIVE: 1
-        :param ENDED: 2
+        :param WAITING:
+        :param ACTIVE:
+        :param ENDED:
 
         """
         WAITING = 0
@@ -108,15 +119,26 @@ class Stage(models.Model):
         ordering = ['name']
 
 class StageParticipants(models.Model):
+    """
+    Класс **StageParticipants**
+
+    :param stage: Стадия
+    :param user: User
+    :param status: статус
+    :param venue: Место проведения
+    :param role: Роль
+
+    """
     class Status(models.IntegerChoices):
         """
         Именованные константы для отображения статуса заявки(участия) в мероприятии
         Можно расширить
 
-        :param AWAITED: 0
-        :param ACCEPTED: 200
-        :param REJECTED: 400
-        :param BANNED: 404
+        :param AWAITED:
+        :param ACCEPTED:
+        :param REJECTED:
+        :param BANNED:
+
         """
         AWAITED = 0
         ACCEPTED = 200
@@ -128,9 +150,10 @@ class StageParticipants(models.Model):
         Именованные константы для отображеня роли учатися в мероприятии
         Можно расширить
 
-        :param PARTICIPANT: 0
-        :param AWARDEE: 10
-        :param WINNER: 100
+        :param PARTICIPANT:
+        :param AWARDEE:
+        :param WINNER:
+
         """
         PARTICIPANT = 0
         AWARDEE = 10
@@ -151,9 +174,24 @@ class StageParticipants(models.Model):
 
 
 class StageStaff(models.Model):
+    """
+    Класс **StageStaff**
+
+    :param stage: Стадия
+    :param user: User
+    :param status: статус
+    :param venue: Место проведения
+    :param role: Роль
+
+    """
     class Status(models.IntegerChoices):
         """
         Именованные константы, обозначающие статус работника на площадке
+
+        :param ACCEPTED:
+        :param FIRED:
+        :param WAITING:
+
         """
         ACCEPTED = 200
         FIRED = 400
@@ -162,6 +200,11 @@ class StageStaff(models.Model):
     class Roles(models.IntegerChoices):
         """
         Именованные константы, обозначающие роли работников на площадках
+
+        :param STAFF:
+        :param CURATOR:
+        :param PROVIDER:
+
         """
         STAFF = 5
         CURATOR = 10

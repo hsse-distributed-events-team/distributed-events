@@ -2,10 +2,28 @@ from django.db import models
 
 
 class StageSettings(models.Model):
+    """
+    Класс **StageSettings**
+
+    Настройки стадии мероприятия
+
+    :param can_user_choose_venue: Выбор площадки пользователем
+    :param application_auto_accept: Автопринятие заявок
+    :param public_participant_list: Публичный список участников
+    :param contacts_is_visible: Отображение контактов
+    :param who_can_edit_venues: Кто может радактировать площадки
+    :param who_can_accept_applications: Кто может принимать заявки
+    :param who_can_manage_mailing_list: Кто может управлять рассылкой
+
+    """
     class AccessLevel(models.IntegerChoices):
         """
         Именованные константы для отображения уровня доступа к функциям настройки
         Можно расширить
+
+        :param STAFF:
+        :param CURATOR:
+        :param PROVIDER:
         """
         STAFF = 5
         CURATOR = 10

@@ -7,3 +7,4 @@
 
    event_handler.rst
    user_handler.rst
+   creator_handler.rst
