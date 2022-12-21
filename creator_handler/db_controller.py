@@ -1,5 +1,5 @@
 from event_handler.models import Event, Stage, StageStaff, StageParticipants, Venue
-
+from creator_handler.models import StageSettings
 from user_handler.models import DjangoUser, User
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -117,7 +117,8 @@ def make_record_stage(name, event, preview, time_start, time_end, description):
         preview=preview,
         time_start=time_start,
         time_end=time_end,
-        description=description
+        description=description,
+        settings=StageSettings.objects.create(),
     )
     return stage
 
