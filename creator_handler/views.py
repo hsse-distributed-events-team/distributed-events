@@ -312,8 +312,8 @@ def edit_venue(request, event_id: int, venue_id: int):
 
 @login_required
 def make_newsletter(request, event_id: int):
-    if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
-        return redirect("/404")
+    # if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
+    #     return redirect("/404")
     if request.method == 'POST':
         form = EmailForm(request.POST)
         if form.is_valid():
