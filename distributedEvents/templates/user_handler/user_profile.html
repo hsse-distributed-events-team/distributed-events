@@ -15,9 +15,7 @@
             {{ u_form|crispy }}
           </fieldset>
           <div class="form-group">
-              <button class="btn btn-outline-danger" type="submit" name="upd">Обновить</button>
-              <a class="btn btn-outline-danger float-end mr-1" href="{% url 'participant_event_list' %}">Участвую</a>
-              <a class="btn btn-outline-danger float-end mr-1" href="{% url 'staff_event_list' %}">Организую</a>
+              <button class="btn btn-add" type="submit" name="upd">Обновить</button>
           </div>
       </form>
     </div>

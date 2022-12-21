@@ -44,12 +44,17 @@ ul {
 }
 
 .content-section {
-  background: #ffffff;
+  background-color: #f6f5f3;
   padding: 10px 20px;
   border: 1px solid #dddddd;
-  border-radius: 3px;
+  border-radius: 15px;
+
   margin-bottom: 20px;
   margin-top: 4rem;
+}
+.row {
+    margin-left: 15%!important;
+    margin-right: 15%!important;
 }
 
 .article-title {
