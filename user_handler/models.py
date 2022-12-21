@@ -3,6 +3,14 @@ from django.contrib.auth.models import User as DjangoUser
 
 
 class PersonalData(models.Model):
+    """
+    Класс **PersonalData**
+
+    :param name: Имя
+    :param surname: Фамилия
+    :param region: Регион
+
+    """
     name = models.CharField('Имя', max_length=20)
     surname = models.CharField('Фамилия', max_length=20)
     region = models.SmallIntegerField('Регион', default=1)
@@ -13,6 +21,14 @@ class PersonalData(models.Model):
 
 
 class User(models.Model):
+    """
+    Класс **User**
+
+    :param user: Пользователь
+    :param personal_data: Информация о пользователе
+    :param is_verified: Проверенный ли пользователm
+
+    """
     user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE, related_name="django_user")
     personal_data = models.OneToOneField(PersonalData, on_delete=models.CASCADE)
     is_verified = models.BooleanField('Проверенный пользователь', default=False)
@@ -25,4 +41,4 @@ class User(models.Model):
         verbose_name_plural = 'Пользователи'
 
     def __str__(self):
-        return f'{self.user.username} User'
+        return f'{self.user.username}'

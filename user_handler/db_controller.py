@@ -4,8 +4,9 @@ from .models import *
 def create_user_for_django_user(django_user: DjangoUser) -> User:
     """
     Создание объекта User с пустой PersonalData
+    :param personal_data: информация о пользователе
+    :return: user user
     """
-
     personal_data = PersonalData.objects.create()
     user = User.objects.create(user=django_user, personal_data=personal_data)
     return user
@@ -14,9 +15,12 @@ def create_user_for_django_user(django_user: DjangoUser) -> User:
 def add_region_of_user(username, region):
     """
     Изменение региона пользователя с ником username
-    """
 
-    user = get_user(username)
+    :param region: регион пользователя
+    :return: user user
+
+    """
+    user = User.objects.get(user__username=username)
     user.personal_data.region = region
     user.personal_data.save()
 
@@ -57,3 +61,7 @@ def update_user_profile(data):
     user.personal_data.save()
     user.user.save()
     # return user
+
+
+def get_user_by_id(user_id: int) -> User:
+    return User.objects.get(id=user_id)
