@@ -16,7 +16,8 @@
           </fieldset>
           <div class="form-group">
               <button class="btn btn-outline-danger" type="submit" name="upd">Обновить</button>
-              <a class="btn btn-outline-danger" href="{% url 'all_events' %}">Мои мероприятия</a>
+              <a class="btn btn-outline-danger float-end mr-1" href="{% url 'participant_event_list' %}">Участвую</a>
+              <a class="btn btn-outline-danger float-end mr-1" href="{% url 'staff_event_list' %}">Организую</a>
           </div>
       </form>
     </div>
