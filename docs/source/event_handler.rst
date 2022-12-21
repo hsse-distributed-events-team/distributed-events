@@ -7,3 +7,5 @@
 
    event_handler_models.rst
    event_handler_views.rst
+   event_handler_forms.rst
+   event_handler_db_controller.rst
