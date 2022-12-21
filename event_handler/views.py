@@ -29,7 +29,7 @@ def create_event(request):
     :type request: :class: 'django.http.HttpRequest'
     :return: html страница
     """
-    context = {'page-name': "Создать мероприятие"}
+    context = {'page_name': "Создать мероприятие"}
 
     if request.method == 'POST':
         form = EventForm(request.POST)
@@ -75,7 +75,7 @@ def all_events(request):
     # if not event_list:
     #     return error404(request)
 
-    context = {'page-name': 'Все мероприятия',
+    context = {'page_name': 'Все мероприятия',
                'event_list': event_list,
                'navigation_buttons': [
                    {
@@ -111,16 +111,16 @@ def participant_event_list(request):
     # if not event_list:
     #     return error404(request)
 
-    context = {'page-name': 'Мои мероприятия(участник)',
+    context = {'page_name': 'Мои мероприятия (Участник)',
                'event_list': event_list,
                'navigation_buttons': [
                    {
                        'name': "Главная",
-                       'href': "../.."
+                       'href': "/"
                    },
                    {
                        'name': "Профиль",
-                       'href': "../user_profile"
+                       'href': "/user_profile"
                    }
                ]
                }
@@ -143,10 +143,21 @@ def staff_event_list(request):
     # if not event_list:
     #     return error404(request)
 
-    context = {'page-name': 'Мои мероприятия(Модератор)',
+    context = {'page_name': 'Мои мероприятия (Модератор)',
                'event_list': event_list,
                'navigation_buttons': [
-                   {}
+                   {
+                       'name': "Главная",
+                       'href': "/"
+                   },
+                   {
+                       'name': "Создать мероприятие",
+                       'href': "/create_event/"
+                   },
+                   {
+                       'name': "Профиль",
+                       'href': "/user_profile"
+                   }
                ]
                }
 
@@ -165,7 +176,7 @@ def current_event(request, event_id):
     """
     try:
         event = get_event_by_id(event_id)
-        context = {'page-name': f'{event.name}', 'navigation_buttons': [
+        context = {'page_name': f'{event.name}', 'navigation_buttons': [
             {
                 'name': "Главная",
                 'href': ".."
@@ -183,7 +194,7 @@ def current_event(request, event_id):
         event = get_event_by_id(event_id)
         context['event_id'] = event_id
         context['name'] = event.name
-        context['page-name'] = context['name']
+        context['page_name'] = context['name']
         context['description'] = event.description
         context['stages'] = [get_stages_by_event(context["event_id"])]
         return render(request, 'event_handler/event.html', context)
