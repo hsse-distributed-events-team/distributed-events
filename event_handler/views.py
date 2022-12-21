@@ -161,7 +161,7 @@ def staff_event_list(request):
                ]
                }
 
-    return render(request, 'event_handler/all_events.html', context)
+    return render(request, 'event_handler/all_events_for_staff.html', context)
 
 
 def current_event(request, event_id):
