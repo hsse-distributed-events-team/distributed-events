@@ -7,6 +7,14 @@ from .db_controller import *
 
 
 def register(request):  # place where the user can register
+    """
+    Страница регистрации пользователя
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+
+    """
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -28,6 +36,14 @@ def register(request):  # place where the user can register
 
 @login_required
 def profile(request):   # go to profile page
+    """
+    Страница профиля пользователя
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+
+    """
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         #print(u_form)
