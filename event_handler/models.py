@@ -2,8 +2,17 @@ from django.db import models
 from user_handler.models import User
 from creator_handler.models import StageSettings
 
-
 class Event(models.Model):
+    """
+    Класс **Event**
+
+    Мероприятие и его описание
+
+    :param name: название мероприятия
+    :param description: информация о мероприятии
+
+    """
+
     name = models.CharField("Название мероприятия", default="Новое мероприятие", max_length=50)
     description = models.TextField(null=True, blank=True, max_length=500)
 
@@ -12,7 +21,7 @@ class Event(models.Model):
 
     class Meta:
         """
-        Настройка отображения в админ-панели
+        Настройка отображения в админпанели
         """
         verbose_name = 'Событие'
         verbose_name_plural = 'События'
@@ -20,6 +29,19 @@ class Event(models.Model):
 
 
 class Venue(models.Model):
+    """
+    Класс **Venue**
+
+    Площадка и информация о ней
+
+    :param name: название этапа
+    :param address: адрес проведения
+    :param region: Регион, в котором площадка
+    :param participants_maximum: Максимальное число участников
+    :param parental_event: Event
+    :param contacts: Контакты
+
+    """
     name = models.CharField("Название", max_length=50)
     address = models.TextField("Адрес", max_length=500)
     region = models.SmallIntegerField("Регион, в котором площадка", null=True, blank=True)
@@ -40,10 +62,31 @@ class Venue(models.Model):
 
 
 class Stage(models.Model):
+    """
+    Класс **Stage**
+
+    Этап и информация о нём
+
+    :param name: название этапа
+    :param description: описание этапа
+    :param parent: родитель
+    :param preview: превью
+    :param users: участники
+    :param status: статус
+    :param time_start: начало
+    :param time_end: конец
+    :param contacts: Контакты
+
+    """
     class Status(models.IntegerChoices):
         """
         Именованные константы, отображающие статус этапа мероприятия
         Можно расширить
+
+        :param WAITING:
+        :param ACTIVE:
+        :param ENDED:
+
         """
         WAITING = 0
         ACTIVE = 1
@@ -75,12 +118,27 @@ class Stage(models.Model):
         verbose_name_plural = 'Этапы'
         ordering = ['name']
 
-
 class StageParticipants(models.Model):
+    """
+    Класс **StageParticipants**
+
+    :param stage: Стадия
+    :param user: User
+    :param status: статус
+    :param venue: Место проведения
+    :param role: Роль
+
+    """
     class Status(models.IntegerChoices):
         """
         Именованные константы для отображения статуса заявки(участия) в мероприятии
         Можно расширить
+
+        :param AWAITED:
+        :param ACCEPTED:
+        :param REJECTED:
+        :param BANNED:
+
         """
         AWAITED = 0
         ACCEPTED = 200
@@ -91,6 +149,11 @@ class StageParticipants(models.Model):
         """
         Именованные константы для отображеня роли учатися в мероприятии
         Можно расширить
+
+        :param PARTICIPANT:
+        :param AWARDEE:
+        :param WINNER:
+
         """
         PARTICIPANT = 0
         AWARDEE = 10
@@ -111,9 +174,24 @@ class StageParticipants(models.Model):
 
 
 class StageStaff(models.Model):
+    """
+    Класс **StageStaff**
+
+    :param stage: Стадия
+    :param user: User
+    :param status: статус
+    :param venue: Место проведения
+    :param role: Роль
+
+    """
     class Status(models.IntegerChoices):
         """
         Именованные константы, обозначающие статус работника на площадке
+
+        :param ACCEPTED:
+        :param FIRED:
+        :param WAITING:
+
         """
         ACCEPTED = 200
         FIRED = 400
@@ -122,6 +200,11 @@ class StageStaff(models.Model):
     class Roles(models.IntegerChoices):
         """
         Именованные константы, обозначающие роли работников на площадках
+
+        :param STAFF:
+        :param CURATOR:
+        :param PROVIDER:
+
         """
         STAFF = 5
         CURATOR = 10

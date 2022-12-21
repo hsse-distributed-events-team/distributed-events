@@ -4,8 +4,8 @@
     <div class="content-section">
       <div class="media">
         <div class="media-body">
-          <h2 class="account-heading">{{ user.username }}</h2>
-          <p class="text-secondary">{{ user.email }}</p>
+          <h2 class="account-heading">Имя пользователя: {{ user.username }}</h2>
+          <p class="text-secondary">Ваш емайл: {{ user.email }}</p>
         </div>
       </div>
        <form method="POST" enctype="multipart/form-data">
@@ -15,7 +15,7 @@
             {{ u_form|crispy }}
           </fieldset>
           <div class="form-group">
-              <button class="btn btn-outline-info" type="submit">Обновить</button>
+              <button class="btn btn-add" type="submit" name="upd">Обновить</button>
           </div>
       </form>
     </div>

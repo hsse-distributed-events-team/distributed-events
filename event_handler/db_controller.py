@@ -1,5 +1,5 @@
 from user_handler.models import User, PersonalData
-from event_handler.models import Stage, Event
+from event_handler.models import Stage, Event, StageStaff
 
 from user_handler.db_controller import create_user_for_django_user
 
@@ -18,6 +18,7 @@ def get_all_events(django_user: DjangoUser = None) -> Union[List, Union[Tuple, E
     Получить список всех мероприятий по заданным параметрам
     :param django_user: Пользователь, сделавший запрос
     :return: Список из троек: мероприятие, его первый этап, bool участвует ли django_user в этом мероприятии
+
     """
 
     user_events = set()
@@ -84,8 +85,10 @@ def get_events_by_role(django_user: DjangoUser = None, user_role=0) -> Union[Lis
 
 def get_user_by_django_user(django_user: DjangoUser) -> User:
     """
+
     :param dj_user: Пользователь в django-формате (обычно передаётся в качестве request.user)
     :return: User from user_handler
+
     """
     try:
         user = User.objects.get(user=django_user)
@@ -114,19 +117,3 @@ def get_stages_by_event(event: Event):
 
 def get_event_by_stage(stage: Stage) -> Event:
     return stage.parent
-
-# def make_record_event(event: Event):
-#     record = Event(name=Event.name, description=Event.description)
-#     record.save()
-#
-#
-# def make_record_stage(stage: Stage, event: Event):
-#     record = Stage(
-#         name=Stage.name,
-#         parent=Event,
-#         preview=Stage.preview,
-#         time_start=Stage.time_start,
-#         time_end=Stage.time_end,
-#         description=Stage.description
-#     )
-#     record.save()

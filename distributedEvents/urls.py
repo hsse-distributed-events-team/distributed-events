@@ -26,7 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('create_event/', views.create_event, name='create_event'),
 
-    path('all_events/<int:event_id>', views.current_event, name="cur_event"),
+    path('event/<int:event_id>', views.current_event, name="cur_event"),
+    path('event_registration/<int:event_id>', views.current_event_registration, name="cur_event_registration"),
     path('', views.all_events, name="all_events"),
 
     path('register/', user_views.register, name='register'),
@@ -41,7 +42,18 @@ urlpatterns = [
     path('events/edit/<int:event_id>/venues/create', creator_views.create_venue, name="create_venue"),
     path('events/edit/<int:event_id>/venues/delete', creator_views.delete_venue, name="delete_venue"),
 
-    # path('events/edit/<int:event_id>/venues/edit/<int:venue_id>', creator_views., name=""),
+    # path('events/edit/<int:event_id>/stages/', creator_views.stages_list, name="test"),
+    # path('events/edit/<int:event_id>/stages/edit/<int:venue_id>', creator_views.edit_stage, name="edit_stage"),
+    # path('events/edit/<int:event_id>/stages/create', creator_views.create_stage, name="create_stage"),
+    # path('events/edit/<int:event_id>/stages/delete', creator_views.delete_stage, name="delete_stage"),
+    # path('events/edit/<int:event_id>/staff', creator_views.view_staff, name="view_staff"),
+    # path('events/stages/edit/add_staff', creator_views.add_staff, name="add_staff"),
+
+    path('events/edit/<int:event_id>/participants/', creator_views.participants_list, name="participants_list"),
+    path('events/edit/<int:event_id>/participants/reject', creator_views.reject_participant, name="reject_participant"),
+    path('events/edit/<int:event_id>/participants/accepted', creator_views.accept_participant, name="accept_participant"),
+    path('events/edit/<int:event_id>/participants/ban', creator_views.ban_participant, name="ban_participant"),
+
     # path('events/edit/<int:event_id>', creator_views., name=""),
     # path('events/edit/<int:event_id>', creator_views., name=""),
     # path('events/edit/<int:event_id>', creator_views., name=""),

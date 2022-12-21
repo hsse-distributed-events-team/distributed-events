@@ -1,19 +1,33 @@
 from django import forms
 from event_handler.models import StageStaff
 
-"""
-    Форма для сбора информации мероприятия
-"""
 
-#
-# class StaffForm(forms.ModelForm):
-#     class Meta:
-#         model = StageStaff
-#         fields = '__all__'
+class StaffForm(forms.ModelForm):
+    """
+    Класс **StaffForm**
+
+    Форма для сбора информации о сотруднике
+
+
+    """
+
+    class Meta:
+        model = StageStaff
+        fields = '__all__'
+
 
 class VenueForm(forms.Form):
     """
-        Форма создания площадки
+    Класс **StaffForm**
+
+    Форма создания площадки
+
+    :param name: Название мероприятия
+    :param address: Адрес
+    :param region: Регион
+    :param participants_maximum: Максимальное число участников
+    :param contacts: Контакты
+
     """
 
     name = forms.CharField(label='Название', required=True, max_length=50)

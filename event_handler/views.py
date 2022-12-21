@@ -3,9 +3,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from event_handler.forms import Event as EventForm
-from event_handler.models import Event, Stage
+from event_handler.forms import RegistrateEventForm
 
 from event_handler.db_controller import *
+from creator_handler.db_controller import *
+import creator_handler.db_controller as c_db
+
+from event_handler.models import Event, Stage, StageStaff
+
+import event_handler.db_controller as e_db
+import creator_handler.db_controller as c_db
 
 
 def error404(request):
@@ -26,6 +33,7 @@ def create_event(request):
     Страница создания мероприятия
 
     :param request: объект с деталями запроса
+    :param context: информация о создаваемом мероприятии
     :type request: :class: 'django.http.HttpRequest'
     :return: html страница
     """
@@ -41,23 +49,16 @@ def create_event(request):
             date_finish = form.cleaned_data['date_finish']
             description = form.cleaned_data['description']
 
-            user = request.user
+            user = c_db.get_user_by_django_user(request.user)
 
-            if user.is_authenticated:
-                event = Event.objects.create(name=name, description=description)
-                Stage.objects.create(
-                    name=name,
-                    parent=event,
-                    preview=preview,
-                    time_start=date_start,
-                    time_end=date_finish,
-                    description=description
-                )
+            event = c_db.make_record_event(name, description)
+            stage = c_db.make_record_stage(name, event, preview, date_start, date_finish, description)
+            c_db.create_staff(user, stage, StageStaff.Roles.PROVIDER, StageStaff.Status.ACCEPTED)
+
             return redirect('all_events')
         else:
             return HttpResponse('Invalid data')
     context['form'] = EventForm()
-
     return render(request, 'creator_handler/create_event.html', context)
 
 
@@ -66,16 +67,13 @@ def all_events(request):
     Страница всех мероприятий
 
     :param request: объект с деталями запроса
+    :param context: информация о всеx мероприятиях
     :type request: :class: 'django.http.HttpRequest'
     :return: html страница
     """
-
     event_list = get_all_events(request.user)
 
-    # if not event_list:
-    #     return error404(request)
-
-    context = {'page_name': 'Все мероприятия',
+    context = {'page-name': 'Все мероприятия',
                'event_list': event_list,
                'navigation_buttons': [
                    {
@@ -88,12 +86,13 @@ def all_events(request):
                    },
                    {
                        'name': "Профиль",
-                       'href': "/user_profile"
+                       'href': "../user_profile"
                    }
                ]
                }
 
     return render(request, 'event_handler/all_events.html', context)
+
 
 
 @login_required(login_url="login")
@@ -164,6 +163,7 @@ def staff_event_list(request):
     return render(request, 'event_handler/all_events_for_staff.html', context)
 
 
+
 def current_event(request, event_id):
     """
     Страница одного мероприятия
@@ -175,8 +175,8 @@ def current_event(request, event_id):
     :return: html страница
     """
     try:
-        event = get_event_by_id(event_id)
-        context = {'page_name': f'{event.name}', 'navigation_buttons': [
+        event = e_db.get_event_by_id(event_id)
+        context = {'page-name': f'{event.name}', 'navigation_buttons': [
             {
                 'name': "Главная",
                 'href': ".."
@@ -187,16 +187,57 @@ def current_event(request, event_id):
             },
             {
                 'name': "Профиль",
-                'href': "/user_profile"
+                'href': "../user_profile"
             }
         ]
                    }
-        event = get_event_by_id(event_id)
+        event = e_db.get_event_by_id(event_id)
         context['event_id'] = event_id
         context['name'] = event.name
         context['page_name'] = context['name']
         context['description'] = event.description
-        context['stages'] = [get_stages_by_event(context["event_id"])]
+        context['stages'] = [e_db.get_stages_by_event(context["event_id"])]
         return render(request, 'event_handler/event.html', context)
     except ValueError:
         raise Http404
+
+
+@login_required(login_url="login")
+def current_event_registration(request, event_id):
+    """
+    Страница регистрации на мероприятие
+
+    :param request: объект с деталями запроса
+    :type request: :class: 'django.http.HttpRequest'
+    :param event_id: id мероприятия
+    :type event_id: :class: 'int'
+    :return: html страница
+    """
+    if request.method == "POST":
+        form = RegistrateEventForm(request.POST)
+        if form.is_valid():
+            venue_id = form.cleaned_data['venue_id']
+            user = get_user_by_django_user(request.user)
+            c_db.register_on_event(event_id, venue_id, user)
+            return redirect('all_events')
+
+    context = {'navigation_buttons': [
+        {
+            'name': "Главная",
+            'href': ".."
+        },
+        {
+            'name': "Профиль",
+            'href': "../user_profile"
+        }
+    ]
+    }
+    event = get_event_by_id(event_id)
+    context['event_id'] = event_id
+    context['name'] = event.name
+    context['page-name'] = context['name']
+    context['description'] = event.description
+    context['venues_list'] = get_venues_by_event(event)
+    context['stages'] = [get_stages_by_event(context["event_id"])]
+    return render(request, 'event_handler/event_registration.html', context)
+
