@@ -33,6 +33,7 @@ def create_event(request):
     Страница создания мероприятия
 
     :param request: объект с деталями запроса
+    :param context: информация о создаваемом мероприятии
     :type request: :class: 'django.http.HttpRequest'
     :return: html страница
     """
@@ -58,7 +59,6 @@ def create_event(request):
         else:
             return HttpResponse('Invalid data')
     context['form'] = EventForm()
-
     return render(request, 'creator_handler/create_event.html', context)
 
 
@@ -67,6 +67,7 @@ def all_events(request, page_number=1):
     Страница всех мероприятий
 
     :param request: объект с деталями запроса
+    :param context: информация о всеx мероприятиях
     :type request: :class: 'django.http.HttpRequest'
     :return: html страница
     """
@@ -92,6 +93,7 @@ def all_events(request, page_number=1):
                }
 
     return render(request, 'event_handler/all_events.html', context)
+
 
 
 def current_event(request, event_id):
