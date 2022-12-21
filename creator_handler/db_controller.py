@@ -1,5 +1,5 @@
 from event_handler.models import Event, Stage, StageStaff, StageParticipants, Venue
-
+from creator_handler.models import StageSettings
 from user_handler.models import DjangoUser, User
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,7 +10,7 @@ from event_handler.db_controller import get_user_by_django_user, get_stages_by_e
 
 
 def get_participants_by_event(event: Event):
-    stage = get_stages_by_event(get_event_by_id(event_id)).first()
+    stage = get_stages_by_event(event).first()
     return StageParticipants.objects.filter(stage=stage)
 
 def get_staff_by_event(event: Event):
@@ -117,7 +117,8 @@ def make_record_stage(name, event, preview, time_start, time_end, description):
         preview=preview,
         time_start=time_start,
         time_end=time_end,
-        description=description
+        description=description,
+        settings=StageSettings.objects.create(),
     )
     return stage
 

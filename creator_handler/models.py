@@ -44,7 +44,7 @@ class StageSettings(models.Model):
         try:
             return str(self.stage)
         except:
-            return f"А настроек то нема {self.id}"
+            return f"Настройки лежат сами по себе. {self.id}"
 
     class Meta:
         """
