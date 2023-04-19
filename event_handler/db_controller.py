@@ -12,6 +12,17 @@ from itertools import chain
 
 ITEMS_PER_PAGE = 12  # Количество объектов в одной странице выдачи
 
+def get_info_event(event_id: int) -> Union[Event, Stage, int]:
+    """
+    Получить информацию о мероприятии по его id
+    :param event_id: Идентификатор мероприятия
+    :return: Мероприятие, его первый этап, bool участвует ли django_user в этом мероприятии
+    """
+    try:
+        event = Event.objects.get(pk=event_id)
+        return event, event.stage_set.first, True
+    except ObjectDoesNotExist:
+        return None, None, False
 
 def get_all_events(django_user: DjangoUser = None) -> Union[List, Union[Tuple, Event, Stage, int]]:
     """
