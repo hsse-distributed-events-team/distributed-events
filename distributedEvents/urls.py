@@ -23,6 +23,7 @@ from user_handler import views as user_views
 from creator_handler import views as creator_views
 
 urlpatterns = [
+    path('test/', views.show_events, name='test'),
     path('admin/', admin.site.urls),
     path('create_event/', views.create_event, name='create_event'),
 
