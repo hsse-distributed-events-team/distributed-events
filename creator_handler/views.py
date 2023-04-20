@@ -198,19 +198,6 @@ def add_staff(request):
 
     return render(request, 'creator_handler/add_staff.html', {'form': form})
 
-
-@login_required
-def stages_list(request, event_id: int):
-    if not c_db.user_have_access(request.user, event_id):
-        return redirect('/404')
-    stages = c_db.get_stages_by_event(c_db.get_event_by_id(event_id))
-    context = {
-        "stages_list": stages,
-        "navigation_buttons": NAVIGATE_BUTTONS,
-    }
-    return render(request, 'creator_handler/stages_list.html', context)
-
-
 def venues_list(request, event_id: int):
     if not c_db.user_have_access(request.user, event_id):
         return redirect('/404')
@@ -311,35 +298,13 @@ def make_newsletter(request, event_id: int):
     form = EmailForm()
     return render(request, 'creator_handler/create_newsletter.html', {"form": form})
 
-@login_required(login_url="login")
-def stages_list2(request, event_id: int):
-    if user_have_access(request.user, event_id):
-        return error404(request)
-    stages = get_stages_by_event(get_event_by_id(event_id))
-    answer = []
-    adjacency_list = {}
-    final = -1
-    stages_by_id = {}
-    for stage in stages:
-        stages_by_id[stage.id] = stage
-        if stage.next_stage is not None:
-            adjacency_list.setdefault(stage.next_stage.id, []).append(stage.id)
-        else:
-            final = stage.id
-    if final == -1:
-        raise ValueError
-    euler_bypass(final, adjacency_list, 0, answer, stages_by_id)
-    for stage, depth in answer:
-        print(stage.name, depth)
-    return redirect('/')
 
 @login_required(login_url="login")
 def stages_list(request, event_id: int):
+    if user_have_access(request.user, event_id):
+        return error404(request)
+
     context = {
-        'stages_list': [
-            (get_stage_by_id(1), 1),
-            (get_stage_by_id(2), 2),
-            (get_stage_by_id(3), 1)
-        ]
+        'stages_list': get_formatted_stages(event_id)
     }
     return render(request, 'creator_handler/stages_list.html', context)

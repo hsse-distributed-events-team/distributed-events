@@ -164,6 +164,23 @@ def get_event_partcipants(event_id: int):
     stage = get_stages_by_event(get_event_by_id(event_id)).first()
     return StageParticipants.objects.filter(stage=stage)
 
+def get_formatted_stages(event_id: int):
+    stages = get_stages_by_event(get_event_by_id(event_id))
+    answer = []
+    adjacency_list = {}
+    final = -1
+    stages_by_id = {}
+    for stage in stages:
+        stages_by_id[stage.id] = stage
+        if stage.next_stage is not None:
+            adjacency_list.setdefault(stage.next_stage.id, []).append(stage.id)
+        else:
+            final = stage.id
+    if final == -1:
+        raise ValueError
+    euler_bypass(final, adjacency_list, 0, answer, stages_by_id)
+    return answer
+
 
 def euler_bypass(stage: int, adjacency_list, depth: int, answer, stages_by_id):
     answer.append((stages_by_id[stage], depth))
