@@ -169,3 +169,6 @@ def euler_bypass(stage: int, adjacency_list, depth: int, answer, stages_by_id):
     answer.append((stages_by_id[stage], depth))
     for previous_stage in adjacency_list.setdefault(stage, []):
         euler_bypass(previous_stage, adjacency_list, depth + 1, answer, stages_by_id)
+
+def get_stage_by_id(stage_id: int):
+    return Stage.objects.get(id=stage_id)

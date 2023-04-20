@@ -296,6 +296,7 @@ def edit_venue(request, event_id: int, venue_id: int):
     }
     return render(request, 'creator_handler/edit_venue.html', context)
 
+
 @login_required
 def make_newsletter(request, event_id: int):
     # if not c_db.user_have_access(request.user, event_id, c_db.SettingsSet.EDIT_VENUES):
@@ -331,3 +332,14 @@ def stages_list2(request, event_id: int):
     for stage, depth in answer:
         print(stage.name, depth)
     return redirect('/')
+
+@login_required(login_url="login")
+def stages_list(request, event_id: int):
+    context = {
+        'stages_list': [
+            (get_stage_by_id(1), 1),
+            (get_stage_by_id(2), 2),
+            (get_stage_by_id(3), 1)
+        ]
+    }
+    return render(request, 'creator_handler/stages_list.html', context)
