@@ -163,3 +163,6 @@ def ban_participant(user: User, event_id: int):
 def get_event_partcipants(event_id: int):
     stage = get_stages_by_event(get_event_by_id(event_id)).first()
     return StageParticipants.objects.filter(stage=stage)
+
+def get_stage_by_id(stage_id: int):
+    return Stage.objects.get(id=stage_id)
