@@ -106,6 +106,7 @@ class Stage(models.Model):
     settings = models.OneToOneField(StageSettings, default=StageSettings, null=True, on_delete=models.CASCADE)
     time_start = models.DateTimeField(null=True, blank=True)
     time_end = models.DateTimeField(null=True, blank=True)
+    next_stage = models.ForeignKey("self", null=True, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.name

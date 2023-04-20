@@ -163,3 +163,9 @@ def ban_participant(user: User, event_id: int):
 def get_event_partcipants(event_id: int):
     stage = get_stages_by_event(get_event_by_id(event_id)).first()
     return StageParticipants.objects.filter(stage=stage)
+
+
+def euler_bypass(stage: int, adjacency_list, depth: int, answer, stages_by_id):
+    answer.append((stages_by_id[stage], depth))
+    for previous_stage in adjacency_list.setdefault(stage, []):
+        euler_bypass(previous_stage, adjacency_list, depth + 1, answer, stages_by_id)

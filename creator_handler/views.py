@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from creator_handler.db_controller import *
 from . import email
 from .forms import VenueForm, StaffForm, EmailForm
+from event_handler.views import error404
 
 import creator_handler.db_controller as c_db
 import user_handler.db_controller as u_db
@@ -308,3 +309,25 @@ def make_newsletter(request, event_id: int):
             return redirect(f'/events/edit/{event_id}/participants/')
     form = EmailForm()
     return render(request, 'creator_handler/create_newsletter.html', {"form": form})
+
+@login_required(login_url="login")
+def stages_list2(request, event_id: int):
+    if user_have_access(request.user, event_id):
+        return error404(request)
+    stages = get_stages_by_event(get_event_by_id(event_id))
+    answer = []
+    adjacency_list = {}
+    final = -1
+    stages_by_id = {}
+    for stage in stages:
+        stages_by_id[stage.id] = stage
+        if stage.next_stage is not None:
+            adjacency_list.setdefault(stage.next_stage.id, []).append(stage.id)
+        else:
+            final = stage.id
+    if final == -1:
+        raise ValueError
+    euler_bypass(final, adjacency_list, 0, answer, stages_by_id)
+    for stage, depth in answer:
+        print(stage.name, depth)
+    return redirect('/')
