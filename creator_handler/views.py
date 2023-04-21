@@ -7,6 +7,8 @@ from . import email
 from .forms import VenueForm, StaffForm, EmailForm
 from event_handler.views import error404
 
+from json import load as json_load
+
 import creator_handler.db_controller as c_db
 import user_handler.db_controller as u_db
 
@@ -198,6 +200,7 @@ def add_staff(request):
 
     return render(request, 'creator_handler/add_staff.html', {'form': form})
 
+
 def venues_list(request, event_id: int):
     if not c_db.user_have_access(request.user, event_id):
         return redirect('/404')
@@ -301,10 +304,27 @@ def make_newsletter(request, event_id: int):
 
 @login_required(login_url="login")
 def stages_list(request, event_id: int):
-    if user_have_access(request.user, event_id):
+    if not user_have_access(request.user, event_id):
         return error404(request)
 
     context = {
         'stages_list': get_formatted_stages(event_id)
     }
     return render(request, 'creator_handler/stages_list.html', context)
+
+
+@login_required(login_url="login")
+def create_stage(request, event_id: int):
+    if not user_have_access(request.user, event_id):
+        return error404(request)
+    if request.method != "POST":
+        return JsonResponse({}, status=403)
+    try:
+
+        next_stage = get_stage_by_id(json_load(request)["next_stage_id"])
+        print(next_stage)
+        make_record_stage("test", get_event_by_id(event_id), next_stage=next_stage)
+        return JsonResponse({}, status=200)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"errors": "undefined"}, status=400)

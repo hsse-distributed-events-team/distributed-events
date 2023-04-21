@@ -46,7 +46,7 @@ def get_venue_by_id_dict(venue_id: int):
 def user_have_access(django_user: DjangoUser, event_id: int, setting=-1) -> bool:
     user = get_user_by_django_user(django_user)
     try:
-        stage = get_stages_by_event(get_event_by_id(event_id)).first()
+        stage = get_stages_by_event(get_event_by_id(event_id)).filter(next_stage__isnull=True).first()
         staff = StageStaff.objects.get(user=user, stage=stage)
         setting_rule = 0
         if setting == SettingsSet.EDIT_VENUES:
@@ -113,7 +113,8 @@ def make_record_event(name, description):
     return event
 
 
-def make_record_stage(name, event, preview, time_start, time_end, description):
+def make_record_stage(name, event, preview="Пустое превью", time_start=None,
+                      time_end=None, description="пустое описание", next_stage=None):
     stage = Stage.objects.create(
         name=name,
         parent=event,
@@ -122,6 +123,7 @@ def make_record_stage(name, event, preview, time_start, time_end, description):
         time_end=time_end,
         description=description,
         settings=StageSettings.objects.create(),
+        next_stage=next_stage,
     )
     return stage
 
@@ -164,6 +166,7 @@ def get_event_partcipants(event_id: int):
     stage = get_stages_by_event(get_event_by_id(event_id)).first()
     return StageParticipants.objects.filter(stage=stage)
 
+
 def get_formatted_stages(event_id: int):
     stages = get_stages_by_event(get_event_by_id(event_id))
     answer = []
@@ -178,6 +181,8 @@ def get_formatted_stages(event_id: int):
             final = stage.id
     if final == -1:
         raise ValueError
+    for previous_stages in adjacency_list:
+        adjacency_list[previous_stages].reverse()
     euler_bypass(final, adjacency_list, 0, answer, stages_by_id)
     return answer
 
@@ -186,6 +191,7 @@ def euler_bypass(stage: int, adjacency_list, depth: int, answer, stages_by_id):
     answer.append((stages_by_id[stage], depth))
     for previous_stage in adjacency_list.setdefault(stage, []):
         euler_bypass(previous_stage, adjacency_list, depth + 1, answer, stages_by_id)
+
 
 def get_stage_by_id(stage_id: int):
     return Stage.objects.get(id=stage_id)
