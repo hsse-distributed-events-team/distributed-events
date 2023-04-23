@@ -123,3 +123,9 @@ def get_open_stages_by_event(event: Event):
 
 def get_event_by_stage(stage: Stage) -> Event:
     return stage.parent
+
+
+def check_user_participate_in_stage(django_user: User, stage: Stage) -> bool:
+    if stage in map(lambda stage_part: stage_part.stage, get_user_stages(get_user_by_django_user(django_user))):
+        return True
+    return False

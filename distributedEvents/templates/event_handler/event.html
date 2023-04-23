@@ -20,10 +20,18 @@
             color: green;
         }
 
+        .purple {
+            color: purple;
+        }
+
         a {
             display: block;
             text-decoration: none;
             color: black;
+        }
+
+        .disabled-link {
+            pointer-events: none;
         }
     </style>
 </head>
@@ -41,8 +49,12 @@
 <p>--------------------------------------</p>
 <p>Основная панель(пока так)</p>
 <div class="open-stage-list">
-    {% for stage in open_stages %}
-        <a href="/stage_registration/{{ stage.id }}">{{ stage.name }}</a>
+    {% for stage, is_participate in open_stages %}
+        {% if is_participate %}
+            <a class="purple disabled-link">{{ stage.name }}</a>
+        {% else %}
+            <a href="/stage_registration/{{ stage.id }}">{{ stage.name }}</a>
+        {% endif %}
     {% endfor %}
 </div>
 </body>

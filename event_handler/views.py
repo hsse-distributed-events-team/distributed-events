@@ -239,10 +239,14 @@ def current_event(request, event_id):
     all_stages.sort(key=lambda stage: stage.time_start.timestamp() if stage.time_start else float("inf"))
     open_stages.sort(key=lambda stage: stage.time_start.timestamp() if stage.time_start else float("inf"))
 
+    print([(stage, check_user_participate_in_stage(request.user, stage))
+           for stage in open_stages])
+
     context = {
         'event': event,
         'all_stages': all_stages,
-        'open_stages': open_stages,
+        'open_stages': [(stage, check_user_participate_in_stage(request.user, stage))
+                        for stage in open_stages],
         'waiting_status': Stage.Status.WAITING,
         'active_status': Stage.Status.ACTIVE
     }
