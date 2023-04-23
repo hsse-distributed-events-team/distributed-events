@@ -115,5 +115,11 @@ def get_stages_by_event(event: Event):
     return Stage.objects.filter(parent=event)
 
 
+def get_open_stages_by_event(event: Event):
+    waiting_status = Stage.Status.WAITING
+    return list(filter(lambda stage: stage.settings.can_register,
+                       Stage.objects.filter(parent=event, status=waiting_status)))
+
+
 def get_event_by_stage(stage: Stage) -> Event:
     return stage.parent

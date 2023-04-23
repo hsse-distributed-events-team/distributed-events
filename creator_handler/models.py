@@ -29,6 +29,7 @@ class StageSettings(models.Model):
         CURATOR = 10
         PROVIDER = 100
 
+    can_register = models.BooleanField("Можно зарегистрироваться", default=False, null=False)
     can_user_choose_venue = models.BooleanField("Выбор площадки пользователем", default=False)
     application_auto_accept = models.BooleanField("Автопринятие заявок", default=False)
     public_participant_list = models.BooleanField("Публичный список участников", default=False)

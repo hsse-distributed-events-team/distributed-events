@@ -1,9 +1,10 @@
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 
 from event_handler.forms import Event as EventForm
-from event_handler.forms import RegistrateEventForm
+from event_handler.forms import RegistrateStageForm
 
 from event_handler.db_controller import *
 from creator_handler.db_controller import *
@@ -15,19 +16,20 @@ import event_handler.db_controller as e_db
 import creator_handler.db_controller as c_db
 
 NAVIGATE_BUTTONS = [
-        {
-            'name': "О нас",
-            'href': "https://hsse.mipt.ru/"
-        },
-        {
-            'name': "Создать мероприятие",
-            'href': "/create_event"
-        },
-        {
-            'name': "Профиль",
-            'href': "/user_profile"
-        }
-    ]
+    {
+        'name': "О нас",
+        'href': "https://hsse.mipt.ru/"
+    },
+    {
+        'name': "Создать мероприятие",
+        'href': "/create_event"
+    },
+    {
+        'name': "Профиль",
+        'href': "/user_profile"
+    }
+]
+
 
 def error404(request):
     """
@@ -108,7 +110,6 @@ def all_events(request):
     return render(request, 'event_handler/all_events.html', context)
 
 
-
 @login_required(login_url="login")
 def participant_event_list(request):
     """
@@ -177,6 +178,43 @@ def staff_event_list(request):
     return render(request, 'event_handler/all_events_for_staff.html', context)
 
 
+# def current_event(request, event_id):
+#     """
+#     Страница одного мероприятия
+#
+#     :param request: объект с деталями запроса
+#     :type request: :class: 'django.http.HttpRequest'
+#     :param event_id: id мероприятия
+#     :type event_id: :class: 'int'
+#     :return: html страница
+#     """
+#     try:
+#         event = e_db.get_event_by_id(event_id)
+#         context = {'page-name': f'{event.name}', 'navigation_buttons': [
+#             {
+#                 'name': "Главная",
+#                 'href': ".."
+#             },
+#             {
+#                 'name': "Зарегистрироваться",
+#                 'href': f"../event_registration/{event_id}"
+#             },
+#             {
+#                 'name': "Профиль",
+#                 'href': "../user_profile"
+#             }
+#         ]
+#                    }
+#         event = e_db.get_event_by_id(event_id)
+#         context['event_id'] = event_id
+#         context['name'] = event.name
+#         context['page_name'] = context['name']
+#         context['description'] = event.description
+#         context['stages'] = [e_db.get_stages_by_event(context["event_id"])]
+#         return render(request, 'event_handler/event.html', context)
+#     except ValueError:
+#         raise Http404
+
 
 def current_event(request, event_id):
     """
@@ -188,38 +226,34 @@ def current_event(request, event_id):
     :type event_id: :class: 'int'
     :return: html страница
     """
+
     try:
         event = e_db.get_event_by_id(event_id)
-        context = {'page-name': f'{event.name}', 'navigation_buttons': [
-            {
-                'name': "Главная",
-                'href': ".."
-            },
-            {
-                'name': "Зарегистрироваться",
-                'href': f"../event_registration/{event_id}"
-            },
-            {
-                'name': "Профиль",
-                'href': "../user_profile"
-            }
-        ]
-                   }
-        event = e_db.get_event_by_id(event_id)
-        context['event_id'] = event_id
-        context['name'] = event.name
-        context['page_name'] = context['name']
-        context['description'] = event.description
-        context['stages'] = [e_db.get_stages_by_event(context["event_id"])]
-        return render(request, 'event_handler/event.html', context)
-    except ValueError:
-        raise Http404
+    except ObjectDoesNotExist:
+        return error404(request)
+
+    all_stages = list(get_stages_by_event(event_id))
+    open_stages = get_open_stages_by_event(event_id)
+    all_stages.sort(key=lambda stage: stage.name)
+    open_stages.sort(key=lambda stage: stage.name)
+    all_stages.sort(key=lambda stage: stage.time_start.timestamp() if stage.time_start else float("inf"))
+    open_stages.sort(key=lambda stage: stage.time_start.timestamp() if stage.time_start else float("inf"))
+
+    context = {
+        'event': event,
+        'all_stages': all_stages,
+        'open_stages': open_stages,
+        'waiting_status': Stage.Status.WAITING,
+        'active_status': Stage.Status.ACTIVE
+    }
+
+    return render(request, 'event_handler/event.html', context)
 
 
 @login_required(login_url="login")
-def current_event_registration(request, event_id):
+def current_stage_registration(request, stage_id):
     """
-    Страница регистрации на мероприятие
+    Страница регистрации на этап мероприятия
 
     :param request: объект с деталями запроса
     :type request: :class: 'django.http.HttpRequest'
@@ -228,30 +262,17 @@ def current_event_registration(request, event_id):
     :return: html страница
     """
     if request.method == "POST":
-        form = RegistrateEventForm(request.POST)
+        form = RegistrateStageForm(request.POST)
         if form.is_valid():
             venue_id = form.cleaned_data['venue_id']
             user = get_user_by_django_user(request.user)
-            c_db.register_on_event(event_id, venue_id, user)
+            c_db.register_on_stage(stage_id, venue_id, user)
             return redirect('all_events')
 
-    context = {'navigation_buttons': [
-        {
-            'name': "Главная",
-            'href': ".."
-        },
-        {
-            'name': "Профиль",
-            'href': "../user_profile"
-        }
-    ]
+    stage = get_stage_by_id(stage_id)
+    context = {
+        'stage': stage,
+        'venues_list': get_venues_by_event(get_event_by_stage(stage).id)
     }
-    event = get_event_by_id(event_id)
-    context['event_id'] = event_id
-    context['name'] = event.name
-    context['page-name'] = context['name']
-    context['description'] = event.description
-    context['venues_list'] = get_venues_by_event(event)
-    context['stages'] = [get_stages_by_event(context["event_id"])]
-    return render(request, 'event_handler/event_registration.html', context)
 
+    return render(request, 'event_handler/stage_registration.html', context)

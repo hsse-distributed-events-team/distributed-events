@@ -11,10 +11,10 @@
 <body>
 {% include "layouts/navigation_bar.html" %}
 <div class="lots_of_events">
-    <h1 class="handler">{{ name }}</h1>
-    <h2 class="current_event_time">Сроки проведения: {{ date }}</h2>
-    <h1 class="full_event_description_handler">Описание</h1>
-    <h3 class="full_event_description">{{ description }}</h3>
+    <h1 class="handler">{{ stage.name }}</h1>
+    <h2 class="current_stage_time">Сроки проведения: {% if stage.time_start %}{{ stage.time_start }}{% else %}Неизвестно{% endif %} - {% if stage.time_end %}{{ stage.time_end }}{% else %}Неизвестно{% endif %}</h2>
+    <h1 class="full_stage_description_handler">Описание</h1>
+    <h3 class="full_stage_description">{{ description }}</h3>
     <div class="table-area">
         <table class="table" id="table">
             <thead>

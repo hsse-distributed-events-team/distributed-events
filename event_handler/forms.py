@@ -22,9 +22,9 @@ class Event(forms.Form):
     date_finish = forms.DateField(widget=forms.SelectDateWidget)
     description = forms.CharField()
 
-class RegistrateEventForm(forms.Form):
+class RegistrateStageForm(forms.Form):
     """
-    Класс **RegistrateEventForm**
+    Класс **RegistrateStageForm**
 
     :param venue_id: id площадки
 

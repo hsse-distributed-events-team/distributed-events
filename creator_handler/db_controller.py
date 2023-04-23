@@ -95,10 +95,10 @@ def is_venue_attached_to_event(event_id: int, venue_id: int) -> bool:
         return False
 
 
-def register_on_event(event_id: int, venue_id: int, user: User):
-    stage = get_stages_by_event(get_event_by_id(event_id)).first()
+def register_on_stage(stage_id: int, venue_id: int, user: User):
+    stage = get_stages_by_event(get_event_by_id(stage_id)).first()
     venue = get_venue_by_id(venue_id)
-    if not is_venue_attached_to_event(event_id, venue_id):
+    if not is_venue_attached_to_event(stage_id, venue_id):
         raise ValueError
 
     participation = StageParticipants.objects.get_or_create(stage=stage, user=user)[0]
