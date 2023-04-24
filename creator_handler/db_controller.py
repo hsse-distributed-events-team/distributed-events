@@ -172,7 +172,10 @@ def get_formatted_stages(event_id: int):
     answer = []
     adjacency_list = {}
     final = -1
-    stages_by_id = {}
+    fictive_stage = Stage(id=-1, name="fictive")
+    stages_by_id = {-1: fictive_stage}
+    for stage in stages:
+        adjacency_list.setdefault(stage.id, []).append(fictive_stage.id)
     for stage in stages:
         stages_by_id[stage.id] = stage
         if stage.next_stage is not None:
