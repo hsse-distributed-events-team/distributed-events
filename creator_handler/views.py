@@ -335,8 +335,8 @@ def delete_stage(request, event_id: int):
     if request.method != "POST":
         return JsonResponse({}, status=403)
     try:
-        stage = get_stage_by_id(json_load(request)["stage_id"])
-        delete_stage_recursive(stage)
+        stage_id = json_load(request)["stage_id"]
+        delete_stage_recursive(stage_id)
     except Exception as e:
         print(e)
         return JsonResponse({"errors": "undefined"}, status=400)

@@ -130,15 +130,15 @@ def make_record_stage(name, event, preview="Пустое превью", time_sta
 
 def get_stage_subtree(stage: int, to_delete):
     previous_stages = Stage.objects.filter(next_stage=stage).values_list('id', flat=True)
-    print(previous_stages)
     for previous_stage in previous_stages:
-        get_stage_subtree(previous_stage)
+        get_stage_subtree(previous_stage, to_delete)
     to_delete.append(stage)
 
 
 def delete_stage_recursive(stage: int):
     to_delete = []
     get_stage_subtree(stage, to_delete)
+    print(to_delete)
     Stage.objects.filter(id__in=to_delete).delete()
 
 
