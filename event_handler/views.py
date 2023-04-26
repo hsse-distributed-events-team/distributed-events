@@ -118,11 +118,11 @@ def show_events(request):
     """
 
 
-    a = get_open_events(request.user)
+    #a = get_open_or_closed_events(request.user)
     #print(a)
 
-    event_list_open = get_all_events(request.user)
-    event_list_closed = get_all_events(request.user)
+    event_list_open = get_open_or_closed_events(request.user, True)
+    event_list_closed = get_open_or_closed_events(request.user, False)
 
     context = {'page_name': 'Все мероприятия',
                'event_list_open': event_list_open,
