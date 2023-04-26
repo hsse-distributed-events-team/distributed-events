@@ -143,7 +143,7 @@ def show_events(request):
                ]
                }
 
-    return render(request, 'event_handler/all_events.html', context)
+    return render(request, 'event_handler/main_page.html', context)
 
 @login_required(login_url="login")
 def participant_event_list(request):
