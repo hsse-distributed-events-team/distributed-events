@@ -269,7 +269,7 @@ def current_event(request, event_id):
         return error404(request)
 
     all_stages = list(get_stages_by_event(event_id))
-    open_stages = get_open_stages_by_event(event_id)
+    open_stages = list(get_open_stages_by_event(event_id))
     all_stages.sort(key=lambda stage: stage.name)
     open_stages.sort(key=lambda stage: stage.name)
     all_stages.sort(key=lambda stage: stage.time_start.timestamp() if stage.time_start else float("inf"))

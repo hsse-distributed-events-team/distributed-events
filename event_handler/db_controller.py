@@ -12,6 +12,7 @@ from itertools import chain
 
 ITEMS_PER_PAGE = 12  # Количество объектов в одной странице выдачи
 
+
 def get_info_event(event_id: int) -> Union[Event]:
     """
     Получить информацию о мероприятии по его id
@@ -25,7 +26,8 @@ def get_info_event(event_id: int) -> Union[Event]:
         return None
 
 
-def get_open_or_closed_events(django_user: DjangoUser = None, is_open : bool = True) -> Union[List, Union[Tuple, Event, Stage, int]]:
+def get_open_or_closed_events(django_user: DjangoUser = None, is_open: bool = True) -> Union[
+    List, Union[Tuple, Event, Stage, int]]:
     """
     Получить список открытых или закрытых мероприятий по заданным параметрам
     :param django_user: Пользователь, сделавший запрос
@@ -49,6 +51,7 @@ def get_open_or_closed_events(django_user: DjangoUser = None, is_open : bool = T
         else:
             result.append((event, event.stage_set.first, False))
     return result
+
 
 def get_all_events(django_user: DjangoUser = None) -> Union[List, Union[Tuple, Event, Stage, int]]:
     """
@@ -154,8 +157,7 @@ def get_stages_by_event(event: Event):
 
 def get_open_stages_by_event(event: Event):
     waiting_status = Stage.Status.WAITING
-    return list(filter(lambda stage: stage.settings.can_register,
-                       Stage.objects.filter(parent=event, status=waiting_status)))
+    return Stage.objects.filter(parent=event, status=waiting_status, settings__can_register=True)
 
 
 def get_event_by_stage(stage: Stage) -> Event:
