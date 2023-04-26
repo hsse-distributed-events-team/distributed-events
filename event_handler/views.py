@@ -107,7 +107,43 @@ def all_events(request):
 
     return render(request, 'event_handler/all_events.html', context)
 
+def show_events(request):
+    """
+    Страница всех мероприятий
 
+    :param request: объект с деталями запроса
+    :param context: информация о всеx мероприятиях
+    :type request: :class: 'django.http.HttpRequest'
+    :return: html страница
+    """
+
+
+    #a = get_open_or_closed_events(request.user)
+    #print(a)
+
+    event_list_open = get_open_or_closed_events(request.user, True)
+    event_list_closed = get_open_or_closed_events(request.user, False)
+
+    context = {'page_name': 'Все мероприятия',
+               'event_list_open': event_list_open,
+               'event_list_closed': event_list_closed,
+               'navigation_buttons': [
+                   {
+                       'name': "О нас",
+                       'href': "https://hsse.mipt.ru/"
+                   },
+                   {
+                       'name': "Создать мероприятие",
+                       'href': "/create_event"
+                   },
+                   {
+                       'name': "Профиль",
+                       'href': "../user_profile"
+                   }
+               ]
+               }
+
+    return render(request, 'event_handler/main_page.html', context)
 
 @login_required(login_url="login")
 def participant_event_list(request):
