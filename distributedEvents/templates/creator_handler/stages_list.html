@@ -13,46 +13,24 @@
 <div class="stage-list">
     {% for stage, indent in stages_list %}
         <div class="stage-list__stage">
-            <p>id - {{ stage.id }}, отступ - {{ indent }}</p>
-            <button stage_id= {{ stage.id }}>Создать</button>
+            {% if stage.id > -1 %}
+                <p class="stage" tab={{indent}}>
+                    {% for item in ""|ljust:indent %}
+                        <span>==</span>
+                    {% endfor %}
+                    id - {{ stage.id }}, отступ - {{ indent }}
+                    <button class="stage__button_type_add" type="button" stage_id= {{ stage.id }}>Создать</button>
+                    {% if indent > 0 %}
+                        <button class="stage__button_type_delete" type="button" stage_id= {{ stage.id }}>Удалить</button>
+                    {% endif %}
+                </p>
+            {% endif %}
         </div>
     {% endfor %}
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    function createStage(next_stage_) {
-        console.log("WHY")
-        fetch(document.URL + "create",
-                 {
-                     method: "POST",
-                     body: JSON.stringify({
-                        next_stage_id: next_stage_,
-                     }),
-                     headers: { "X-CSRFToken": getCookie("csrftoken") }
-                 }
-        )
-    }
-    var buttons = document.querySelectorAll("button")
-
-
-    for (const btn of buttons) {
-    btn.addEventListener("click", () => {createStage(btn.getAttribute("stage_id"))})
-    }
-    function getCookie(c_name) {
-            if (document.cookie.length > 0) {
-                c_start = document.cookie.indexOf(c_name + "=");
-                if (c_start != -1) {
-                    c_start = c_start + c_name.length + 1;
-                    c_end = document.cookie.indexOf(";", c_start);
-                    if (c_end == -1) c_end = document.cookie.length;
-                    return unescape(document.cookie.substring(c_start,c_end));
-                }
-            }
-            return "";
-        }
-
-
+<script src="{% static 'source/stages_list.js' %}">
 </script>
 </body>
 </html>

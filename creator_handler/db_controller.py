@@ -127,6 +127,20 @@ def make_record_stage(name, event, preview="Пустое превью", time_sta
     return stage
 
 
+def get_stage_subtree(stage: int, to_delete):
+    previous_stages = Stage.objects.filter(next_stage=stage).values_list('id', flat=True)
+    for previous_stage in previous_stages:
+        get_stage_subtree(previous_stage, to_delete)
+    to_delete.append(stage)
+
+
+def delete_stage_recursive(stage: int):
+    to_delete = []
+    get_stage_subtree(stage, to_delete)
+    print(to_delete)
+    Stage.objects.filter(id__in=to_delete).delete()
+
+
 def create_staff(user, stage, role, status=Stage.Status.WAITING):
     StageStaff.objects.create(user=user,
                               stage=stage,
@@ -171,7 +185,10 @@ def get_formatted_stages(event_id: int):
     answer = []
     adjacency_list = {}
     final = -1
-    stages_by_id = {}
+    fictive_stage = Stage(id=-1, name="fictive")
+    stages_by_id = {-1: fictive_stage}
+    for stage in stages:
+        adjacency_list.setdefault(stage.id, []).append(fictive_stage.id)
     for stage in stages:
         stages_by_id[stage.id] = stage
         if stage.next_stage is not None:

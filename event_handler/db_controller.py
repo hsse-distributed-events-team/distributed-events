@@ -12,6 +12,43 @@ from itertools import chain
 
 ITEMS_PER_PAGE = 12  # Количество объектов в одной странице выдачи
 
+def get_info_event(event_id: int) -> Union[Event]:
+    """
+    Получить информацию о мероприятии по его id
+    :param event_id: Идентификатор мероприятия
+    :return: Мероприятие
+    """
+    try:
+        event = Event.objects.get(pk=event_id)
+        return event
+    except ObjectDoesNotExist:
+        return None
+
+
+def get_open_or_closed_events(django_user: DjangoUser = None, is_open : bool = True) -> Union[List, Union[Tuple, Event, Stage, int]]:
+    """
+    Получить список открытых или закрытых мероприятий по заданным параметрам
+    :param django_user: Пользователь, сделавший запрос
+    :return: Список из троек: мероприятие, его первый этап, bool участвует ли django_user в этом мероприятии
+
+    """
+
+    user_events = set()
+    if (not django_user.is_anonymous) and django_user is not None:
+        user = get_user_by_django_user(django_user)
+        user_events = get_user_events(user)
+
+    result = list()
+    stages = Stage.objects.filter(settings__can_register=is_open)
+    parent_events_id = stages.values_list('parent', flat=True).distinct()
+    parents_event = Event.objects.filter(id__in=parent_events_id)
+
+    for event in parents_event:
+        if event in user_events:
+            result.append((event, event.stage_set.first, True))
+        else:
+            result.append((event, event.stage_set.first, False))
+    return result
 
 def get_all_events(django_user: DjangoUser = None) -> Union[List, Union[Tuple, Event, Stage, int]]:
     """
